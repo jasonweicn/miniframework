@@ -1,2 +1,2 @@
 # MicroFramework
-这是一个PHP框架
+这是一个微小的PHP框架
