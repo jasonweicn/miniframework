@@ -24,6 +24,11 @@ class Autoloader
         spl_autoload_register(array(__CLASS__, 'autoload'));
     }
     
+    /**
+     * 自动载入
+     * 
+     * @param string $className
+     */
     public function autoload($className)
     {
         $file = MICRO_PATH . DIRECTORY_SEPARATOR . 'Library' . DIRECTORY_SEPARATOR . $className . '.php';

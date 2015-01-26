@@ -12,4 +12,6 @@ defined('APP_PATH') or define('APP_PATH',       dirname($_SERVER['SCRIPT_FILENAM
 
 require(MICRO_PATH .'Library' . DIRECTORY_SEPARATOR . 'Autoloader.php');
 Autoloader::getInstance(MICRO_PATH);
+
+//一切由此开始
 App::getInstance()->run();

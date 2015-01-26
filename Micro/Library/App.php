@@ -11,6 +11,7 @@ class App
 {
     protected $_controller;
     protected $_router;
+    protected $_baseUrl;
     
     protected static $_instance;
     
@@ -24,15 +25,17 @@ class App
     
     protected function __construct()
     {
-        //...
-    }
-    
-    public function run()
-    {
         $router = $this->getRouter();
         $this->_controller = $router->route();
-        
-        $action = $router->_action . 'Action';
+    }
+    
+    /**
+     * 开始
+     * 
+     */
+    public function run()
+    {
+        $action = $this->_router->_action . 'Action';
         
         if (method_exists($this->_controller, $action)) {
             if (method_exists($this->_controller, 'init')) {
@@ -44,6 +47,10 @@ class App
         }
     }
     
+    /**
+     * 获取路由器对象
+     * 
+     */
     public function getRouter ()
     {
         if ($this->_router === null) {

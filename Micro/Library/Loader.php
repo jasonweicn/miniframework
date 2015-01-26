@@ -9,6 +9,11 @@
 
 class Loader
 {
+    /**
+     * 载入Class
+     * 
+     * @param string $className
+     */
     public static function loadClass($className)
     {
         $file = APP_PATH . DIRECTORY_SEPARATOR . 'Models' . DIRECTORY_SEPARATOR . $className . '.php';

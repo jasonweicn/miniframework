@@ -11,11 +11,37 @@ class Router
 {
     protected $_controller;
     public $_action;
+    public $_baseUrl;
     
     public function __construct()
     {
-        $this->setController();
-        $this->setAction();
+        $baseUrl = $this->getBaseUrl();
+        
+        if (false === strpos($_SERVER['REQUEST_URI'], $_SERVER['SCRIPT_NAME'])) {
+            //Rewrite
+            $requestUri = '';
+            if (empty($_SERVER['QUERY_STRING'])) {
+                $requestUri = $_SERVER['REQUEST_URI'];
+            } else {
+                $requestUri = str_replace('?'.$_SERVER['QUERY_STRING'], '', $_SERVER['REQUEST_URI']);
+            }
+            if ($requestUri != $baseUrl) {
+                $requestUri = str_replace($baseUrl, '', $requestUri);
+            }
+            $uriArray = explode('/', $requestUri);
+            $this->_controller = (isset($uriArray[1]) && !empty($uriArray[1])) ? $uriArray[1] : 'index';
+            $this->_action = (isset($uriArray[2]) && !empty($uriArray[2])) ? $uriArray[2] : 'index';
+        } else {
+            //GET
+            if (empty($_SERVER['QUERY_STRING'])) {
+                $this->_controller = 'index';
+                $this->_action = 'index';
+            } else {
+                parse_str($_SERVER['QUERY_STRING'], $urlParams);
+                $this->_controller = isset($urlParams['c']) ? $urlParams['c'] : 'index';
+                $this->_action = isset($urlParams['a']) ? $urlParams['a'] : 'index';
+            }
+        }
     }
     
     /**
@@ -24,7 +50,7 @@ class Router
      */
     public function route()
     {
-        $class = $this->getController();
+        $class = $this->_controller;
         $target = APP_PATH . DIRECTORY_SEPARATOR . 'Controllers' . DIRECTORY_SEPARATOR . $class . '.php';
         
         //引入目标文件
@@ -44,29 +70,30 @@ class Router
         return $controller;
     }
     
-    public function setController()
+    /**
+     * 从$_SERVER['PHP_SELF']中提取基础地址
+     * 
+     */
+    public function setBaseUrl()
     {
-        if ($this->_controller === null) {
-            $this->_controller = isset($_GET['c']) ? $_GET['c'] : 'index';
+        if ($this->_baseUrl === null) {
+            $phpSelf = $_SERVER['PHP_SELF'];
+            $urlArray = explode('/', $phpSelf);
+            unset($urlArray[count($urlArray) - 1]);
+            $this->_baseUrl = implode('/', $urlArray);
         }
-        return $this->_controller;
+        return $this->_baseUrl;
     }
     
-    public function getController()
+    /**
+     * 获取基础地址
+     * 
+     */
+    public function getBaseUrl()
     {
-        return $this->_controller;
-    }
-    
-    public function setAction()
-    {
-        if ($this->_action === null) {
-            $this->_action = isset($_GET['a']) ? $_GET['a'] : 'index';
+        if ($this->_baseUrl === null) {
+            $this->_baseUrl = $this->setBaseUrl();
         }
-        return $this->_action;
-    }
-    
-    public function getAction()
-    {
-        return $this->_action;
+        return $this->_baseUrl;
     }
 }
