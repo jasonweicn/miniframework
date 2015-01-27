@@ -12,6 +12,7 @@ class NewsController extends Action
         $news = new News();
         $info = $news->getInfo();
         $this->view->assign('info', $info);
+        $this->view->display();
     }
 }
 ?>

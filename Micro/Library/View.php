@@ -9,8 +9,20 @@
 
 class View
 {
+    /**
+     * 渲染模板
+     * 
+     * @var string
+     */
     private $_render;
-
+    
+    /**
+     * 构造
+     * 
+     * @param string $controller
+     * @param string $action
+     * @return View
+     */
     function __construct($controller, $action)
     {
         $file = APP_PATH . DIRECTORY_SEPARATOR .  'Views' . DIRECTORY_SEPARATOR . strtolower($controller) . DIRECTORY_SEPARATOR . $action . '.php';
@@ -41,10 +53,13 @@ class View
         }
         return false;
     }
-
-    public function __destruct()
+    
+    /**
+     * 渲染
+     * 
+     */
+    public function display()
     {
-        //渲染视图
         include($this->_render);
-    }  
+    }
 }

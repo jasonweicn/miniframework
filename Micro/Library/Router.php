@@ -9,30 +9,58 @@
 
 class Router
 {
+    /**
+     * 控制器实例
+     * 
+     * @var object
+     */
     protected $_controller;
+    
+    /**
+     * 动作
+     * 
+     * @var string
+     */
     public $_action;
+    
+    /**
+     * 基础路径
+     * 
+     * @var string
+     */
     public $_baseUrl;
     
+    /**
+     * 路由方式
+     * 
+     * @var string
+     */
+    public $_routeType;
+    
+    /**
+     * 路径数组
+     * 
+     * @var string
+     */
+    public $_uriArray;
+    
+    /**
+     * 构造
+     * 
+     */
     public function __construct()
     {
         $baseUrl = $this->getBaseUrl();
         
         if (false === strpos($_SERVER['REQUEST_URI'], $_SERVER['SCRIPT_NAME'])) {
             //Rewrite
-            $requestUri = '';
-            if (empty($_SERVER['QUERY_STRING'])) {
-                $requestUri = $_SERVER['REQUEST_URI'];
-            } else {
-                $requestUri = str_replace('?'.$_SERVER['QUERY_STRING'], '', $_SERVER['REQUEST_URI']);
-            }
-            if ($requestUri != $baseUrl) {
-                $requestUri = str_replace($baseUrl, '', $requestUri);
-            }
-            $uriArray = explode('/', $requestUri);
-            $this->_controller = (isset($uriArray[1]) && !empty($uriArray[1])) ? $uriArray[1] : 'index';
-            $this->_action = (isset($uriArray[2]) && !empty($uriArray[2])) ? $uriArray[2] : 'index';
+            $this->setRouteType('rewrite');
+            $this->_uriArray = $this->parserUrlToArray();
+            $this->_controller = (isset($this->_uriArray[1]) && !empty($this->_uriArray[1])) ? $this->_uriArray[1] : 'index';
+            $this->_action = (isset($this->_uriArray[2]) && !empty($this->_uriArray[2])) ? $this->_uriArray[2] : 'index';
         } else {
             //GET
+            $this->setRouteType('get');
             if (empty($_SERVER['QUERY_STRING'])) {
                 $this->_controller = 'index';
                 $this->_action = 'index';
@@ -95,5 +123,35 @@ class Router
             $this->_baseUrl = $this->setBaseUrl();
         }
         return $this->_baseUrl;
+    }
+    
+    public function setRouteType($type)
+    {
+        $this->_routeType = $type;
+    }
+    
+    public function getRouteType()
+    {
+        return $this->_routeType;
+    }
+    
+    /**
+     * 解析Url为数组
+     * 
+     */
+    public function parserUrlToArray()
+    {
+        $baseUrl = $this->getBaseUrl();
+        $requestUri = '';
+        if (empty($_SERVER['QUERY_STRING'])) {
+            $requestUri = $_SERVER['REQUEST_URI'];
+        } else {
+            $requestUri = str_replace('?' . $_SERVER['QUERY_STRING'], '', $_SERVER['REQUEST_URI']);
+        }
+        if ($requestUri != $baseUrl) {
+            $requestUri = str_replace($baseUrl, '', $requestUri);
+        }
+        $uriArray = explode('/', $requestUri);
+        return $uriArray;
     }
 }

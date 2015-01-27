@@ -9,13 +9,39 @@
 
 class Action
 {
+    /**
+     * View实例
+     * 
+     * @var View
+     */
     public $view;
     
+    /**
+     * Params实例
+     * 
+     * @var Params
+     */
+    public $params;
+    
+    /**
+     * 构造
+     * 
+     * @param string $controller
+     * @param string $action
+     * @return Action
+     */
     function __construct($controller, $action)
     {
         $this->view = new View($controller, $action);
+        $this->params = Params::getInstance();
     }
     
+    /**
+     * 向View传入变量
+     * 
+     * @param mixed $variable
+     * @param mixed $value
+     */
     public function assign($variable, $value)
     {
         $this->view->assign($variable, $value);

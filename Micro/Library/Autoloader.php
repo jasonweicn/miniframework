@@ -9,8 +9,17 @@
 
 class Autoloader
 {
+    /**
+     * Autoloader Instance
+     * 
+     * @var Autoloader
+     */
     protected static $_instance;
     
+    /**
+     * 获取实例
+     * 
+     */
     public static function getInstance()
     {
         if (self::$_instance === null) {
@@ -19,6 +28,10 @@ class Autoloader
         return self::$_instance;
     }
     
+    /**
+     * 构造
+     * 
+     */
     protected function __construct()
     {
         spl_autoload_register(array(__CLASS__, 'autoload'));
