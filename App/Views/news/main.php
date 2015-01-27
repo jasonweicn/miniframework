@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title><?php echo $this->title;?></title>
-<link rel="stylesheet" type="text/css" href="my.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl();?>/css/default.css">
 </head>
 <body>
     <?php echo $this->info;?>

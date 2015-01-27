@@ -28,7 +28,7 @@ class App
      * 
      * @var string
      */
-    protected $_baseUrl;
+    public $_baseUrl;
     
     /**
      * Params实例
@@ -75,6 +75,7 @@ class App
         if ($this->_router->_routeType == 'rewrite') {
             $this->uriToParams($this->_router->_uriArray);
         }
+        $this->_baseUrl = $this->_router->getBaseUrl();
         $this->_controller = $this->_router->route();
         $action = $this->_router->_action . 'Action';
         

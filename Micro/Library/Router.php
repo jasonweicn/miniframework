@@ -28,7 +28,7 @@ class Router
      * 
      * @var string
      */
-    public $_baseUrl;
+    protected $_baseUrl;
     
     /**
      * 路由方式

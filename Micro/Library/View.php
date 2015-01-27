@@ -16,6 +16,10 @@ class View
      */
     private $_render;
     
+    protected $_app;
+    
+    protected $_baseUrl;
+    
     /**
      * 构造
      * 
@@ -32,6 +36,16 @@ class View
         } else {
             throw new Exception('View ' . $action . ' does not exist.');
         }
+        
+        $this->_app = App::getInstance();
+    }
+    
+    public function baseUrl()
+    {
+        if ($this->_baseUrl === null) {
+            $this->_baseUrl = $this->_app->_baseUrl;
+        }
+        return $this->_baseUrl;
     }
     
     public function __set($variable, $value)

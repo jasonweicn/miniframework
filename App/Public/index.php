@@ -5,5 +5,6 @@
  */
 
 define('APP_PATH', dirname(__FILE__).'/../');
-//print_r($_SERVER);exit();
+
+//引入 Micro Framework 就是这么简单
 require '../../Micro/Micro.php';
