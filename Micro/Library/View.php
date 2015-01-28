@@ -10,14 +10,40 @@
 class View
 {
     /**
+     * Micro_Exception实例
+     * @var Micro_Exception
+     */
+    protected $_exception;
+    
+    /**
+     * 控制器
+     * @var string
+     */
+    protected $_controller;
+    
+    /**
+     * 动作
+     * @var string
+     */
+    protected $_action;
+    
+    /**
      * 渲染模板
      * 
      * @var string
      */
     private $_render;
     
+    /**
+     * App实例
+     * @var App
+     */
     protected $_app;
     
+    /**
+     * 基础路径
+     * @var string
+     */
     protected $_baseUrl;
     
     /**
@@ -29,14 +55,9 @@ class View
      */
     function __construct($controller, $action)
     {
-        $file = APP_PATH . DIRECTORY_SEPARATOR .  'Views' . DIRECTORY_SEPARATOR . strtolower($controller) . DIRECTORY_SEPARATOR . $action . '.php';
-        
-        if (file_exists($file)) {
-            $this->_render = $file;
-        } else {
-            throw new Exception('View ' . $action . ' does not exist.');
-        }
-        
+        $this->_exception = Micro_Exception::getInstance();
+        $this->_controller = $controller;
+        $this->_action = $action;
         $this->_app = App::getInstance();
     }
     
@@ -74,6 +95,16 @@ class View
      */
     public function display()
     {
+        $file = APP_PATH . DIRECTORY_SEPARATOR .  'Views' . DIRECTORY_SEPARATOR . strtolower($this->_controller) . DIRECTORY_SEPARATOR . $this->_action . '.php';
+        
+        if (file_exists($file)) {
+            $this->_render = $file;
+        } else {
+            if ($this->_exception->throwExceptions()) {
+                throw new Exception('View "' . $this->_action . '" does not exist.');
+            }
+        }
+        
         include($this->_render);
     }
 }

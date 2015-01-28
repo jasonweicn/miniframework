@@ -20,7 +20,7 @@ class Loader
         if (file_exists($file)) {
             include_once($file);
         } else {
-            throw new Exception('File ' . $filename . ' not found.');
+            throw new Exception('Model file "' . $filename . '" not found.');
         }
     }
 }

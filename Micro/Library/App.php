@@ -17,6 +17,12 @@ class App
     protected $_controller;
     
     /**
+     * Micro_Exception实例
+     * @var Micro_Exception
+     */
+    protected $_exception;
+    
+    /**
      * Router实例
      * 
      * @var Router
@@ -62,6 +68,7 @@ class App
      */
     protected function __construct()
     {
+        $this->_exception = Micro_Exception::getInstance();
         $this->_params = Params::getInstance();
         $this->getRouter();
     }
@@ -72,6 +79,7 @@ class App
      */
     public function run()
     {
+        if (SHOW_ERROR === true) $this->_exception->throwExceptions(true);
         if ($this->_router->_routeType == 'rewrite') {
             $this->uriToParams($this->_router->_uriArray);
         }
@@ -85,7 +93,9 @@ class App
             }
             $this->_controller->$action();
         } else {
-            throw new Exception('Action ' . $action . ' does not exist.');
+            if ($this->_exception->throwExceptions()) {
+                throw new Exception('Action "' . $this->_router->_action . '" does not exist.');
+            }
         }
     }
     

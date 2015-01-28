@@ -10,6 +10,12 @@
 class Router
 {
     /**
+     * Micro_Exception实例
+     * @var Micro_Exception
+     */
+    protected $_exception;
+    
+    /**
      * 控制器实例
      * 
      * @var object
@@ -50,6 +56,7 @@ class Router
      */
     public function __construct()
     {
+        $this->_exception = Micro_Exception::getInstance();
         $baseUrl = $this->getBaseUrl();
         
         if (false === strpos($_SERVER['REQUEST_URI'], $_SERVER['SCRIPT_NAME'])) {
@@ -90,10 +97,14 @@ class Router
             if (class_exists($className)) {
                 $controller = new $className($class, $this->_action);
             } else {
-                throw new Exception($className . ' does not exist.');
+                if ($this->_exception->throwExceptions()) {
+                    throw new Exception($className . ' does not exist.');
+                }
             }
         } else {
-            throw new Exception('Controller ' . $class . ' not found.');
+            if ($this->_exception->throwExceptions()) {
+                throw new Exception('Controller "' . $class . '" not found.');
+            }
         }
         return $controller;
     }

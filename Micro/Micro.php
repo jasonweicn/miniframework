@@ -9,6 +9,7 @@
 
 defined('MICRO_PATH')  or define('MICRO_PATH',  __DIR__ . DIRECTORY_SEPARATOR);
 defined('APP_PATH') or define('APP_PATH',       dirname($_SERVER['SCRIPT_FILENAME']) . DIRECTORY_SEPARATOR);
+defined('SHOW_ERROR') or define('SHOW_ERROR',   false);
 
 require(MICRO_PATH .'Library' . DIRECTORY_SEPARATOR . 'Autoloader.php');
 Autoloader::getInstance(MICRO_PATH);

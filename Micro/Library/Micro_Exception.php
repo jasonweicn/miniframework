@@ -7,18 +7,24 @@
 // | Author: Jason.wei <jasonwei06@hotmail.com>
 // +------------------------------------------------------------
 
-class Autoloader
+class Micro_Exception
 {
     /**
-     * Autoloader Instance
-     * 
-     * @var Autoloader
+     * 是否抛出异常
+     * @var boolean
+     */
+    public $_throwExceptions = false;
+    
+    /**
+     * App实例
+     *
+     * @var App
      */
     protected static $_instance;
     
     /**
      * 获取实例
-     * 
+     *
      */
     public static function getInstance()
     {
@@ -30,25 +36,23 @@ class Autoloader
     
     /**
      * 构造
-     * 
+     *
      */
     protected function __construct()
     {
-        spl_autoload_register(array(__CLASS__, 'autoload'));
+        //reserve...
     }
     
     /**
-     * 自动载入
-     * 
-     * @param string $className
+     * 异常处理方法
+     * @param boolean $flag
+     * @return boolean
      */
-    public function autoload($className)
+    public function throwExceptions($flag = null)
     {
-        $file = MICRO_PATH . DIRECTORY_SEPARATOR . 'Library' . DIRECTORY_SEPARATOR . $className . '.php';
-        if (file_exists($file)) {
-            include_once($file);
-        } else {
-            throw new Exception('Class ' . $className . ' not found.');
+        if ($flag !== null) {
+            $this->_throwExceptions = $flag;
         }
+        return $this->_throwExceptions;
     }
 }
