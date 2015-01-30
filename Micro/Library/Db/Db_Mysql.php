@@ -1,0 +1,321 @@
+<?php
+// +------------------------------------------------------------
+// | Micro Framework
+// +------------------------------------------------------------
+// | Source: https://github.com/jasonweicn/MicroFramework
+// +------------------------------------------------------------
+// | Author: Jason.wei <jasonwei06@hotmail.com>
+// +------------------------------------------------------------
+
+require_once 'Db_Abstract.php';
+
+class Db_Mysql extends Db_Abstract
+{
+    /**
+     * 创建一个数据源
+     * 
+     */
+    private function _dsn()
+    {
+        $dsn = array();
+        
+        if (isset($this->_params['host']) && is_string($this->_params['host'])) {
+            $dsn['host'] = $this->_params['host'];
+        } else {
+            $dsn['host'] = 'localhost';
+        }
+        
+        if (isset($this->_params['port'])) {
+            $dsn['port'] = $this->_params['port'];
+        }
+        
+        if (isset($this->_params['dbname']) && is_string($this->_params['dbname'])) {
+            $dsn['dbname'] = $this->_params['dbname'];
+        } else {
+            throw new Exception('"dbname" must be in the params of Db.');
+        }
+        
+        foreach ($dsn as $key => $val) {
+            $dsn[$key] = "$key=$val";
+        }
+
+        return 'mysql:' . implode(';', $dsn);
+    }
+    
+    /**
+     * 创建一个数据库连接
+     * 
+     */
+    protected function _connect()
+    {
+        if ($this->_dbh) return;
+        
+        $dsn = $this->_dsn();
+        
+        if (isset($this->_params['persistent']) && ($this->_params['persistent'] == true)) {
+            $this->_params['options'][PDO::ATTR_PERSISTENT] = true;
+        } else {
+            $this->_params['options'][PDO::ATTR_PERSISTENT] = false;
+        }
+        
+        try {
+            $this->_dbh = new PDO(
+                $dsn,
+                $this->_params['username'],
+                $this->_params['passwd'],
+                $this->_params['options']
+            );
+            $this->_dbh->exec('SET character_set_connection=' . $this->_params['charset'] . ', character_set_results=' . $this->_params['charset'] . ', character_set_client=binary');
+        } catch (PDOException $e) {
+            throw new Exception($e);
+        }
+    }
+    
+    /**
+     * 执行SQL语句
+     *
+     * @param string $sql
+     * @return int
+     */
+    public function execSql($sql = null)
+    {
+        $this->_connect();
+        $this->_setLastSql($sql);
+        try {
+            $affected = $this->_dbh->exec($sql);
+            if ($affected === false) {
+                $this->_getPdoError();
+            }
+            return $affected;
+        } catch (PDOException $e) {
+            throw new Exception($e);
+        }
+    }
+    
+    /**
+     * 查询SQL语句
+     *
+     * @param string $sql SQL语句
+     * @param string $queryMode 查询方式(All or Row)
+     * @return array
+     */
+    public function query($sql = null, $queryMode = 'All')
+    {
+        $this->_connect();
+        $this->_setLastSql($sql);
+        try {
+            $recordset = $this->_dbh->query($sql);
+            if ($recordset === false) {
+                $this->_getPdoError();
+            }
+            $recordset->setFetchMode(PDO::FETCH_ASSOC);
+            
+            if ($queryMode == 'All') {
+                $result = $recordset->fetchAll();
+            } elseif ($queryMode == 'Row') {
+                $result = $recordset->fetch();
+            } else {
+                $result = null;
+            }
+            
+            return $result;
+        } catch (PDOException $e) {
+            throw new Exception($e);
+        }
+    }
+    
+    /**
+     * 插入记录
+     *
+     * @param string $table 表名
+     * @param array $data 数据 array(col => value)
+     * @return int
+     */
+    public function insert($table, array $data)
+    {
+        $sql = "INSERT INTO `$table` (`" . implode('`,`', array_keys($data)) . "`) VALUES ('" . implode("','", $data) . "')";
+        
+        return $this->execSql($sql);
+    }
+    
+    /**
+     * 更新记录
+     *
+     * @param string $table 表名
+     * @param array $data 数据 array(col => value)
+     * @param string $where 条件
+     * @return int
+     */
+    public function update($table, array $data, $where = '')
+    {
+        $sql = '';
+        if (!empty($data)) {
+            foreach ($data as $key => $value) {
+                $sql .= ", `$key`='$value'";
+            }
+        }
+        $sql = substr($sql, 1);
+        $sql = "UPDATE `$table` SET $sql" . (($where) ? " WHERE $where" : '');
+        
+        return $this->execSql($sql);
+    }
+    
+    /**
+     * 替换记录
+     *
+     * @param string $table 表名
+     * @param array $data 数据 array(col => value)
+     * @return int
+     */
+    public function replace($table, array $data)
+    {
+        $sql = "REPLACE INTO `$table`(`" . implode('`,`', array_keys($data)) . "`) VALUES ('" . implode("','", $data) . "')";
+        
+        return $this->execSql($sql);
+    }
+    
+    /**
+     * 删除记录
+     *
+     * @param string $table 表名
+     * @param string $where 条件
+     * @return int
+     */
+    public function delete($table, $where = '')
+    {
+        $sql = "DELETE FROM `$table`" . (($where) ? " WHERE $where" : '');
+        return $this->execSql($sql);
+    }
+    
+    /**
+     * 按指定条件查询行数
+     * 
+     * @param string $table
+     * @param string $col
+     * @param string $where
+     * @return int
+     */
+    public function countRow($table, $col = '*', $where = '')
+    {
+        $sql = "SELECT COUNT($col) AS rows FROM `$table`" . (($where) ? " WHERE $where" : '');
+        $result = $this->query($sql, 'Row');
+        return $result['rows'];
+    }
+    
+    /**
+     * 获取字段最大值
+     * 
+     * @param string $table 表名
+     * @param string $col 字段名
+     * @param string $where 条件
+     */
+    public function getMaxValue($table, $col, $where = '')
+    {
+        $sql = "SELECT MAX($col) AS max_value FROM `$table``" . (($where) ? " WHERE $where" : '');
+        $result = $this->query($sql, 'Row');
+        $maxValue = $result["max_value"];
+        if ($maxValue == "" || $maxValue == null) {
+            $maxValue = 0;
+        }
+        return $maxValue;
+    }
+    
+    /**
+     * 获取表引擎
+     * 
+     * @param string $table 表名
+     * @return string
+     */
+    public function getTableEngine($table)
+    {
+        $sql = "SHOW TABLE STATUS FROM `" . $this->_params['dbname'] . "` WHERE `Name`='" . $table . "'";
+        $result = $this->query($sql);
+        return $result[0]['Engine'];
+    }
+    
+    /**
+     * 事务开始
+     */
+    protected function _beginTransaction()
+    {
+        $this->_dbh->beginTransaction();
+    }
+    
+    /**
+     * 事务提交
+     */
+    protected function _commit()
+    {
+        $this->_dbh->commit();
+    }
+    
+    /**
+     * 事务回滚
+     */
+    protected function _rollBack()
+    {
+        $this->_dbh->rollBack();
+    }
+    
+    /**
+     * 通过事务处理多条SQL语句
+     *
+     * @param array $arraySql
+     * @return boolean
+     */
+    public function execTrans(array $arraySql)
+    {
+        $flag = true;
+        $this->_beginTransaction();
+        foreach ($arraySql as $sql) {
+            if ($this->execSql($sql) == 0) $flag = false;
+        }
+        if ($flag === false) {
+            $this->_rollBack();
+            return false;
+        } else {
+            $this->_commit();
+            return true;
+        }
+    }
+    
+    /**
+     * 获得最后一次插入记录的自增主键
+     * 
+     */
+    public function lastInsertId()
+    {
+        $this->_connect();
+        return $this->_dbh->lastInsertId();
+    }
+    
+    /**
+     * 保存最后一次执行的SQL语句
+     * 
+     * @param string $sql
+     */
+    protected function _setLastSql($sql = null)
+    {
+        $this->_lastSql = $sql;
+    }
+    
+    /**
+     * 捕获PDO错误信息
+     */
+    private function _getPdoError()
+    {
+        $this->_connect();
+        if ($this->_dbh->errorCode() != '00000') {
+            $errorInfo = $this->_dbh->errorInfo();
+            throw new Exception($errorInfo[2]);
+        }
+    }
+    
+    /**
+     * 关闭数据库连接
+     */
+    public function close()
+    {
+        $this->_dbh = null;
+    }
+}

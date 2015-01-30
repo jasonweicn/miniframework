@@ -13,19 +13,19 @@ class View
      * Micro_Exception实例
      * @var Micro_Exception
      */
-    protected $_exception;
+    private $_exception;
     
     /**
      * 控制器
      * @var string
      */
-    protected $_controller;
+    private $_controller;
     
     /**
      * 动作
      * @var string
      */
-    protected $_action;
+    private $_action;
     
     /**
      * 渲染模板
@@ -38,7 +38,7 @@ class View
      * App实例
      * @var App
      */
-    protected $_app;
+    private $_app;
     
     /**
      * 基础路径

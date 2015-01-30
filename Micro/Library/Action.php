@@ -14,14 +14,14 @@ class Action
      * 
      * @var View
      */
-    public $view;
+    protected $view;
     
     /**
      * Params实例
      * 
      * @var Params
      */
-    public $params;
+    protected $params;
     
     /**
      * 构造

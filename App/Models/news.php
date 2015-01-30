@@ -6,4 +6,3 @@ class News
         return "<p>Hello World!</p>";
     }
 }
-?>
