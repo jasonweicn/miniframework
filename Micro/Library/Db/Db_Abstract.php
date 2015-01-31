@@ -102,16 +102,15 @@ abstract class Db_Abstract
     /**
      * 构造
      * 
-     * @param array $params
-     * $params => array (
-     *     host         => (string) What host to connect to, default to localhost.
-     *     dbname       => (string) The name of the database to user.
-     *     username     => (string) Connect to the database as this username.
-     *     passwd       => (string) Password associated with the username.
+     * @param array $params => array (
+     *     host         => (string) 主机，默认值为localhost
+     *     dbname       => (string) 数据库名
+     *     username     => (string) 用户名
+     *     passwd       => (string) 密码
      * 
-     *     port         => (string) The port of the database.
-     *     charset      => (string) The charset of the database, default to utf8.
-     *     persistent   => (boolean) Whether to use a persistent connection or not, defaults to false.
+     *     port         => (string) 端口
+     *     charset      => (string) 字符集编码，默认值为utf8
+     *     persistent   => (boolean) 是否启用持久连接，默认值为false
      * )
      * @return Db_Abstract
      */

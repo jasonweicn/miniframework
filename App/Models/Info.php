@@ -1,5 +1,5 @@
 <?php
-class News
+class Info
 {
     public function getInfo()
     {

@@ -10,8 +10,8 @@
 class View
 {
     /**
-     * Micro_Exception实例
-     * @var Micro_Exception
+     * Exceptions实例
+     * @var Exceptions
      */
     private $_exception;
     
@@ -35,10 +35,10 @@ class View
     private $_render;
     
     /**
-     * App实例
-     * @var App
+     * Request实例
+     * @var Request
      */
-    private $_app;
+    private $_request;
     
     /**
      * 基础路径
@@ -55,16 +55,16 @@ class View
      */
     function __construct($controller, $action)
     {
-        $this->_exception = Micro_Exception::getInstance();
+        $this->_exception = Exceptions::getInstance();
+        $this->_request = Request::getInstance();
         $this->_controller = $controller;
         $this->_action = $action;
-        $this->_app = App::getInstance();
     }
     
     public function baseUrl()
     {
         if ($this->_baseUrl === null) {
-            $this->_baseUrl = $this->_app->_baseUrl;
+            $this->_baseUrl = $this->_request->getBaseUrl();
         }
         return $this->_baseUrl;
     }

@@ -1,16 +1,16 @@
 <?php
-class NewsController extends Action
+class IndexController extends Action
 {
     function init()
     {
         $this->view->title = 'Micro Framework';
     }
     
-    function mainAction()
+    function indexAction()
     {
-        Loader::loadClass('news');
-        $news = new News();
-        $info = $news->getInfo();
+        Loader::loadClass('Info');
+        $info = new Info();
+        $info = $info->getInfo();
         $this->view->assign('info', $info);
         $this->view->display();
     }

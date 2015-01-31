@@ -10,10 +10,16 @@
 class Router
 {
     /**
-     * Micro_Exception实例
-     * @var Micro_Exception
+     * Exceptions实例
+     * @var Exceptions
      */
     protected $_exception;
+    
+    /**
+     * Request实例
+     * @var Request
+     */
+    private $_request;
     
     /**
      * 控制器实例
@@ -56,13 +62,19 @@ class Router
      */
     public function __construct()
     {
-        $this->_exception = Micro_Exception::getInstance();
-        $baseUrl = $this->getBaseUrl();
-        
+        $this->_exception = Exceptions::getInstance();
+        $this->_request = Request::getInstance();
+    }
+    
+    /**
+     * 处理请求
+     */
+    private function _parser()
+    {
         if (false === strpos($_SERVER['REQUEST_URI'], $_SERVER['SCRIPT_NAME'])) {
             //Rewrite
             $this->setRouteType('rewrite');
-            $this->_uriArray = $this->parserUrlToArray();
+            $this->_uriArray = $this->parseUrlToArray();
             $this->_controller = (isset($this->_uriArray[1]) && !empty($this->_uriArray[1])) ? $this->_uriArray[1] : 'index';
             $this->_action = (isset($this->_uriArray[2]) && !empty($this->_uriArray[2])) ? $this->_uriArray[2] : 'index';
         } else {
@@ -85,14 +97,14 @@ class Router
      */
     public function route()
     {
+        $this->_parser();
+        
         $class = $this->_controller;
         $target = APP_PATH . DIRECTORY_SEPARATOR . 'Controllers' . DIRECTORY_SEPARATOR . $class . '.php';
         
-        //引入目标文件
         if (file_exists($target)) {
             include_once($target);
             
-            //Example: NewsController
             $className = ucfirst($class) . 'Controller';
             if (class_exists($className)) {
                 $controller = new $className($class, $this->_action);
@@ -109,33 +121,6 @@ class Router
         return $controller;
     }
     
-    /**
-     * 从$_SERVER['PHP_SELF']中提取基础地址
-     * 
-     */
-    public function setBaseUrl()
-    {
-        if ($this->_baseUrl === null) {
-            $phpSelf = $_SERVER['PHP_SELF'];
-            $urlArray = explode('/', $phpSelf);
-            unset($urlArray[count($urlArray) - 1]);
-            $this->_baseUrl = implode('/', $urlArray);
-        }
-        return $this->_baseUrl;
-    }
-    
-    /**
-     * 获取基础地址
-     * 
-     */
-    public function getBaseUrl()
-    {
-        if ($this->_baseUrl === null) {
-            $this->_baseUrl = $this->setBaseUrl();
-        }
-        return $this->_baseUrl;
-    }
-    
     public function setRouteType($type)
     {
         $this->_routeType = $type;
@@ -150,15 +135,18 @@ class Router
      * 解析Url为数组
      * 
      */
-    public function parserUrlToArray()
+    public function parseUrlToArray()
     {
-        $baseUrl = $this->getBaseUrl();
         $requestUri = '';
+        
         if (empty($_SERVER['QUERY_STRING'])) {
             $requestUri = $_SERVER['REQUEST_URI'];
         } else {
             $requestUri = str_replace('?' . $_SERVER['QUERY_STRING'], '', $_SERVER['REQUEST_URI']);
         }
+        
+        $baseUrl = $this->_request->getBaseUrl();
+        
         if ($requestUri != $baseUrl) {
             $requestUri = str_replace($baseUrl, '', $requestUri);
         }

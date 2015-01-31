@@ -17,8 +17,8 @@ class App
     protected $_controller;
     
     /**
-     * Micro_Exception实例
-     * @var Micro_Exception
+     * Exceptions实例
+     * @var Exceptions
      */
     protected $_exception;
     
@@ -28,13 +28,6 @@ class App
      * @var Router
      */
     protected $_router;
-    
-    /**
-     * 基础路径
-     * 
-     * @var string
-     */
-    public $_baseUrl;
     
     /**
      * Params实例
@@ -68,7 +61,7 @@ class App
      */
     protected function __construct()
     {
-        $this->_exception = Micro_Exception::getInstance();
+        $this->_exception = Exceptions::getInstance();
         $this->_params = Params::getInstance();
         $this->getRouter();
     }
@@ -80,11 +73,13 @@ class App
     public function run()
     {
         if (SHOW_ERROR === true) $this->_exception->throwExceptions(true);
+        
+        $this->_controller = $this->_router->route();
+        
         if ($this->_router->_routeType == 'rewrite') {
             $this->uriToParams($this->_router->_uriArray);
         }
-        $this->_baseUrl = $this->_router->getBaseUrl();
-        $this->_controller = $this->_router->route();
+        
         $action = $this->_router->_action . 'Action';
         
         if (method_exists($this->_controller, $action)) {

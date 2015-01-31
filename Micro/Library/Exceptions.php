@@ -7,13 +7,13 @@
 // | Author: Jason.wei <jasonwei06@hotmail.com>
 // +------------------------------------------------------------
 
-class Micro_Exception
+class Exceptions
 {
     /**
      * 是否抛出异常
      * @var boolean
      */
-    public $_throwExceptions = false;
+    protected $_throwExceptions = false;
     
     /**
      * App实例
