@@ -99,6 +99,8 @@ class View
         } else {
             if ($this->_exception->throwExceptions()) {
                 throw new Exception('View "' . $this->_action . '" does not exist.');
+            } else {
+                $this->_exception->sendHttpStatus(404);
             }
         }
         

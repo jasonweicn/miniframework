@@ -103,7 +103,7 @@ class App
             if ($this->_exception->throwExceptions()) {
                 throw new Exception('Controller "' . $controllerFile . '" not found.');
             } else {
-                $this->_exception->sendHttp404();
+                $this->_exception->sendHttpStatus(404);
             }
         }
         
@@ -113,7 +113,7 @@ class App
             if ($this->_exception->throwExceptions()) {
                 throw new Exception($controllerName . ' does not exist.');
             } else {
-                $this->_exception->sendHttp404();
+                $this->_exception->sendHttpStatus(404);
             }
         }
         
@@ -128,7 +128,7 @@ class App
             if ($this->_exception->throwExceptions()) {
                 throw new Exception('Action "' . $this->_router->_action . '" does not exist.');
             } else {
-                $this->_exception->sendHttp404();
+                $this->_exception->sendHttpStatus(404);
             }
         }
     }

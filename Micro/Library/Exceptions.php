@@ -57,12 +57,33 @@ class Exceptions
     }
     
     /**
-     * 返回404状态
+     * 返回http状态
      */
-    public function sendHttp404()
+    public function sendHttpStatus($code)
     {
-        header("HTTP/1.1 404 Not Found");
-        header("Status: 404 Not Found");
+        $status = array(
+            404 => 'Not Found',
+            500 => 'Internal Server Error'
+        );
+        
+        if (isset($status[$code])) {
+            $info = '<html><head><title>Error</title></head><body><h1>An error occurred</h1>';
+            $info.= '<h2>' . $code . ' ' . $status[$code] . '</h2></body></html>';
+            echo $info;
+            header('HTTP/1.1 ' . $code . ' ' . $status[$code]);
+            header('Status: ' . $code . ' ' . $status[$code]);
+        }
+        
+        die();
+    }
+    
+    /**
+     * 返回500状态
+     */
+    public function sendHttp500()
+    {
+        header("HTTP/1.1 500 Internal Server Error");
+        header("Status: 500 Internal Server Error");
         die();
     }
 }

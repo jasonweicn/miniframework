@@ -1,7 +1,8 @@
 2015-02-02
 	* The optimization.
 	* Add "insertAll" method of the MySQL.
-	* Add "sendHttp404" method of the Exceptions.
+	* Add "sendHttpStatus" method of the Exceptions.
+	* Version 0.5.0 released.
 
 
 2015-02-01
