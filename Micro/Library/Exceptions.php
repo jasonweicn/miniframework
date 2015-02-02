@@ -55,4 +55,14 @@ class Exceptions
         }
         return $this->_throwExceptions;
     }
+    
+    /**
+     * 返回404状态
+     */
+    public function sendHttp404()
+    {
+        header("HTTP/1.1 404 Not Found");
+        header("Status: 404 Not Found");
+        die();
+    }
 }

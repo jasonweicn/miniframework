@@ -48,17 +48,14 @@ class View
     
     /**
      * 构造
-     * 
-     * @param string $controller
-     * @param string $action
-     * @return View
      */
-    function __construct($controller, $action)
+    function __construct()
     {
         $this->_exception = Exceptions::getInstance();
         $this->_request = Request::getInstance();
-        $this->_controller = $controller;
-        $this->_action = $action;
+        $app = App::getInstance();
+        $this->_controller = $app->controller;
+        $this->_action = $app->action;
     }
     
     public function baseUrl()
@@ -95,10 +92,10 @@ class View
      */
     public function display()
     {
-        $file = APP_PATH . DIRECTORY_SEPARATOR .  'Views' . DIRECTORY_SEPARATOR . strtolower($this->_controller) . DIRECTORY_SEPARATOR . $this->_action . '.php';
+        $viewTpl = APP_PATH . DIRECTORY_SEPARATOR .  'Views' . DIRECTORY_SEPARATOR . strtolower($this->_controller) . DIRECTORY_SEPARATOR . $this->_action . '.php';
         
-        if (file_exists($file)) {
-            $this->_render = $file;
+        if (file_exists($viewTpl)) {
+            $this->_render = $viewTpl;
         } else {
             if ($this->_exception->throwExceptions()) {
                 throw new Exception('View "' . $this->_action . '" does not exist.');

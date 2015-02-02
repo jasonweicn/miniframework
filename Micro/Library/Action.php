@@ -30,9 +30,9 @@ class Action
      * @param string $action
      * @return Action
      */
-    function __construct($controller, $action)
+    function __construct()
     {
-        $this->view = new View($controller, $action);
+        $this->view = new View();
         $this->params = Params::getInstance();
     }
     

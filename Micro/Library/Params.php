@@ -101,10 +101,9 @@ class Params
      * 递归方式过滤数组
      * 
      * @param array $array
-     * @param int $max_layer
      * @return array
      */
-    private function getArray($array, $max_layer = 32) {
+    private function getArray($array) {
         foreach ($array as $key => $val) {
             if (is_array($val)) {
                 $array[$key] = $this->getArray($val);

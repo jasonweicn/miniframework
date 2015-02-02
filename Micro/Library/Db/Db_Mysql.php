@@ -139,6 +139,29 @@ class Db_Mysql extends Db_Abstract
     }
     
     /**
+     * 批量插入记录
+     * @param string $table
+     * @param array $dataArray = array(
+     *     0 => array(col1 => value1, col2 => value2),
+     *     1 => array(col1 => value1, col2 => value2),
+     *     ...
+     * )
+     * @return int
+     */
+    public function insertAll($table, array $dataArray)
+    {
+        $sql = "INSERT INTO `$table` (`" . implode('`,`', array_keys($dataArray[0])) . "`) VALUES ";
+        
+        foreach ($dataArray as $data) {
+            $valSqls[] = "('" . implode("','", $data) . "')";
+        }
+        
+        $sql .= implode(', ', $valSqls);
+        
+        return $this->execSql($sql);
+    }
+    
+    /**
      * 更新记录
      *
      * @param string $table 表名

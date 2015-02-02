@@ -10,11 +10,16 @@
 class App
 {
     /**
-     * 控制器实例
-     * 
-     * @var object
+     * 控制器
+     * @var string
      */
-    protected $_controller;
+    public $controller;
+    
+    /**
+     * 动作
+     * @var string
+     */
+    public $action;
     
     /**
      * Exceptions实例
@@ -74,22 +79,56 @@ class App
     {
         if (SHOW_ERROR === true) $this->_exception->throwExceptions(true);
         
-        $this->_controller = $this->_router->route();
+        if ('rewrite' == $this->_router->getRouteType()) {
+            $this->uriToParams($this->_router->getUriArray());
+        }
         
-        if ($this->_router->_routeType == 'rewrite') {
-            $this->uriToParams($this->_router->_uriArray);
+        $this->dispatch();
+    }
+    
+    /**
+     * 调派
+     */
+    private function dispatch()
+    {
+        $this->controller = $this->_router->_controller;
+        $this->action = $this->_router->_action;
+        
+        $controllerName = ucfirst($this->controller) . 'Controller';
+        $controllerFile = APP_PATH . DIRECTORY_SEPARATOR . 'Controllers' . DIRECTORY_SEPARATOR . $controllerName . '.php';
+        
+        if (file_exists($controllerFile)) {
+            include_once($controllerFile);
+        } else {
+            if ($this->_exception->throwExceptions()) {
+                throw new Exception('Controller "' . $controllerFile . '" not found.');
+            } else {
+                $this->_exception->sendHttp404();
+            }
+        }
+        
+        if (class_exists($controllerName)) {
+            $controller = new $controllerName();
+        } else {
+            if ($this->_exception->throwExceptions()) {
+                throw new Exception($controllerName . ' does not exist.');
+            } else {
+                $this->_exception->sendHttp404();
+            }
         }
         
         $action = $this->_router->_action . 'Action';
         
-        if (method_exists($this->_controller, $action)) {
-            if (method_exists($this->_controller, 'init')) {
-                $this->_controller->init();
+        if (method_exists($controller, $action)) {
+            if (method_exists($controller, 'init')) {
+                $controller->init();
             }
-            $this->_controller->$action();
+            $controller->$action();
         } else {
             if ($this->_exception->throwExceptions()) {
                 throw new Exception('Action "' . $this->_router->_action . '" does not exist.');
+            } else {
+                $this->_exception->sendHttp404();
             }
         }
     }

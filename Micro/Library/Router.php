@@ -22,11 +22,11 @@ class Router
     private $_request;
     
     /**
-     * 控制器实例
+     * 控制器
      * 
-     * @var object
+     * @var string
      */
-    protected $_controller;
+    public $_controller;
     
     /**
      * 动作
@@ -36,25 +36,18 @@ class Router
     public $_action;
     
     /**
-     * 基础路径
-     * 
-     * @var string
-     */
-    protected $_baseUrl;
-    
-    /**
      * 路由方式
      * 
      * @var string
      */
-    public $_routeType;
+    protected $_routeType;
     
     /**
      * 路径数组
      * 
      * @var string
      */
-    public $_uriArray;
+    protected $_uriArray;
     
     /**
      * 构造
@@ -64,22 +57,16 @@ class Router
     {
         $this->_exception = Exceptions::getInstance();
         $this->_request = Request::getInstance();
-    }
-    
-    /**
-     * 处理请求
-     */
-    private function _parser()
-    {
+        
         if (false === strpos($_SERVER['REQUEST_URI'], $_SERVER['SCRIPT_NAME'])) {
             //Rewrite
-            $this->setRouteType('rewrite');
+            $this->_routeType = 'rewrite';
             $this->_uriArray = $this->parseUrlToArray();
             $this->_controller = (isset($this->_uriArray[1]) && !empty($this->_uriArray[1])) ? $this->_uriArray[1] : 'index';
             $this->_action = (isset($this->_uriArray[2]) && !empty($this->_uriArray[2])) ? $this->_uriArray[2] : 'index';
         } else {
             //GET
-            $this->setRouteType('get');
+            $this->_routeType = 'get';
             if (empty($_SERVER['QUERY_STRING'])) {
                 $this->_controller = 'index';
                 $this->_action = 'index';
@@ -91,36 +78,6 @@ class Router
         }
     }
     
-    /**
-     * 路由
-     * 
-     */
-    public function route()
-    {
-        $this->_parser();
-        
-        $class = $this->_controller;
-        $target = APP_PATH . DIRECTORY_SEPARATOR . 'Controllers' . DIRECTORY_SEPARATOR . $class . '.php';
-        
-        if (file_exists($target)) {
-            include_once($target);
-            
-            $className = ucfirst($class) . 'Controller';
-            if (class_exists($className)) {
-                $controller = new $className($class, $this->_action);
-            } else {
-                if ($this->_exception->throwExceptions()) {
-                    throw new Exception($className . ' does not exist.');
-                }
-            }
-        } else {
-            if ($this->_exception->throwExceptions()) {
-                throw new Exception('Controller "' . $class . '" not found.');
-            }
-        }
-        return $controller;
-    }
-    
     public function setRouteType($type)
     {
         $this->_routeType = $type;
@@ -129,6 +86,11 @@ class Router
     public function getRouteType()
     {
         return $this->_routeType;
+    }
+    
+    public function getUriArray()
+    {
+        return $this->_uriArray;
     }
     
     /**
