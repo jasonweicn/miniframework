@@ -1,8 +1,8 @@
 <?php
 // +------------------------------------------------------------
-// | Micro Framework
+// | Mini Framework
 // +------------------------------------------------------------
-// | Source: https://github.com/jasonweicn/MicroFramework
+// | Source: https://github.com/jasonweicn/MiniFramework
 // +------------------------------------------------------------
 // | Author: Jason.wei <jasonwei06@hotmail.com>
 // +------------------------------------------------------------
@@ -58,22 +58,46 @@ class Router
         $this->_exception = Exceptions::getInstance();
         $this->_request = Request::getInstance();
         
+        $exceptions = Exceptions::getInstance();
+        
         if (false === strpos($_SERVER['REQUEST_URI'], $_SERVER['SCRIPT_NAME'])) {
             //Rewrite
             $this->_routeType = 'rewrite';
             $this->_uriArray = $this->parseUrlToArray();
-            $this->_controller = (isset($this->_uriArray[1]) && !empty($this->_uriArray[1])) ? $this->_uriArray[1] : 'index';
-            $this->_action = (isset($this->_uriArray[2]) && !empty($this->_uriArray[2])) ? $this->_uriArray[2] : 'index';
+            
+            $controller = (isset($this->_uriArray[1]) && !empty($this->_uriArray[1])) ? $this->_uriArray[1] : 'index';
+            $action = (isset($this->_uriArray[2]) && !empty($this->_uriArray[2])) ? $this->_uriArray[2] : 'index';
         } else {
             //GET
             $this->_routeType = 'get';
             if (empty($_SERVER['QUERY_STRING'])) {
-                $this->_controller = 'index';
-                $this->_action = 'index';
+                $controller = 'index';
+                $action = 'index';
             } else {
                 parse_str($_SERVER['QUERY_STRING'], $urlParams);
-                $this->_controller = isset($urlParams['c']) ? $urlParams['c'] : 'index';
-                $this->_action = isset($urlParams['a']) ? $urlParams['a'] : 'index';
+                
+                $controller = isset($urlParams['c']) ? $urlParams['c'] : 'index';
+                $action = isset($urlParams['a']) ? $urlParams['a'] : 'index';
+            }
+        }
+        
+        if ($this->checkRoute($controller)) {
+            $this->_controller = $controller;
+        } else {
+            if ($exceptions->throwExceptions()) {
+                throw new Exception('Controller "' . $controller . '" not found.');
+            } else {
+                $exceptions->sendHttpStatus(404);
+            }
+        }
+        
+        if ($this->checkRoute($action)) {
+            $this->_action = $action;
+        } else {
+            if ($exceptions->throwExceptions()) {
+                throw new Exception('Action "' . $action . '" does not exist.');
+            } else {
+                $exceptions->sendHttpStatus(404);
             }
         }
     }
@@ -114,5 +138,10 @@ class Router
         }
         $uriArray = explode('/', $requestUri);
         return $uriArray;
+    }
+    
+    protected function checkRoute($value)
+    {
+        return preg_match ("/^[a-z][a-zA-Z0-9]+$/", $value);
     }
 }

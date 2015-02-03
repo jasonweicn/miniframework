@@ -1,8 +1,8 @@
 <?php
 // +------------------------------------------------------------
-// | Micro Framework
+// | Mini Framework
 // +------------------------------------------------------------
-// | Source: https://github.com/jasonweicn/MicroFramework
+// | Source: https://github.com/jasonweicn/MiniFramework
 // +------------------------------------------------------------
 // | Author: Jason.wei <jasonwei06@hotmail.com>
 // +------------------------------------------------------------
@@ -44,7 +44,7 @@ class Autoloader
      */
     public function autoload($className)
     {
-        $file = MICRO_PATH . DIRECTORY_SEPARATOR . 'Library' . DIRECTORY_SEPARATOR . $className . '.php';
+        $file = MINI_PATH . DIRECTORY_SEPARATOR . 'Library' . DIRECTORY_SEPARATOR . $className . '.php';
         if (file_exists($file)) {
             include_once($file);
         } else {

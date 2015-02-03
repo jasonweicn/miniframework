@@ -1,13 +1,13 @@
 <?php
 // +------------------------------------------------------------
-// | Micro Framework
+// | Mini Framework
 // +------------------------------------------------------------
-// | Source: https://github.com/jasonweicn/MicroFramework
+// | Source: https://github.com/jasonweicn/MiniFramework
 // +------------------------------------------------------------
 // | Author: Jason.wei <jasonwei06@hotmail.com>
 // +------------------------------------------------------------
 
-class Action
+abstract class Action
 {
     /**
      * View实例
@@ -34,6 +34,9 @@ class Action
     {
         $this->view = new View();
         $this->params = Params::getInstance();
+        if (method_exists($this, 'init')) {
+            $this->init();
+        }
     }
     
     /**
@@ -42,10 +45,8 @@ class Action
      * @param mixed $variable
      * @param mixed $value
      */
-    public function assign($variable, $value)
+    protected function assign($variable, $value)
     {
         $this->view->assign($variable, $value);
     }
-    
-    public function init() {}
 }

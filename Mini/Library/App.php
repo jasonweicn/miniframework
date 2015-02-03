@@ -1,8 +1,8 @@
 <?php
 // +------------------------------------------------------------
-// | Micro Framework
+// | Mini Framework
 // +------------------------------------------------------------
-// | Source: https://github.com/jasonweicn/MicroFramework
+// | Source: https://github.com/jasonweicn/MiniFramework
 // +------------------------------------------------------------
 // | Author: Jason.wei <jasonwei06@hotmail.com>
 // +------------------------------------------------------------
@@ -66,7 +66,7 @@ class App
      */
     protected function __construct()
     {
-        $this->_exception = Exceptions::getInstance();
+        $this->_exception = Exceptions::getInstance()->throwExceptions(SHOW_ERROR);
         $this->_params = Params::getInstance();
         $this->getRouter();
     }
@@ -77,8 +77,6 @@ class App
      */
     public function run()
     {
-        if (SHOW_ERROR === true) $this->_exception->throwExceptions(true);
-        
         if ('rewrite' == $this->_router->getRouteType()) {
             $this->uriToParams($this->_router->getUriArray());
         }
@@ -120,9 +118,6 @@ class App
         $action = $this->_router->_action . 'Action';
         
         if (method_exists($controller, $action)) {
-            if (method_exists($controller, 'init')) {
-                $controller->init();
-            }
             $controller->$action();
         } else {
             if ($this->_exception->throwExceptions()) {

@@ -1,8 +1,8 @@
 <?php
 // +------------------------------------------------------------
-// | Micro Framework
+// | Mini Framework
 // +------------------------------------------------------------
-// | Source: https://github.com/jasonweicn/MicroFramework
+// | Source: https://github.com/jasonweicn/MiniFramework
 // +------------------------------------------------------------
 // | Author: Jason.wei <jasonwei06@hotmail.com>
 // +------------------------------------------------------------
@@ -51,13 +51,13 @@ class Exceptions
     public function throwExceptions($flag = null)
     {
         if ($flag !== null) {
-            $this->_throwExceptions = $flag;
+            $this->_throwExceptions = ($flag === true) ? $flag : false;
         }
         return $this->_throwExceptions;
     }
     
     /**
-     * 返回http状态
+     * 发送http状态
      */
     public function sendHttpStatus($code)
     {
@@ -74,16 +74,6 @@ class Exceptions
             header('Status: ' . $code . ' ' . $status[$code]);
         }
         
-        die();
-    }
-    
-    /**
-     * 返回500状态
-     */
-    public function sendHttp500()
-    {
-        header("HTTP/1.1 500 Internal Server Error");
-        header("Status: 500 Internal Server Error");
         die();
     }
 }

@@ -1,31 +1,44 @@
+2015-02-03
+
+    * Changed name to MiniFramework.(MF)
+    * Add a "checkRoute" method to Router.
+    * Bugfix.
+
+
 2015-02-02
+
 	* The optimization.
-	* Add "insertAll" method of the MySQL.
-	* Add "sendHttpStatus" method of the Exceptions.
+	* Add a "insertAll" method to MySQL.
+	* Add a "sendHttpStatus" method to Exceptions.
 	* Version 0.5.0 released.
 
 
 2015-02-01
-	* Add a "Request" named model.
+
+	* Added a "Request" named model.
 	* The optimization framework architecture.
 
 
 2015-01-30
+
 	* Support for MySQL of the database.
 	* Version 0.4 released.
 
 
 2015-01-28
+
 	* Support for exception control.
 	* Version 0.3 released.
 
 
 2015-01-27
+
 	* Support for params (GET and POST).
 	* Bugfix.
 
 
 2015-01-26
+
 	* Support for rewrite.
 	* Version 0.2 released.
 

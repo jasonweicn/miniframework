@@ -3,7 +3,7 @@ class IndexController extends Action
 {
     function init()
     {
-        $this->view->title = 'Micro Framework';
+        $this->view->title = 'Mini Framework';
     }
     
     function indexAction()

@@ -1,8 +1,8 @@
 <?php
 // +------------------------------------------------------------
-// | Micro Framework
+// | Mini Framework
 // +------------------------------------------------------------
-// | Source: https://github.com/jasonweicn/MicroFramework
+// | Source: https://github.com/jasonweicn/MiniFramework
 // +------------------------------------------------------------
 // | Author: Jason.wei <jasonwei06@hotmail.com>
 // +------------------------------------------------------------
@@ -28,7 +28,7 @@ class Db
         $adapterName = 'Db_' . ucwords($adapter);
         
         if (!class_exists($adapterName, false)) {
-            $adapterPath = MICRO_PATH . DIRECTORY_SEPARATOR . 'Library' . DIRECTORY_SEPARATOR . 'Db';
+            $adapterPath = MINI_PATH . DIRECTORY_SEPARATOR . 'Library' . DIRECTORY_SEPARATOR . 'Db';
             require_once $adapterPath . DIRECTORY_SEPARATOR . $adapterName . '.php';
         }
         
