@@ -66,7 +66,8 @@ class App
      */
     protected function __construct()
     {
-        $this->_exception = Exceptions::getInstance()->throwExceptions(SHOW_ERROR);
+        $this->_exception = Exceptions::getInstance();
+        $this->_exception->throwExceptions(SHOW_ERROR);
         $this->_params = Params::getInstance();
         $this->getRouter();
     }

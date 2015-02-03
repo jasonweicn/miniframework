@@ -7,43 +7,43 @@
 
 2015-02-02
 
-	* The optimization.
-	* Add a "insertAll" method to MySQL.
-	* Add a "sendHttpStatus" method to Exceptions.
-	* Version 0.5.0 released.
+    * The optimization.
+    * Add a "insertAll" method to MySQL.
+    * Add a "sendHttpStatus" method to Exceptions.
+    * Version 0.5.0 released.
 
 
 2015-02-01
 
-	* Added a "Request" named model.
-	* The optimization framework architecture.
+    * Added a "Request" named model.
+    * The optimization framework architecture.
 
 
 2015-01-30
 
-	* Support for MySQL of the database.
-	* Version 0.4 released.
+    * Support for MySQL of the database.
+    * Version 0.4 released.
 
 
 2015-01-28
 
-	* Support for exception control.
-	* Version 0.3 released.
+    * Support for exception control.
+    * Version 0.3 released.
 
 
 2015-01-27
 
-	* Support for params (GET and POST).
-	* Bugfix.
+    * Support for params (GET and POST).
+    * Bugfix.
 
 
 2015-01-26
 
-	* Support for rewrite.
-	* Version 0.2 released.
+    * Support for rewrite.
+    * Version 0.2 released.
 
 
 2015-01-25
 
-	* The first public version.
-	* Version 0.1 released.
+    * The first public version.
+    * Version 0.1 released.

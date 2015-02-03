@@ -92,7 +92,7 @@ class Router
         }
         
         if ($this->checkRoute($action)) {
-            $this->_action = $action;
+            $this->_action = strtolower($action);
         } else {
             if ($exceptions->throwExceptions()) {
                 throw new Exception('Action "' . $action . '" does not exist.');
