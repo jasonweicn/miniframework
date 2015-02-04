@@ -142,6 +142,6 @@ class Router
     
     protected function checkRoute($value)
     {
-        return preg_match ("/^[a-z][a-zA-Z0-9]+$/", $value);
+        return preg_match ("/^[a-zA-Z][a-zA-Z0-9]*$/", $value);
     }
 }

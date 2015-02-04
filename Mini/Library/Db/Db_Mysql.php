@@ -67,7 +67,11 @@ class Db_Mysql extends Db_Abstract
             );
             $this->_dbh->exec('SET character_set_connection=' . $this->_params['charset'] . ', character_set_results=' . $this->_params['charset'] . ', character_set_client=binary');
         } catch (PDOException $e) {
-            throw new Exception($e);
+            if ($this->_exception->throwExceptions()) {
+                throw new Exception($e);
+            } else {
+                $this->_exception->sendHttpStatus(500);
+            }
         }
     }
     
@@ -81,6 +85,7 @@ class Db_Mysql extends Db_Abstract
     {
         $this->_connect();
         $this->_setLastSql($sql);
+        if ($this->_debug === true) $this->_debugSql($sql);
         try {
             $affected = $this->_dbh->exec($sql);
             if ($affected === false) {
@@ -88,7 +93,11 @@ class Db_Mysql extends Db_Abstract
             }
             return $affected;
         } catch (PDOException $e) {
-            throw new Exception($e);
+            if ($this->_exception->throwExceptions()) {
+                throw new Exception($e);
+            } else {
+                $this->_exception->sendHttpStatus(500);
+            }
         }
     }
     
@@ -103,6 +112,7 @@ class Db_Mysql extends Db_Abstract
     {
         $this->_connect();
         $this->_setLastSql($sql);
+        if ($this->_debug === true) $this->_debugSql($sql);
         try {
             $recordset = $this->_dbh->query($sql);
             if ($recordset === false) {
@@ -120,7 +130,11 @@ class Db_Mysql extends Db_Abstract
             
             return $result;
         } catch (PDOException $e) {
-            throw new Exception($e);
+            if ($this->_exception->throwExceptions()) {
+                throw new Exception($e);
+            } else {
+                $this->_exception->sendHttpStatus(500);
+            }
         }
     }
     
@@ -313,16 +327,6 @@ class Db_Mysql extends Db_Abstract
     }
     
     /**
-     * 保存最后一次执行的SQL语句
-     * 
-     * @param string $sql
-     */
-    protected function _setLastSql($sql = null)
-    {
-        $this->_lastSql = $sql;
-    }
-    
-    /**
      * 捕获PDO错误信息
      */
     private function _getPdoError()
@@ -330,7 +334,11 @@ class Db_Mysql extends Db_Abstract
         $this->_connect();
         if ($this->_dbh->errorCode() != '00000') {
             $errorInfo = $this->_dbh->errorInfo();
-            throw new Exception($errorInfo[2]);
+            if ($this->_exception->throwExceptions()) {
+                throw new Exception($errorInfo[2]);
+            } else {
+                $this->_exception->sendHttpStatus(500);
+            }
         }
     }
     

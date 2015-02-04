@@ -34,8 +34,8 @@ abstract class Action
     {
         $this->view = new View();
         $this->params = Params::getInstance();
-        if (method_exists($this, 'init')) {
-            $this->init();
+        if (method_exists($this, '_init')) {
+            $this->_init();
         }
     }
     

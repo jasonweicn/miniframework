@@ -17,25 +17,49 @@ class Db
      */
     public static function factory($adapter = 'Mysql', $params = array())
     {
+        $exceptions = Exceptions::getInstance();
+        
         if (!is_array($params)) {
-            throw new Exception('Adapter params must be in an array.');
+            if ($exceptions->throwExceptions()) {
+                throw new Exception('Adapter params must be in an array.');
+            } else {
+                $exceptions->sendHttpStatus(500);
+            }
         }
         
         if (!is_string($adapter) || empty($adapter)) {
-            throw new Exception('Adapter name must be specified in a string.');
+            if ($exceptions->throwExceptions()) {
+                throw new Exception('Adapter name must be specified in a string.');
+            } else {
+                $exceptions->sendHttpStatus(500);
+            }
         }
         
         $adapterName = 'Db_' . ucwords($adapter);
         
         if (!class_exists($adapterName, false)) {
             $adapterPath = MINI_PATH . DIRECTORY_SEPARATOR . 'Library' . DIRECTORY_SEPARATOR . 'Db';
-            require_once $adapterPath . DIRECTORY_SEPARATOR . $adapterName . '.php';
+            $adapterFile = $adapterPath . DIRECTORY_SEPARATOR . $adapterName . '.php';
+            if (!file_exists($adapterFile)) {
+                if ($exceptions->throwExceptions()) {
+                    throw new Exception('Adapter "' . $adapterName . '" not found.');
+                } else {
+                    $exceptions->sendHttpStatus(500);
+                }
+                
+            }
+            
+            require_once($adapterFile);
         }
         
         $dbAdapter = new $adapterName($params);
         
         if (! $dbAdapter instanceof Db_Abstract) {
-            throw new Exception('Adapter class "' . $adapterName . '" does not extend Db_Abstract.');
+            if ($exceptions->throwExceptions()) {
+                throw new Exception('Adapter class "' . $adapterName . '" does not extend Db_Abstract.');
+            } else {
+                $exceptions->sendHttpStatus(500);
+            }
         }
 
         return $dbAdapter;

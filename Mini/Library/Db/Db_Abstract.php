@@ -10,6 +10,12 @@
 abstract class Db_Abstract
 {
     /**
+     * Exceptions实例
+     * @var Exceptions
+     */
+    protected $_exception;
+    
+    /**
      * 数据库连接
      * 
      * @var object | resource | null
@@ -29,6 +35,12 @@ abstract class Db_Abstract
      * @var string
      */
     protected $_lastSql = null;
+    
+    /**
+     * 调试
+     * @var boolean
+     */
+    protected  $_debug = false;
     
     /**
      * 创建一个数据库连接
@@ -116,8 +128,14 @@ abstract class Db_Abstract
      */
     public function __construct($params)
     {
+        $this->_exception = Exceptions::getInstance();
+        
         if (!is_array($params)) {
-            throw new Exception('Adapter params must be in an array.');
+            if ($this->_exception->throwExceptions()) {
+                throw new Exception('Adapter params must be in an array.');
+            } else {
+                $this->_exception->sendHttpStatus(500);
+            }
         }
         
         if (!isset($params['charset'])) {
@@ -178,15 +196,38 @@ abstract class Db_Abstract
      * 获取最后一次执行的SQL语句
      * 
      */
-    public function getLastSql ()
+    public function getLastSql()
     {
         return $this->_lastSql;
     }
     
     /**
-     * 保存最后一次执行的SQL语句（抽象）
+     * 保存最后一次执行的SQL语句
      * 
      * @param string $sql
      */
-    abstract protected function _setLastSql($sql = null);
+    protected function _setLastSql($sql = null)
+    {
+        $this->_lastSql = $sql;
+    }
+    
+    /**
+     * 开启调试模式
+     */
+    public function debug()
+    {
+        $this->_debug = true;
+        return $this;
+    }
+    
+    /**
+     * 输出调试信息
+     * @param string $sql
+     */
+    protected function _debugSql($sql) {
+        echo "<p>----------DEBUG SQL BEGIN----------</p>\n";
+        echo "<p><pre>$sql</pre></p>\n";
+        echo "<p>----------DEBUG SQL END----------</p>\n";
+        die();
+    }
 }

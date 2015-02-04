@@ -1,45 +1,51 @@
+2015-02-04
+
+    * Db_Abstract中新增debug方法，用法：$db->debug()->insert('tablename', array('col'=>'val'));。
+    * 新增数据库的异常控制。
+
+
 2015-02-03
 
-    * Changed name to MiniFramework.(MF)
-    * Add a "checkRoute" method to Router.
+    * 框架更名为Mini Framework，缩写依旧为：MF。
+    * Router中新增checkRoute方法。
     * Bugfix.
 
 
 2015-02-02
 
-    * The optimization.
-    * Add a "insertAll" method to MySQL.
-    * Add a "sendHttpStatus" method to Exceptions.
+    * Db_Mysql中新增insertAll方法。
+    * Exceptions中新增sendHttpStatus方法。
+    * 框架性能优化。
     * Version 0.5.0 released.
 
 
 2015-02-01
 
-    * Added a "Request" named model.
-    * The optimization framework architecture.
+    * 新增Request类库。
+    * 框架性能优化。
 
 
 2015-01-30
 
-    * Support for MySQL of the database.
+    * 新增基于PDO的MySQL的类库。
     * Version 0.4 released.
 
 
 2015-01-28
 
-    * Support for exception control.
+    * 新增异常控制机制。
     * Version 0.3 released.
 
 
 2015-01-27
 
-    * Support for params (GET and POST).
+    * 新增处理GET和POST数据的类库。
     * Bugfix.
 
 
 2015-01-26
 
-    * Support for rewrite.
+    * 新增Rewrite路由模式。
     * Version 0.2 released.
 
 
