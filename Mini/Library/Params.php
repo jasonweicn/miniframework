@@ -84,11 +84,21 @@ class Params
         }
     }
     
+    /**
+     * 获得一个整型变量
+     * @param unknown $number
+     * @return int
+     */
     private function getInt($number)
     {
         return intval($number);
     }
-     
+    
+    /**
+     * 获得一个字符型变量
+     * @param unknown $string
+     * @return string
+     */
     private function getStr($string)
     {
         if (!get_magic_quotes_gpc()) {
@@ -129,6 +139,10 @@ class Params
         return eregi('select|insert|update|delete|\/\*|\*|\.\.\/|\.\/|union|into|load_file|outfile', $string);
     }
     
+    /**
+     * 存入参数数组
+     * @param array $params
+     */
     public function setParams(array $params)
     {
         $this->_params = $this->_params + (array)$params;
@@ -141,11 +155,20 @@ class Params
         return;
     }
     
+    /**
+     * 取出参数数组
+     * @return array:
+     */
     public function getParams()
     {
         return $this->_params;
     }
     
+    /**
+     * 存入一个参数
+     * @param string $key
+     * @param unknown $value
+     */
     public function setParam($key, $value)
     {
         $key = (string)$key;
@@ -158,6 +181,11 @@ class Params
         return;
     }
     
+    /**
+     * 取出一个参数
+     * @param string $key
+     * @return $value
+     */
     public function getParam($key)
     {
         $value = null;

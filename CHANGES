@@ -1,3 +1,10 @@
+2015-02-08
+
+    * 优化完善了Loader中的loadClass方法。
+    * Bugfix
+    * Version 0.6.0 released.
+
+
 2015-02-04
 
     * Db_Abstract中新增debug方法，用法：$db->debug()->insert('tablename', array('col'=>'val'));。

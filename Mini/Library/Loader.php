@@ -16,11 +16,20 @@ class Loader
      */
     public static function loadClass($className)
     {
-        $file = APP_PATH . DIRECTORY_SEPARATOR . 'Models' . DIRECTORY_SEPARATOR . $className . '.php';
-        if (file_exists($file)) {
-            include_once($file);
+        if (class_exists($className, false) || interface_exists($className, false)) {
+            return;
+        }
+        
+        $classFile = APP_PATH . DIRECTORY_SEPARATOR . 'Models' . DIRECTORY_SEPARATOR . $className . '.php';
+        
+        if (file_exists($classFile)) {
+            include_once($classFile);
         } else {
-            throw new Exception('Class file "' . $filename . '" not found.');
+            throw new Exception('Class file "' . $classFile . '" not found.');
+        }
+        
+        if (!class_exists($className, false) && !interface_exists($className, false)) {
+            throw new Exception('Class "' . $className . '" does not exist.');
         }
     }
 }

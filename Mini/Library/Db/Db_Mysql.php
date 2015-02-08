@@ -32,7 +32,11 @@ class Db_Mysql extends Db_Abstract
         if (isset($this->_params['dbname']) && is_string($this->_params['dbname'])) {
             $dsn['dbname'] = $this->_params['dbname'];
         } else {
-            throw new Exception('"dbname" must be in the params of Db.');
+            if ($this->_exception->throwExceptions()) {
+                throw new Exception('"dbname" must be in the params of Db.');
+            } else {
+                $this->_exception->sendHttpStatus(500);
+            }
         }
         
         foreach ($dsn as $key => $val) {
