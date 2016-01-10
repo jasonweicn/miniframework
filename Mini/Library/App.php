@@ -22,6 +22,12 @@ class App
     public $action;
     
     /**
+     * 函数库清单数组
+     * @var array
+     */
+    private static $_funcs = array();
+    
+    /**
      * Exceptions实例
      * @var Exceptions
      */
@@ -81,6 +87,8 @@ class App
         if ('rewrite' == $this->_router->getRouteType()) {
             $this->uriToParams($this->_router->getUriArray());
         }
+        
+        $this->loadFunc('global');
         
         $this->dispatch();
     }
@@ -166,5 +174,27 @@ class App
                 }
             }
         }
+    }
+    
+    /**
+     * 加载函数库
+     * @param string $func
+     * @throws Exception
+     * @return boolean
+     */
+    private function loadFunc($func)
+    {
+        $file = MINI_PATH . DIRECTORY_SEPARATOR . 'Functions' . DIRECTORY_SEPARATOR . $func . '.func.php';
+        $key = md5($file);
+        if (!isset(self::$funcs[$key])) {
+            if (file_exists($file)) {
+                include($file);
+                self::$funcs[$key] = true;
+            } else {
+                throw new Exception('Function "' . $func . '" not found.');
+            }
+        }
+        
+        return true;        
     }
 }
