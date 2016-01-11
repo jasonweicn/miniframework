@@ -1,3 +1,9 @@
+2016-01-11
+
+    * 新增支持Memcache的缓存类库
+    * 向全局函数库中新增2个函数chgArrayKey()和getRandomString()
+
+
 2016-01-10
 
     * 新增全局函数库
