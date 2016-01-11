@@ -186,10 +186,10 @@ class App
     {
         $file = MINI_PATH . DIRECTORY_SEPARATOR . 'Functions' . DIRECTORY_SEPARATOR . $func . '.func.php';
         $key = md5($file);
-        if (!isset(self::$funcs[$key])) {
+        if (!isset(self::$_funcs[$key])) {
             if (file_exists($file)) {
                 include($file);
-                self::$funcs[$key] = true;
+                self::$_funcs[$key] = true;
             } else {
                 throw new Exception('Function "' . $func . '" not found.');
             }
