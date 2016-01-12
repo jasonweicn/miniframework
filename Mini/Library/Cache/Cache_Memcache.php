@@ -31,7 +31,7 @@ class Cache_Memcache extends Cache_Abstract
         }
     }
     
-    public function _set($name, $value, $expire = null)
+    public function set($name, $value, $expire = null)
     {
         if (is_null($expire)) {
             $expire = $this->_expire;
@@ -40,13 +40,13 @@ class Cache_Memcache extends Cache_Abstract
         $this->_cache_server->set($name, $value, 0, $expire);
     }
     
-    public function _get($name)
+    public function get($name)
     {
         $this->_connect();
         return $this->_cache_server->get($name);
     }
     
-    public function _unset($name)
+    public function del($name)
     {
         $this->_connect();
         return $this->_cache_server->delete($name);

@@ -1,3 +1,12 @@
+2016-01-13
+
+    * 新增支持文件存取的缓存类库
+    * 从Cache_Abstract中移除_connect()和close()方法
+    * 在Cache_Abstract中，将_set()方法更名为set()
+    * 在Cache_Abstract中，将_get()方法更名为get()
+    * 在Cache_Abstract中，将_unset()方法更名为del()
+
+
 2016-01-11
 
     * 新增支持Memcache的缓存类库
