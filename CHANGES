@@ -5,6 +5,7 @@
     * 在Cache_Abstract中，将_set()方法更名为set()
     * 在Cache_Abstract中，将_get()方法更名为get()
     * 在Cache_Abstract中，将_unset()方法更名为del()
+    * Version 0.7.0 released.
 
 
 2016-01-11
