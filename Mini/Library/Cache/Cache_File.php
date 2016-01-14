@@ -24,7 +24,7 @@ class Cache_File extends Cache_Abstract
         $cache_key = $this->getCacheKey($name);
         $cache_value = serialize($value);
         $compress_flag = 0;
-        if ($this->_compress && function_exists('gzcompress')) {
+        if ($this->_compress_flag && function_exists('gzcompress')) {
             $cache_value = gzcompress($cache_value);
             $compress_flag = 1;
         }

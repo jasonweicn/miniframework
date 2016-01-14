@@ -33,7 +33,7 @@ abstract class Cache_Abstract
      * 是否压缩缓存数据
      * @var bool
      */
-    protected $_compress = true;
+    protected $_compress_flag = true;
     
     /**
      * 缓存服务器
@@ -89,5 +89,10 @@ abstract class Cache_Abstract
         }
         
         $this->_params = $params;
+    }
+    
+    public function setCompress ($flag = false)
+    {
+        $this->_compress_flag = $flag;
     }
 }

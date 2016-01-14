@@ -30,7 +30,7 @@ function getClientIp ()
             $ip = $_SERVER['HTTP_CLIENT_IP'];
         } elseif (isset($_SERVER['HTTP_CDN_SRC_IP'])) {
             $ip = $_SERVER['HTTP_CDN_SRC_IP'];
-        }else {
+        } else {
             if (isset($_SERVER['REMOTE_ADDR'])) {
                 $ip = $_SERVER['REMOTE_ADDR'];
             } else {
@@ -42,6 +42,8 @@ function getClientIp ()
             $ip = getenv('HTTP_X_FORWARDED_FOR');
         } elseif (getenv('HTTP_CLIENT_IP')) {
             $ip = getenv('HTTP_CLIENT_IP');
+        } elseif (getenv('HTTP_CDN_SRC_IP')) {
+            $ip = getenv('HTTP_CDN_SRC_IP');
         } else {
             $ip = getenv('REMOTE_ADDR');
         }

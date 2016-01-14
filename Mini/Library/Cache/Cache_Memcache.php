@@ -36,8 +36,9 @@ class Cache_Memcache extends Cache_Abstract
         if (is_null($expire)) {
             $expire = $this->_expire;
         }
+        $compress_flag = $this->_compress_flag ? MEMCACHE_COMPRESSED : 0;
         $this->_connect();
-        $this->_cache_server->set($name, $value, 0, $expire);
+        $this->_cache_server->set($name, $value, $compress_flag, $expire);
     }
     
     public function get($name)
