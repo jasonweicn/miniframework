@@ -93,4 +93,17 @@ function getRandomString ($len = 8)
     
     return $randomString;
 }
+
+/**
+ * 对图片进行base64编码转换
+ * 
+ * @param string $image_file
+ */
+function base64EncodeImage ($image_file) {
+    $base64_image = '';
+    $image_info = getimagesize($image_file);
+    $image_data = fread(fopen($image_file, 'r'), filesize($image_file));
+    $base64_image = 'data:' . $image_info['mime'] . ';base64,' . chunk_split(base64_encode($image_data));
+    return $base64_image;
+}
 ?>
