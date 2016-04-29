@@ -1,3 +1,9 @@
+2016-04-29
+
+    * 新增支持Redis的缓存类库
+    * 新增使用Memcache或Redis缓存类库时，可通过getMemcacheObj()或getRedisObj()获取实例化对象，便于使用未封装的方法。
+
+
 2016-04-28
 
     * 向全局函数库中新增了base64EncodeImage()用于将图片转换为base64编码

@@ -59,6 +59,7 @@ function getClientIp ()
  * 
  * @param array $array
  * @param mixed $field
+ * @return array
  */
 function chgArrayKey ($array, $field)
 {
@@ -78,12 +79,11 @@ function chgArrayKey ($array, $field)
  * 获取一个指定长度的随机字符串
  * 
  * @param int $len
+ * @return string
  */
 function getRandomString ($len = 8)
 {
-    $str = '0123456789';
-    $str.= 'abcdefghijklmnopqrstuvwxyz';
-    $str.= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $str = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
     $strLen = strlen($str);
     $randomString = '';
     if (!is_int($len) || $len <= 0) $len = 8;
@@ -98,6 +98,7 @@ function getRandomString ($len = 8)
  * 对图片进行base64编码转换
  * 
  * @param string $image_file
+ * @return string
  */
 function base64EncodeImage ($image_file) {
     $base64_image = '';

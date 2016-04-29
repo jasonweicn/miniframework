@@ -82,11 +82,6 @@ class Cache_File extends Cache_Abstract
         @unlink($cache_file);
     }
     
-    public function close()
-    {
-        
-    }
-    
     /**
      * 获取缓存文件KEY值
      * @param unknown $name

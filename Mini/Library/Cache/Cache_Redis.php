@@ -9,10 +9,10 @@
 
 require_once 'Cache_Abstract.php';
 
-class Cache_Memcache extends Cache_Abstract
+class Cache_Redis extends Cache_Abstract
 {
     /**
-     * 连接Memcache
+     * 连接Redis
      * 
      */
     protected function _connect()
@@ -20,7 +20,7 @@ class Cache_Memcache extends Cache_Abstract
         if ($this->_cache_server) return;
         
         try {
-            $this->_cache_server = new Memcache();
+            $this->_cache_server = new Redis();
             $this->_cache_server->connect($this->_params['host'], $this->_params['port']);
         } catch (PDOException $e) {
             if ($this->_exception->throwExceptions()) {
@@ -36,9 +36,11 @@ class Cache_Memcache extends Cache_Abstract
         if (is_null($expire)) {
             $expire = $this->_expire;
         }
-        $compress_flag = $this->_compress_flag ? MEMCACHE_COMPRESSED : 0;
         $this->_connect();
-        $this->_cache_server->set($name, $value, $compress_flag, $expire);
+        $this->_cache_server->set($name, $value);
+        if ($expire > 0) {
+            $this->_cache_server->expire($name, $expire);
+        }
     }
     
     public function get($name)
@@ -54,17 +56,17 @@ class Cache_Memcache extends Cache_Abstract
     }
     
     /**
-     * 获取Memcache实例化对象，便于使用其他未封装的方法
+     * 获取Redis实例化对象，便于使用其他未封装的方法
      * @return obj
      */
-    public function getMemcacheObj()
+    public function getRedisObj()
     {
         $this->_connect();
         return $this->_cache_server;
     }
     
     /**
-     * 关闭Memcache连接
+     * 关闭Redis连接
      */
     public function close()
     {
