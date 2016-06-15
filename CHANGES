@@ -1,3 +1,9 @@
+2016-06-15
+
+    * 在Action中新增_forward()方法
+    * 在Request中新增setControllerName()和setActionName()方法
+
+
 2016-04-29
 
     * 新增支持Redis的缓存类库
