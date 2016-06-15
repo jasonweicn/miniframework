@@ -49,4 +49,25 @@ abstract class Action
     {
         $this->view->assign($variable, $value);
     }
+    
+    /**
+     * 转至给定的控制器和动作
+     * 
+     * @param string $action
+     * @param string $controller
+     * @param array $params
+     */
+    final protected function _forward($action, $controller = null, array $params = null)
+    {
+        $request = Request::getInstance();
+        
+        if ($controller !== null) {
+            $request->setControllerName($controller);
+        }
+
+        $request->setActionName($action);
+        
+        $app = App::getInstance();
+        $app->dispatch();
+    }
 }

@@ -82,7 +82,7 @@ class Router
         }
         
         if ($this->checkRoute($controller)) {
-            $this->_controller = $controller;
+            $this->_request->setControllerName($controller);
         } else {
             if ($exceptions->throwExceptions()) {
                 throw new Exception('Controller "' . $controller . '" not found.');
@@ -92,7 +92,7 @@ class Router
         }
         
         if ($this->checkRoute($action)) {
-            $this->_action = strtolower($action);
+            $this->_request->setActionName(strtolower($action));
         } else {
             if ($exceptions->throwExceptions()) {
                 throw new Exception('Action "' . $action . '" does not exist.');

@@ -96,10 +96,11 @@ class App
     /**
      * 调派
      */
-    private function dispatch()
+    public function dispatch()
     {
-        $this->controller = $this->_router->_controller;
-        $this->action = $this->_router->_action;
+        $request = Request::getInstance();
+        $this->controller = $request->_controller;
+        $this->action = $request->_action;
         
         $controllerName = ucfirst($this->controller) . 'Controller';
         $controllerFile = APP_PATH . DIRECTORY_SEPARATOR . 'Controllers' . DIRECTORY_SEPARATOR . $controllerName . '.php';
@@ -124,7 +125,7 @@ class App
             }
         }
         
-        $action = $this->_router->_action . 'Action';
+        $action = $this->action . 'Action';
         
         if (method_exists($controller, $action)) {
             $controller->$action();
