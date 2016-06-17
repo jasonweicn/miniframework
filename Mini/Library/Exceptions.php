@@ -70,9 +70,9 @@ class Exceptions
     );
     
     /**
-     * App实例
+     * Exceptions Instance
      *
-     * @var App
+     * @var Exceptions
      */
     protected static $_instance;
     
