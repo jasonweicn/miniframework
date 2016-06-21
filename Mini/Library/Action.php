@@ -24,6 +24,13 @@ abstract class Action
     protected $params;
     
     /**
+     * Request实例
+     * 
+     * @var mixed
+     */
+    protected $_request;
+    
+    /**
      * 构造
      * 
      * @param string $controller
@@ -34,6 +41,7 @@ abstract class Action
     {
         $this->view = new View();
         $this->params = Params::getInstance();
+        $this->_request = Request::getInstance();
         if (method_exists($this, '_init')) {
             $this->_init();
         }
@@ -59,13 +67,11 @@ abstract class Action
      */
     final protected function _forward($action, $controller = null, array $params = null)
     {
-        $request = Request::getInstance();
-        
         if ($controller !== null) {
-            $request->setControllerName($controller);
+            $this->_request->setControllerName($controller);
         }
 
-        $request->setActionName($action);
+        $this->_request->setActionName($action);
         
         $app = App::getInstance();
         $app->dispatch();
