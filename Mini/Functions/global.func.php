@@ -100,11 +100,23 @@ function getRandomString ($len = 8)
  * @param string $image_file
  * @return string
  */
-function base64EncodeImage ($image_file) {
+function base64EncodeImage ($image_file)
+{
     $base64_image = '';
     $image_info = getimagesize($image_file);
     $image_data = fread(fopen($image_file, 'r'), filesize($image_file));
     $base64_image = 'data:' . $image_info['mime'] . ';base64,' . chunk_split(base64_encode($image_data));
     return $base64_image;
+}
+
+/**
+ * 输出JSON并终止程序
+ * 
+ * @param mixed $data
+ */
+function pushJson ($data)
+{
+    echo json_encode($data);
+    die();
 }
 ?>

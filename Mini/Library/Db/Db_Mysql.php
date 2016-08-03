@@ -57,7 +57,7 @@ class Db_Mysql extends Db_Abstract
         $dsn = $this->_dsn();
         
         if (version_compare(PHP_VERSION, '5.3.6', '>=')) {
-            $dsn .= ';' . $this->_params['charset'];
+            $dsn .= ';charset=' . $this->_params['charset'];
         } else {
             if (defined('PDO::MYSQL_ATTR_INIT_COMMAND')) {
                 $this->_params['options'][PDO::MYSQL_ATTR_INIT_COMMAND] = 'SET NAMES ' . $this->_params['charset'];
