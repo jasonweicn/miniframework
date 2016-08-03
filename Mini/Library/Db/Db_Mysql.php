@@ -56,6 +56,14 @@ class Db_Mysql extends Db_Abstract
         
         $dsn = $this->_dsn();
         
+        if (version_compare(PHP_VERSION, '5.3.6', '>=')) {
+            $dsn .= ';' . $this->_params['charset'];
+        } else {
+            if (defined('PDO::MYSQL_ATTR_INIT_COMMAND')) {
+                $this->_params['options'][PDO::MYSQL_ATTR_INIT_COMMAND] = 'SET NAMES ' . $this->_params['charset'];
+            }
+        }
+        
         if (isset($this->_params['persistent']) && ($this->_params['persistent'] == true)) {
             $this->_params['options'][PDO::ATTR_PERSISTENT] = true;
         } else {
@@ -69,7 +77,11 @@ class Db_Mysql extends Db_Abstract
                 $this->_params['passwd'],
                 $this->_params['options']
             );
-            $this->_dbh->exec('SET character_set_connection=' . $this->_params['charset'] . ', character_set_results=' . $this->_params['charset'] . ', character_set_client=binary');
+            
+            if (version_compare(PHP_VERSION, '5.3.6', '<') && !defined('PDO::MYSQL_ATTR_INIT_COMMAND')) {
+                $this->_dbh->exec('SET NAMES ' . $this->_params['charset']);
+            }
+            
         } catch (PDOException $e) {
             if ($this->_exception->throwExceptions()) {
                 throw new Exception($e);
