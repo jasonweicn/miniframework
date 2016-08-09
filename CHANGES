@@ -1,3 +1,7 @@
+2016-08-09
+
+    * Bugfix:在Params中的checkInject()里，用preg_match替换ereg
+
 2016-08-03
 
     * 向全局函数库中新增了pushJson()，用于输出JSON并终止程序运行

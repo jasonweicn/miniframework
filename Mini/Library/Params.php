@@ -136,7 +136,7 @@ class Params
      */
     public function checkInject($string)
     {
-        return eregi('select|insert|update|delete|\/\*|\*|\.\.\/|\.\/|union|into|load_file|outfile', $string);
+        return preg_match('/select|insert|update|delete|\/\*|\*|\.\.\/|\.\/|union|into|load_file|outfile/i', $string);
     }
     
     /**
