@@ -28,13 +28,6 @@ class View
     private $_action;
     
     /**
-     * 渲染模板
-     * 
-     * @var string
-     */
-    private $_render;
-    
-    /**
      * Request实例
      * @var Request
      */
@@ -87,24 +80,47 @@ class View
     }
     
     /**
-     * 渲染
+     * 显示
      * 
      */
     public function display()
     {
-        $viewTpl = APP_PATH . DIRECTORY_SEPARATOR .  'Views' . DIRECTORY_SEPARATOR . strtolower($this->_controller) . DIRECTORY_SEPARATOR . $this->_action . '.php';
+        $view = APP_PATH . DIRECTORY_SEPARATOR .  'Views' . DIRECTORY_SEPARATOR . strtolower($this->_controller) . DIRECTORY_SEPARATOR . $this->_action . '.php';
         
-        if (file_exists($viewTpl)) {
-            $this->_render = $viewTpl;
-        } else {
+        echo $this->render($view);
+        die();
+    }
+    
+    /**
+     * 渲染器
+     * 
+     * @param string $view
+     * @return string
+     */
+    private function render($view = null)
+    {
+        if ($view == null) {
             if ($this->_exception->throwExceptions()) {
                 throw new Exception('View "' . $this->_action . '" does not exist.');
             } else {
                 $this->_exception->sendHttpStatus(404);
             }
         }
+        if (!file_exists($view)) {
+            if ($this->_exception->throwExceptions()) {
+                throw new Exception('View "' . $this->_action . '" does not exist.');
+            } else {
+                $this->_exception->sendHttpStatus(404);
+            }
+        }
+        ob_end_clean();
+        ob_start();
+        include($view);
+        $viewContent = ob_get_contents();
+        ob_end_clean();
+        ob_start();
         
-        include($this->_render);
+        return $viewContent;
     }
     
     /**

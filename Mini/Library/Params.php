@@ -196,4 +196,42 @@ class Params
         
         return $value;
     }
+    
+    /**
+     * 获取POST数据
+     * 
+     * @param mixed $key
+     */
+    public function getPost($key = null)
+    {
+        $value = null;
+        if ($key === null) {
+            $value = $this->_post;
+        } else {
+            if (isset($this->_post[$key])) {
+                $value = $this->_post[$key];
+            }
+        }
+        
+        return $value;
+    }
+    
+    /**
+     * 获取查询数据（GET）
+     * 
+     * @param mixed $key
+     */
+    public function getQuery($key = null)
+    {
+        $value = null;
+        if ($key === null) {
+            $value = $this->_get;
+        } else {
+            if (isset($this->_get[$key])) {
+                $value = $this->_get[$key];
+            }
+        }
+        
+        return $value;
+    }
 }

@@ -1,3 +1,9 @@
+2016-08-14
+
+    * 改写了view的渲染方式
+    * 在Params里新增了getPost和getQuery两个方法
+    * Version 0.8.0 released.
+
 2016-08-09
 
     * Bugfix:在Params中的checkInject()里，用preg_match替换ereg
