@@ -1,3 +1,8 @@
+2016-08-18
+
+    * Bugfix:修正Db_Mysql中的一处bug
+    * Version 0.8.1 released.
+
 2016-08-14
 
     * 改写了view的渲染方式

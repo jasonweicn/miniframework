@@ -264,7 +264,7 @@ class Db_Mysql extends Db_Abstract
      */
     public function getMaxValue($table, $col, $where = '')
     {
-        $sql = "SELECT MAX($col) AS max_value FROM `$table``" . (($where) ? " WHERE $where" : '');
+        $sql = "SELECT MAX($col) AS max_value FROM `$table`" . (($where) ? " WHERE $where" : '');
         $result = $this->query($sql, 'Row');
         $maxValue = $result["max_value"];
         if ($maxValue == "" || $maxValue == null) {
