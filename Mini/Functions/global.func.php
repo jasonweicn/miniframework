@@ -119,4 +119,26 @@ function pushJson ($data)
     echo json_encode($data);
     die();
 }
+
+/**
+ * 校验日期格式是否正确
+ *
+ * @param string $date 日期
+ * @param string $formats 需要检验的格式数组
+ * @return boolean
+ */
+function isDate($date, $formats = array('Y-m-d', 'Y/m/d'))
+{
+    $timestamp = strtotime($date);
+    if (!$timestamp) {
+        return false;
+    }
+    foreach ($formats as $format) {
+        if (date($format, $timestamp) == $date) {
+            return true;
+        }
+    }
+
+    return false;
+}
 ?>
