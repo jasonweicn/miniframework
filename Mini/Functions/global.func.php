@@ -116,7 +116,11 @@ function base64EncodeImage ($image_file)
  */
 function pushJson ($data)
 {
-    echo json_encode($data);
+    if (version_compare(PHP_VERSION, '5.4.0', '>=')) {
+        echo json_encode($data, JSON_UNESCAPED_UNICODE);
+    } else {
+        echo json_encode($data);
+    }
     die();
 }
 
