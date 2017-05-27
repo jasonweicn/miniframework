@@ -2,6 +2,8 @@
 Mini Framework - 一个微小的PHP框架
 ===================================
 
+
+
 一些说明
 --------
 
@@ -10,6 +12,7 @@ Mini Framework - 一个微小的PHP框架
 2.App目录里是一个例子。
   请将Apache或Nginx的站点根目录指向App中的Public目录。
   如果你可以通过访问类似于 http://localhost/index.php?c=index&a=index 这样的url获得一个“Hello World!”页面，这说明你已经部署成功了。
+
 
 
 关于Rewrite设置
@@ -33,3 +36,12 @@ location / {
         rewrite ^/(.*)$ /index.php last;
     }
 }
+
+
+
+作者联系方式
+------------
+
+作者：Jason Wei
+信箱：jasonwei06@hotmail.com
+博客：http://www.sunbloger.com

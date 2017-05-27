@@ -103,9 +103,14 @@ function getRandomString ($len = 8)
 function base64EncodeImage ($image_file)
 {
     $base64_image = '';
-    $image_info = getimagesize($image_file);
-    $image_data = fread(fopen($image_file, 'r'), filesize($image_file));
-    $base64_image = 'data:' . $image_info['mime'] . ';base64,' . chunk_split(base64_encode($image_data));
+    if (is_file($image_file)) {
+        $image_info = getimagesize($image_file);
+        $image_data = fread(fopen($image_file, 'r'), filesize($image_file));
+        $base64_image = 'data:' . $image_info['mime'] . ';base64,' . chunk_split(base64_encode($image_data));
+    } else {
+        return false;
+    }
+    
     return $base64_image;
 }
 
