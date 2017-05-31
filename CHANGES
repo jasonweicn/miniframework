@@ -1,6 +1,17 @@
 Mini Framework Change Log
 =========================
 
+2017-05-31 (Version 0.9.0 released.)
+
+* 新增Layout类，用于替代原有的布局控制方法。
+* 从View中移除getLayout()方法，新的布局控制方法请查阅Layout类。
+* 向附带案例App的IndexController.php文件中，增加Models调用方法的示例代码
+* 向附带案例App的IndexController.php文件中，增加Layout调用方法的示例代码
+* 为保持统一的目录命名风格，将常量CACHE_PATH默认值中的cache变更为Cache
+* 新增常量LAYOUT_ON，用于开启或关闭布局控制功能（默认值为false）
+* 新增常量LAYOUT_PATH，用于设置布局脚本存放的路径
+
+
 2017-05-28 (Version 0.8.2 released.)
 
 * 修正全局函数库中base64EncodeImage()方法的一处bug
@@ -27,7 +38,6 @@ Mini Framework Change Log
 
 * 向全局函数库中新增了pushJson()，用于输出JSON并终止程序运行
 * 针对PHP 5.3.6以前可能存在注入的漏洞进行修补
-
 
 2016-06-21
 

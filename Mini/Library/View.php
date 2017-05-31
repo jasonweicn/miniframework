@@ -40,6 +40,13 @@ class View
     protected $_baseUrl;
     
     /**
+     * Layout实例
+     * 
+     * @var Layout
+     */
+    public $_layout;
+    
+    /**
      * 构造
      */
     function __construct()
@@ -49,6 +56,11 @@ class View
         $app = App::getInstance();
         $this->_controller = $app->controller;
         $this->_action = $app->action;
+        
+        if (LAYOUT_ON === true) {
+            $this->_layout = Layout::getInstance();
+            $this->_layout->setLayoutPath(LAYOUT_PATH);
+        }
     }
     
     public function baseUrl()
@@ -87,25 +99,6 @@ class View
     {
         $view = APP_PATH . DIRECTORY_SEPARATOR .  'Views' . DIRECTORY_SEPARATOR . strtolower($this->_controller) . DIRECTORY_SEPARATOR . $this->_action . '.php';
         
-        echo $this->render($view);
-        die();
-    }
-    
-    /**
-     * 渲染器
-     * 
-     * @param string $view
-     * @return string
-     */
-    private function render($view = null)
-    {
-        if ($view == null) {
-            if ($this->_exception->throwExceptions()) {
-                throw new Exception('View "' . $this->_action . '" does not exist.');
-            } else {
-                $this->_exception->sendHttpStatus(404);
-            }
-        }
         if (!file_exists($view)) {
             if ($this->_exception->throwExceptions()) {
                 throw new Exception('View "' . $this->_action . '" does not exist.');
@@ -113,14 +106,47 @@ class View
                 $this->_exception->sendHttpStatus(404);
             }
         }
+        
+        $content = $this->render($view);
+        header('X-Powered-By:MiniFramework');
+        
+        if (LAYOUT_ON === true) {
+            $this->_layout->content = $content;
+            $layoutScript = $this->_layout->getLayoutScript();
+            include($layoutScript);
+        } else {
+            echo $content;
+        }
+        die();
+    }
+    
+    /**
+     * 渲染器
+     * 
+     * @param string $script
+     * @param bool $check (true | false)
+     * @return string
+     */
+    public function render($script, $check = true)
+    {
+        if ($check === true) {
+            if (!file_exists($script)) {
+                if ($this->_exception->throwExceptions()) {
+                    throw new Exception('File "' . $script . '" does not exist.');
+                } else {
+                    $this->_exception->sendHttpStatus(404);
+                }
+            }
+        }
+        
         ob_end_clean();
         ob_start();
-        include($view);
-        $viewContent = ob_get_contents();
+        include($script);
+        $content = ob_get_contents();
         ob_end_clean();
         ob_start();
         
-        return $viewContent;
+        return $content;
     }
     
     /**
@@ -128,6 +154,7 @@ class View
      * 
      * @param string $layout
      */
+    /*
     public function getLayout($layout)
     {
         $layoutFile = APP_PATH . DIRECTORY_SEPARATOR .  'Layouts' . DIRECTORY_SEPARATOR . strtolower($layout) . '.php';
@@ -142,4 +169,5 @@ class View
             }
         }
     }
+    */
 }
