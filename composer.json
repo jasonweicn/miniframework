@@ -1,0 +1,14 @@
+{
+    "name": "jasonwei/miniframework",
+    "description": "MiniFramework",
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "Jason Wei",
+            "email": "jasonwei06@hotmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+    }
+}
