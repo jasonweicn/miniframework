@@ -77,7 +77,7 @@ define('LAYOUT_ON', true);
 连接数据库
 ====================
 
-MiniFramework 目前只支持 MySQL 数据库，支持自动和手动两种连接方式。
+MiniFramework 目前只支持 MySQL 数据库，有自动和手动两种连接方式。
 
 手动连接方法：
 
@@ -122,7 +122,7 @@ $database['default'] = array (
 接下来就可以在模型中通过 `$this->loadDb()` 方法直接加载数据库对象了，例如：
 
 ```
-//在模型Info中，集成Model抽象类
+//在模型Info中，继承Model抽象类
 class Info extends Model
 {
     public function getInfo()

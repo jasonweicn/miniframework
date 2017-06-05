@@ -1,12 +1,12 @@
 MiniFramework Change Log
 =========================
 
-2017-06-05
+2017-06-05 (Version 0.10.0 released.)
 
 * 增加对Composer的支持
 * 新增Config类，用于读取配置信息
 * 新增Config/database.php，用于配置数据库
-* 新增Model类，开发者创建模型时，可通过集成Model获得自动创建的数据库对象
+* 新增Model类，开发者创建模型时，可通过继承Model获得自动创建的数据库对象
 * 新增常量HTTP_CACHE_CONTROL，用于设置页面缓存
 * 新增常量CONFIG_PATH，用于设置配置文件路径
 * 新增常量DB_AUTO_CONNECT，用于设置数据库自动连接（默认值为false）
