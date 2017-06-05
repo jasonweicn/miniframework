@@ -103,6 +103,14 @@ class Layout
      */
     public function setLayout($name)
     {
+        if (!preg_match('/^[a-zA-Z][a-zA-Z0-9_]*$/', $name)) {
+            if ($this->_exception->throwExceptions()) {
+                throw new Exception('Layout "' . $name . '"  invalid.');
+            } else {
+                $this->_exception->sendHttpStatus(500);
+            }
+        }
+        
         $this->_layout = (string) $name;
         
         return $this;
@@ -130,7 +138,7 @@ class Layout
             if ($this->_exception->throwExceptions()) {
                 throw new Exception('Layout "' . $this->getLayout() . '" does not exist.');
             } else {
-                $this->_exception->sendHttpStatus(404);
+                $this->_exception->sendHttpStatus(500);
             }
         }
         

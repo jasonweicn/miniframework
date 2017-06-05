@@ -22,7 +22,7 @@ class Cache_Redis extends Cache_Abstract
         try {
             $this->_cache_server = new Redis();
             $this->_cache_server->connect($this->_params['host'], $this->_params['port']);
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             if ($this->_exception->throwExceptions()) {
                 throw new Exception($e);
             } else {
@@ -73,7 +73,7 @@ class Cache_Redis extends Cache_Abstract
         try {
             $this->_cache_server->close();
             $this->_cache_server = null;
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             if ($this->_exception->throwExceptions()) {
                 throw new Exception($e);
             } else {

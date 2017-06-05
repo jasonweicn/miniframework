@@ -56,6 +56,8 @@ class Db_Mysql extends Db_Abstract
         
         $dsn = $this->_dsn();
         
+        $this->_params['options'][PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
+        
         if (version_compare(PHP_VERSION, '5.3.6', '>=')) {
             $dsn .= ';charset=' . $this->_params['charset'];
         } else {
@@ -77,17 +79,16 @@ class Db_Mysql extends Db_Abstract
                 $this->_params['passwd'],
                 $this->_params['options']
             );
-            
-            if (version_compare(PHP_VERSION, '5.3.6', '<') && !defined('PDO::MYSQL_ATTR_INIT_COMMAND')) {
-                $this->_dbh->exec('SET NAMES ' . $this->_params['charset']);
-            }
-            
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             if ($this->_exception->throwExceptions()) {
-                throw new Exception($e);
+                throw new Exception('Database connection failed.');
             } else {
                 $this->_exception->sendHttpStatus(500);
             }
+        }
+        
+        if (version_compare(PHP_VERSION, '5.3.6', '<') && !defined('PDO::MYSQL_ATTR_INIT_COMMAND')) {
+            $this->_dbh->exec('SET NAMES ' . $this->_params['charset']);
         }
     }
     

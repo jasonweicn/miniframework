@@ -48,7 +48,7 @@ class Autoloader
         if (file_exists($file)) {
             include_once($file);
         } else {
-            throw new Exception('Class "' . $className . '" not found.');
+            throw new Exception('Library "' . $className . '" not found.');
         }
     }
 }

@@ -9,6 +9,9 @@ MiniFramework 是一款超轻量级的 PHP 开发框架，用以满足开发者�
 ```
 MiniFramework/
 |--- App/                   应用案例
+|    |--- Cache             缓存
+|    |--- Config            配置
+|    |    |--- database.php 数据库配置文件
 |    |--- Controllers/      控制器
 |    |--- Layouts/          布局
 |    |--- Models/           模型
@@ -74,7 +77,9 @@ define('LAYOUT_ON', true);
 连接数据库
 ====================
 
-MiniFramework 目前只支持 MySQL 数据库，使用方法如下：
+MiniFramework 目前只支持 MySQL 数据库，支持自动和手动两种连接方式。
+
+手动连接方法：
 
 ```
 $db = Db::factory ('Mysql',
@@ -87,6 +92,46 @@ $db = Db::factory ('Mysql',
         'charset'   => 'utf8'       //字符编码
     )
 );
+
+//还可以通过 Config 中的 load() 方法先读取数据库配置，再创建对象
+$dbConfig = Config::getInstance()->load('database');
+$db2 = Db::factory ('Mysql', $dbConfig['default']);
+```
+
+自动连接方法：
+
+MiniFramework 的自动连接数据库功能默认是关闭的，如需使用，请在你的应用入口文件 `Public/index.php` 中定义常量 `DB_AUTO_CONNECT` 的值为 `true`，例如：
+
+```
+define('DB_AUTO_CONNECT', true);
+```
+
+同时，还需要在 `Config/database.php` 中对数据库连接进行配置，例如：
+
+```
+$database['default'] = array (
+    'host'      => 'localhost', //主机地址
+    'port'      => 3306,        //端口
+    'dbname'    => 'test',      //库名
+    'username'  => 'root',      //用户名
+    'passwd'    => '',          //密码
+    'charset'   => 'utf8'       //字符编码
+);
+```
+
+接下来就可以在模型中通过 `$this->loadDb()` 方法直接加载数据库对象了，例如：
+
+```
+//在模型Info中，集成Model抽象类
+class Info extends Model
+{
+    public function getInfo()
+    {
+        //加载 key 为 default 的数据库
+        $db = $this->loadDb('default');
+        ...
+    }
+}
 ```
 
 使用缓存
@@ -126,6 +171,15 @@ pushJson($test);
 ```
 
 提示：全局函数库位于 `Mini/Functions/global.func.php`
+
+命名规则
+====================
+
+控制器：只允许使用`a-z`、`A-Z`、`0-9`和`_`，并以大写字母开头，结尾加 `Controller` 后缀，例如：`IndexController.php`
+
+模型：只允许使用`a-z`、`A-Z`、`0-9`和`_`，并以大写字母开头，例如：`Info.php`
+
+布局：只允许使用`a-z`、`A-Z`、`0-9`和`_`，并以字母开头，例如：`header.php`
 
 其他
 ====================

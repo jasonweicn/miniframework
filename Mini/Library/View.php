@@ -108,7 +108,8 @@ class View
         }
         
         $content = $this->render($view);
-        header('X-Powered-By:MiniFramework');
+        header('Cache-Control: ' . HTTP_CACHE_CONTROL);
+        header('X-Powered-By: MiniFramework');
         
         if (LAYOUT_ON === true) {
             $this->_layout->content = $content;
@@ -148,26 +149,4 @@ class View
         
         return $content;
     }
-    
-    /**
-     * 调入布局文件
-     * 
-     * @param string $layout
-     */
-    /*
-    public function getLayout($layout)
-    {
-        $layoutFile = APP_PATH . DIRECTORY_SEPARATOR .  'Layouts' . DIRECTORY_SEPARATOR . strtolower($layout) . '.php';
-        
-        if (file_exists($layoutFile)) {
-            include($layoutFile);
-        } else {
-            if ($this->_exception->throwExceptions()) {
-                throw new Exception('Layout "' . $layout . '" does not exist.');
-            } else {
-                $this->_exception->sendHttpStatus(404);
-            }
-        }
-    }
-    */
 }

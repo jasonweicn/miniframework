@@ -1,5 +1,21 @@
-Mini Framework Change Log
+MiniFramework Change Log
 =========================
+
+2017-06-05
+
+* 增加对Composer的支持
+* 新增Config类，用于读取配置信息
+* 新增Config/database.php，用于配置数据库
+* 新增Model类，开发者创建模型时，可通过集成Model获得自动创建的数据库对象
+* 新增常量HTTP_CACHE_CONTROL，用于设置页面缓存
+* 新增常量CONFIG_PATH，用于设置配置文件路径
+* 新增常量DB_AUTO_CONNECT，用于设置数据库自动连接（默认值为false）
+* 在Loader::loadClass()方法中增加对Class命名规则的校验
+* 在setLayout()方法中增加对布局文件命名规则的校验
+* 修正Memcache和Redis缓存类中的Bug
+* 改进全局函数getRandomString()
+* 更新了README
+* 完善注释
 
 2017-05-31 (Version 0.9.0 released.)
 

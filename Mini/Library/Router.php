@@ -120,6 +120,7 @@ class Router
     /**
      * 解析Url为数组
      * 
+     * @return array
      */
     public function parseUrlToArray()
     {
@@ -140,6 +141,12 @@ class Router
         return $uriArray;
     }
     
+    /**
+     * 检查路由参数合法性
+     * 
+     * @param mixed $value
+     * @return int
+     */
     protected function checkRoute($value)
     {
         return preg_match ("/^[a-zA-Z][a-zA-Z0-9]*$/", $value);

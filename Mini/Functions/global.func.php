@@ -88,7 +88,7 @@ function getRandomString ($len = 8)
     $randomString = '';
     if (!is_int($len) || $len <= 0) $len = 8;
     for ($i=0; $i<$len; $i++) {
-        $randomString .= $str[rand(0, $strLen-1)];
+        $randomString .= substr($str, rand(0, $strLen-1), 1);
     }
     
     return $randomString;
