@@ -8,13 +8,7 @@
 // +------------------------------------------------------------
 
 class Router
-{
-    /**
-     * Exceptions实例
-     * @var Exceptions
-     */
-    protected $_exception;
-    
+{    
     /**
      * Request实例
      * @var Request
@@ -55,10 +49,7 @@ class Router
      */
     public function __construct()
     {
-        $this->_exception = Exceptions::getInstance();
         $this->_request = Request::getInstance();
-        
-        $exceptions = Exceptions::getInstance();
         
         if (false === strpos($_SERVER['REQUEST_URI'], $_SERVER['SCRIPT_NAME'])) {
             //Rewrite
@@ -84,21 +75,13 @@ class Router
         if ($this->checkRoute($controller)) {
             $this->_request->setControllerName($controller);
         } else {
-            if ($exceptions->throwExceptions()) {
-                throw new Exception('Controller "' . $controller . '" not found.');
-            } else {
-                $exceptions->sendHttpStatus(404);
-            }
+            throw new Exceptions('Controller "' . $controller . '" not found.', 404);
         }
         
         if ($this->checkRoute($action)) {
             $this->_request->setActionName(strtolower($action));
         } else {
-            if ($exceptions->throwExceptions()) {
-                throw new Exception('Action "' . $action . '" does not exist.');
-            } else {
-                $exceptions->sendHttpStatus(404);
-            }
+            throw new Exceptions('Action "' . $action . '" does not exist.', 404);
         }
     }
     

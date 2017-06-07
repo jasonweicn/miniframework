@@ -7,8 +7,6 @@
 // | Author: Jason.wei <jasonwei06@hotmail.com>
 // +------------------------------------------------------------
 
-require_once 'Cache_Abstract.php';
-
 class Cache_Memcache extends Cache_Abstract
 {
     /**
@@ -22,12 +20,14 @@ class Cache_Memcache extends Cache_Abstract
         try {
             $this->_cache_server = new Memcache();
             $this->_cache_server->connect($this->_params['host'], $this->_params['port']);
-        } catch (Exception $e) {
-            if ($this->_exception->throwExceptions()) {
-                throw new Exception($e);
-            } else {
-                $this->_exception->sendHttpStatus(500);
-            }
+        } catch (Exceptions $e) {
+            throw new Exceptions($e);
+        }
+        
+        $memStats = $this->_cache_server->getExtendedStats();
+        $available = (bool) $memStats[$this->_params['host'] . ':' . $this->_params['port']];
+        if (!$available) {
+            throw new Exceptions('Memcached connection failed.');
         }
     }
     
@@ -71,12 +71,8 @@ class Cache_Memcache extends Cache_Abstract
         try {
             $this->_cache_server->close();
             $this->_cache_server = null;
-        } catch (Exception $e) {
-            if ($this->_exception->throwExceptions()) {
-                throw new Exception($e);
-            } else {
-                $this->_exception->sendHttpStatus(500);
-            }
+        } catch (Exceptions $e) {
+            throw new Exceptions($e);
         }
     }
 }

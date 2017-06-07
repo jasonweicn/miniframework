@@ -7,14 +7,8 @@
 // | Author: Jason.wei <jasonwei06@hotmail.com>
 // +------------------------------------------------------------
 
-class Exceptions
+class Exceptions extends \Exception
 {
-    /**
-     * 是否抛出异常
-     * @var boolean
-     */
-    protected $_throwExceptions = false;
-    
     protected static $status = array(
             // Informational 1xx
             100 => 'Continue',
@@ -70,44 +64,28 @@ class Exceptions
     );
     
     /**
-     * Exceptions Instance
-     *
-     * @var Exceptions
-     */
-    protected static $_instance;
-    
-    /**
-     * 获取实例
-     *
-     */
-    public static function getInstance()
-    {
-        if (self::$_instance === null) {
-            self::$_instance = new self();
-        }
-        return self::$_instance;
-    }
-    
-    /**
      * 构造
      *
      */
-    protected function __construct()
+    public function __construct($message, $code = 0)
     {
-        //reserve...
+        parent::__construct($message, $code);
     }
     
     /**
-     * 异常处理方法
-     * @param boolean $flag
-     * @return boolean
+     * 重构 toString
      */
-    public function throwExceptions($flag = null)
-    {
-        if ($flag !== null) {
-            $this->_throwExceptions = ($flag === true) ? $flag : false;
+    public function __toString(){
+        
+        if (SHOW_ERROR === true) {
+            return parent::__toString();
+        } else {
+            $code = 500;
+            if (isset(self::$status[$this->code])) {
+                $code = $this->code;
+            }
+            self::sendHttpStatus($code);
         }
-        return $this->_throwExceptions;
     }
     
     /**

@@ -10,12 +10,6 @@
 abstract class Db_Abstract
 {
     /**
-     * Exceptions实例
-     * @var Exceptions
-     */
-    protected $_exception;
-    
-    /**
      * 数据库连接
      * 
      * @var object | resource | null
@@ -128,14 +122,8 @@ abstract class Db_Abstract
      */
     public function __construct($params)
     {
-        $this->_exception = Exceptions::getInstance();
-        
         if (!is_array($params)) {
-            if ($this->_exception->throwExceptions()) {
-                throw new Exception('Adapter params must be in an array.');
-            } else {
-                $this->_exception->sendHttpStatus(500);
-            }
+            throw new Exceptions('Adapter params must be in an array.');
         }
         
         if (!isset($params['charset'])) {

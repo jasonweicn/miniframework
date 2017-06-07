@@ -34,7 +34,8 @@ class Autoloader
      */
     protected function __construct()
     {
-        spl_autoload_register(array(__CLASS__, 'autoload'));
+        set_include_path(get_include_path() . PATH_SEPARATOR . MINI_PATH);
+        spl_autoload_register(array(__CLASS__, 'Autoloader::autoload'));
     }
     
     /**
@@ -44,11 +45,18 @@ class Autoloader
      */
     public function autoload($className)
     {
-        $file = MINI_PATH . DIRECTORY_SEPARATOR . 'Library' . DIRECTORY_SEPARATOR . $className . '.php';
+        $classPath = '';
+        
+        if (strpos($className, '_') !== false) {
+            $classPath = strstr($className, '_', true) . DIRECTORY_SEPARATOR;
+        }
+        
+        $file = MINI_PATH . DIRECTORY_SEPARATOR . 'Library' . DIRECTORY_SEPARATOR . $classPath . $className . '.php';
+        
         if (file_exists($file)) {
             include_once($file);
         } else {
-            throw new Exception('Library "' . $className . '" not found.');
+            throw new Exceptions('Library "' . $className . '" not found.');
         }
     }
 }

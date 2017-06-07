@@ -10,12 +10,6 @@
 class Layout
 {
     /**
-     * Exceptions实例
-     * @var Exceptions
-     */
-    private $_exception;
-    
-    /**
      * 布局变量容器
      * 
      * @var array
@@ -59,7 +53,7 @@ class Layout
      */
     function __construct()
     {
-        $this->_exception = Exceptions::getInstance();
+        //reserve...
     }
     
     public function __set($key, $value)
@@ -104,11 +98,7 @@ class Layout
     public function setLayout($name)
     {
         if (!preg_match('/^[a-zA-Z][a-zA-Z0-9_]*$/', $name)) {
-            if ($this->_exception->throwExceptions()) {
-                throw new Exception('Layout "' . $name . '"  invalid.');
-            } else {
-                $this->_exception->sendHttpStatus(500);
-            }
+            throw new Exceptions('Layout "' . $name . '"  invalid.');
         }
         
         $this->_layout = (string) $name;
@@ -135,11 +125,7 @@ class Layout
     {
         $layoutScript = $this->getLayoutPath() . DIRECTORY_SEPARATOR . $this->getLayout() . '.php';
         if (!file_exists($layoutScript)) {
-            if ($this->_exception->throwExceptions()) {
-                throw new Exception('Layout "' . $this->getLayout() . '" does not exist.');
-            } else {
-                $this->_exception->sendHttpStatus(500);
-            }
+            throw new Exceptions('Layout "' . $this->getLayout() . '" does not exist.');
         }
         
         return $layoutScript;

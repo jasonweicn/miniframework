@@ -7,8 +7,6 @@
 // | Author: Jason.wei <jasonwei06@hotmail.com>
 // +------------------------------------------------------------
 
-require_once 'Cache_Abstract.php';
-
 class Cache_File extends Cache_Abstract
 {
     /**

@@ -10,12 +10,6 @@
 class View
 {
     /**
-     * Exceptions实例
-     * @var Exceptions
-     */
-    private $_exception;
-    
-    /**
      * 控制器
      * @var string
      */
@@ -51,7 +45,6 @@ class View
      */
     function __construct()
     {
-        $this->_exception = Exceptions::getInstance();
         $this->_request = Request::getInstance();
         $app = App::getInstance();
         $this->_controller = $app->controller;
@@ -100,11 +93,7 @@ class View
         $view = APP_PATH . DIRECTORY_SEPARATOR .  'Views' . DIRECTORY_SEPARATOR . strtolower($this->_controller) . DIRECTORY_SEPARATOR . $this->_action . '.php';
         
         if (!file_exists($view)) {
-            if ($this->_exception->throwExceptions()) {
-                throw new Exception('View "' . $this->_action . '" does not exist.');
-            } else {
-                $this->_exception->sendHttpStatus(404);
-            }
+            throw new Exceptions('View "' . $this->_action . '" does not exist.', 404);
         }
         
         $content = $this->render($view);
@@ -132,15 +121,14 @@ class View
     {
         if ($check === true) {
             if (!file_exists($script)) {
-                if ($this->_exception->throwExceptions()) {
-                    throw new Exception('File "' . $script . '" does not exist.');
-                } else {
-                    $this->_exception->sendHttpStatus(404);
-                }
+                throw new Exceptions('File "' . $script . '" does not exist.', 404);
             }
         }
         
-        ob_end_clean();
+        if (SHOW_DEBUG === false) {
+            ob_end_clean();
+        }
+        
         ob_start();
         include($script);
         $content = ob_get_contents();

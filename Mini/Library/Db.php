@@ -17,22 +17,12 @@ class Db
      */
     public static function factory($adapter = 'Mysql', $params = array())
     {
-        $exceptions = Exceptions::getInstance();
-        
         if (!is_array($params)) {
-            if ($exceptions->throwExceptions()) {
-                throw new Exception('Adapter params must be in an array.');
-            } else {
-                $exceptions->sendHttpStatus(500);
-            }
+            throw new Exceptions('Adapter params must be in an array.');
         }
         
         if (!is_string($adapter) || empty($adapter)) {
-            if ($exceptions->throwExceptions()) {
-                throw new Exception('Adapter name must be specified in a string.');
-            } else {
-                $exceptions->sendHttpStatus(500);
-            }
+            throw new Exceptions('Adapter name must be specified in a string.');
         }
         
         $adapterName = 'Db_' . ucwords($adapter);
@@ -41,12 +31,7 @@ class Db
             $adapterPath = MINI_PATH . DIRECTORY_SEPARATOR . 'Library' . DIRECTORY_SEPARATOR . 'Db';
             $adapterFile = $adapterPath . DIRECTORY_SEPARATOR . $adapterName . '.php';
             if (!file_exists($adapterFile)) {
-                if ($exceptions->throwExceptions()) {
-                    throw new Exception('Adapter "' . $adapterName . '" not found.');
-                } else {
-                    $exceptions->sendHttpStatus(500);
-                }
-                
+                throw new Exceptions('Adapter "' . $adapterName . '" not found.');
             }
             
             require_once($adapterFile);
@@ -55,11 +40,7 @@ class Db
         $dbAdapter = new $adapterName($params);
         
         if (! $dbAdapter instanceof Db_Abstract) {
-            if ($exceptions->throwExceptions()) {
-                throw new Exception('Adapter class "' . $adapterName . '" does not extend Db_Abstract.');
-            } else {
-                $exceptions->sendHttpStatus(500);
-            }
+            throw new Exceptions('Adapter class "' . $adapterName . '" does not extend Db_Abstract.');
         }
 
         return $dbAdapter;

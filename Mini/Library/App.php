@@ -28,12 +28,6 @@ class App
     private static $_funcs = array();
     
     /**
-     * Exceptions实例
-     * @var Exceptions
-     */
-    protected $_exception;
-    
-    /**
      * Router实例
      * 
      * @var Router
@@ -72,8 +66,6 @@ class App
      */
     protected function __construct()
     {
-        $this->_exception = Exceptions::getInstance();
-        $this->_exception->throwExceptions(SHOW_ERROR);
         $this->_params = Params::getInstance();
         $this->getRouter();
     }
@@ -108,21 +100,13 @@ class App
         if (file_exists($controllerFile)) {
             include_once($controllerFile);
         } else {
-            if ($this->_exception->throwExceptions()) {
-                throw new Exception('Controller "' . $controllerFile . '" not found.');
-            } else {
-                $this->_exception->sendHttpStatus(404);
-            }
+            throw new Exceptions('Controller "' . $controllerFile . '" not found.', 404);
         }
         
         if (class_exists($controllerName)) {
             $controller = new $controllerName();
         } else {
-            if ($this->_exception->throwExceptions()) {
-                throw new Exception($controllerName . ' does not exist.');
-            } else {
-                $this->_exception->sendHttpStatus(404);
-            }
+            throw new Exceptions($controllerName . ' does not exist.', 404);
         }
         
         $action = $this->action . 'Action';
@@ -130,11 +114,7 @@ class App
         if (method_exists($controller, $action)) {
             $controller->$action();
         } else {
-            if ($this->_exception->throwExceptions()) {
-                throw new Exception('Action "' . $this->_router->_action . '" does not exist.');
-            } else {
-                $this->_exception->sendHttpStatus(404);
-            }
+            throw new Exceptions('Action "' . $this->_router->_action . '" does not exist.', 404);
         }
     }
     
@@ -192,7 +172,7 @@ class App
                 include($file);
                 self::$_funcs[$key] = true;
             } else {
-                throw new Exception('Function "' . $func . '" not found.');
+                throw new Exceptions('Function "' . $func . '" not found.');
             }
         }
         

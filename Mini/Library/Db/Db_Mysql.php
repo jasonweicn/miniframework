@@ -7,8 +7,6 @@
 // | Author: Jason.wei <jasonwei06@hotmail.com>
 // +------------------------------------------------------------
 
-require_once 'Db_Abstract.php';
-
 class Db_Mysql extends Db_Abstract
 {
     /**
@@ -32,11 +30,7 @@ class Db_Mysql extends Db_Abstract
         if (isset($this->_params['dbname']) && is_string($this->_params['dbname'])) {
             $dsn['dbname'] = $this->_params['dbname'];
         } else {
-            if ($this->_exception->throwExceptions()) {
-                throw new Exception('"dbname" must be in the params of Db.');
-            } else {
-                $this->_exception->sendHttpStatus(500);
-            }
+            throw new Exceptions('"dbname" must be in the params of Db.');
         }
         
         foreach ($dsn as $key => $val) {
@@ -53,6 +47,10 @@ class Db_Mysql extends Db_Abstract
     protected function _connect()
     {
         if ($this->_dbh) return;
+        
+        if (!class_exists('PDO')) {
+            throw new Exceptions('Not support PDO.');
+        }
         
         $dsn = $this->_dsn();
         
@@ -79,12 +77,8 @@ class Db_Mysql extends Db_Abstract
                 $this->_params['passwd'],
                 $this->_params['options']
             );
-        } catch (Exception $e) {
-            if ($this->_exception->throwExceptions()) {
-                throw new Exception('Database connection failed.');
-            } else {
-                $this->_exception->sendHttpStatus(500);
-            }
+        } catch (Exceptions $e) {
+            throw new Exceptions('Database connection failed.');
         }
         
         if (version_compare(PHP_VERSION, '5.3.6', '<') && !defined('PDO::MYSQL_ATTR_INIT_COMMAND')) {
@@ -110,11 +104,7 @@ class Db_Mysql extends Db_Abstract
             }
             return $affected;
         } catch (PDOException $e) {
-            if ($this->_exception->throwExceptions()) {
-                throw new Exception($e);
-            } else {
-                $this->_exception->sendHttpStatus(500);
-            }
+            throw new Exceptions($e);
         }
     }
     
@@ -147,11 +137,7 @@ class Db_Mysql extends Db_Abstract
             
             return $result;
         } catch (PDOException $e) {
-            if ($this->_exception->throwExceptions()) {
-                throw new Exception($e);
-            } else {
-                $this->_exception->sendHttpStatus(500);
-            }
+            throw new Exceptions($e);
         }
     }
     
@@ -351,11 +337,7 @@ class Db_Mysql extends Db_Abstract
         $this->_connect();
         if ($this->_dbh->errorCode() != '00000') {
             $errorInfo = $this->_dbh->errorInfo();
-            if ($this->_exception->throwExceptions()) {
-                throw new Exception($errorInfo[2]);
-            } else {
-                $this->_exception->sendHttpStatus(500);
-            }
+            throw new Exceptions($errorInfo[2]);
         }
     }
     

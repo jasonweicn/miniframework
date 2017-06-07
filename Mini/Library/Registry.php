@@ -51,12 +51,7 @@ class Registry extends ArrayObject
         $instance = self::getInstance();
         
         if (!$instance->offsetExists($index)) {
-            $exceptions = Exceptions::getInstance();
-            if ($exceptions->throwExceptions()) {
-                throw new Exception('"' . $index . '" not registered.');
-            } else {
-                $this->_exception->sendHttpStatus(500);
-            }
+            throw new Exceptions('"' . $index . '" not registered.');
         }
         
         return $instance->offsetGet($index);

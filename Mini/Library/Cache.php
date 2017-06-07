@@ -17,22 +17,12 @@ class Cache
      */
     public static function factory($adapter = 'Memcache', $params = array())
     {
-        $exceptions = Exceptions::getInstance();
-        
         if (!is_array($params)) {
-            if ($exceptions->throwExceptions()) {
-                throw new Exception('Adapter params must be in an array.');
-            } else {
-                $exceptions->sendHttpStatus(500);
-            }
+            throw new Exceptions('Adapter params must be in an array.');
         }
         
         if (!is_string($adapter) || empty($adapter)) {
-            if ($exceptions->throwExceptions()) {
-                throw new Exception('Adapter name must be specified in a string.');
-            } else {
-                $exceptions->sendHttpStatus(500);
-            }
+            throw new Exceptions('Adapter name must be specified in a string.');
         }
         
         $adapterName = 'Cache_' . ucwords($adapter);
@@ -41,12 +31,7 @@ class Cache
             $adapterPath = MINI_PATH . DIRECTORY_SEPARATOR . 'Library' . DIRECTORY_SEPARATOR . 'Cache';
             $adapterFile = $adapterPath . DIRECTORY_SEPARATOR . $adapterName . '.php';
             if (!file_exists($adapterFile)) {
-                if ($exceptions->throwExceptions()) {
-                    throw new Exception('Adapter "' . $adapterName . '" not found.');
-                } else {
-                    $exceptions->sendHttpStatus(500);
-                }
-                
+                throw new Exceptions('Adapter "' . $adapterName . '" not found.');
             }
             
             require_once($adapterFile);
@@ -55,11 +40,7 @@ class Cache
         $cacheAdapter = new $adapterName($params);
         
         if (! $cacheAdapter instanceof Cache_Abstract) {
-            if ($exceptions->throwExceptions()) {
-                throw new Exception('Adapter class "' . $adapterName . '" does not extend Cache_Abstract.');
-            } else {
-                $exceptions->sendHttpStatus(500);
-            }
+            throw new Exceptions('Adapter class "' . $adapterName . '" does not extend Cache_Abstract.');
         }
 
         return $cacheAdapter;

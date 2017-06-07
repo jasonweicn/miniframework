@@ -44,11 +44,7 @@ class Config
             if (file_exists($configFile)) {
                 include($configFile);
             } else {
-                if ($this->_exception->throwExceptions()) {
-                    throw new Exception('Config "' . $configName . '" not found.');
-                } else {
-                    $this->_exception->sendHttpStatus(500);
-                }
+                throw new Exceptions('Config "' . $configName . '" not found.');
             }
             
             if (isset(${$configName})) {

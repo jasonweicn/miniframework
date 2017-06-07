@@ -78,14 +78,8 @@ abstract class Cache_Abstract
      */
     public function __construct($params)
     {
-        $this->_exception = Exceptions::getInstance();
-        
         if (!is_array($params)) {
-            if ($this->_exception->throwExceptions()) {
-                throw new Exception('Adapter params must be in an array.');
-            } else {
-                $this->_exception->sendHttpStatus(500);
-            }
+            throw new Exceptions('Adapter params must be in an array.');
         }
         
         $this->_params = $params;
