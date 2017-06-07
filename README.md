@@ -84,12 +84,13 @@ MiniFramework 目前只支持 MySQL 数据库，有自动和手动两种连接�
 ```
 $db = Db::factory ('Mysql',
     array (
-        'host'      => 'localhost', //主机地址
-        'port'      => 3306,        //端口
-        'dbname'    => 'mydbname',  //库名
-        'username'  => 'myuser',    //用户名
-        'passwd'    => '123456',    //密码
-        'charset'   => 'utf8'       //字符编码
+        'host'          => 'localhost', //主机地址
+        'port'          => 3306,        //端口
+        'dbname'        => 'mydbname',  //库名
+        'username'      => 'myuser',    //用户名
+        'passwd'        => '123456',    //密码
+        'charset'       => 'utf8',      //字符编码
+        'persistent'    => false        //是否启用持久连接 （ true | false ）
     )
 );
 
