@@ -75,17 +75,37 @@ class Exceptions extends \Exception
     /**
      * 重构 toString
      */
-    public function __toString(){
-        
+    public function __toString()
+    {
         if (SHOW_ERROR === true) {
             return parent::__toString();
         } else {
-            $code = 500;
             if (isset(self::$status[$this->code])) {
-                $code = $this->code;
+                self::showErrorPage($this->code);
+            } else {
+                self::showErrorPage(500);
             }
-            self::sendHttpStatus($code);
         }
+    }
+    
+    /**
+     * 显示自定义的报错内容
+     * 
+     * @param int $code
+     */
+    private function showErrorPage($code)
+    {
+        $flag = self::sendHttpStatus($code);
+        if ($flag === true) {
+            $errMsg = self::$status[$code];
+        } else {
+            $errMsg = 'unknown error';
+        }
+        $info = '<html><head><title>Error</title></head><body><h1>An error occurred</h1>';
+        $info.= '<h2>' . $code . ' ' . $errMsg . '</h2></body></html>';
+        echo $info;
+        
+        die();
     }
     
     /**
@@ -93,14 +113,13 @@ class Exceptions extends \Exception
      */
     public function sendHttpStatus($code)
     {
+        $flag = false;
         if (isset(self::$status[$code])) {
-            $info = '<html><head><title>Error</title></head><body><h1>An error occurred</h1>';
-            $info.= '<h2>' . $code . ' ' . self::$status[$code] . '</h2></body></html>';
-            echo $info;
             header('HTTP/1.1 ' . $code . ' ' . self::$status[$code]);
             header('Status: ' . $code . ' ' . self::$status[$code]);
+            $flag = true;
         }
         
-        die();
+        return $flag;
     }
 }
