@@ -7,6 +7,8 @@
 // | Author: Jason.wei <jasonwei06@hotmail.com>
 // +------------------------------------------------------------
 
+namespace Mini;
+
 abstract class Model
 {
     /**

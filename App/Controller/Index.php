@@ -1,5 +1,9 @@
 <?php
-class IndexController extends Action
+namespace App\Controller;
+
+use Mini\Action;
+
+class Index extends Action
 {
     function _init()
     {
@@ -12,11 +16,16 @@ class IndexController extends Action
     
     function indexAction()
     {
-        Loader::loadClass('Info');
-        $info = new Info();
-        $info_text = $info->getInfo();
+        //实例化一个模型
+        $info = new \App\Model\Info();
         
-        $this->view->assign('info', $info_text);
+        //调用模型中的方法
+        $infoText = $info->getInfo();
+        
+        //向View传值
+        $this->view->assign('info', $infoText);
+        
+        //渲染并显示View
         $this->view->display();
     }
 }

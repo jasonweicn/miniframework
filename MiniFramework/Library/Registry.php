@@ -7,7 +7,9 @@
 // | Author: Jason.wei <jasonwei06@hotmail.com>
 // +------------------------------------------------------------
 
-class Registry extends ArrayObject
+namespace Mini;
+
+class Registry extends \ArrayObject
 {
     /**
      * Registry Instance

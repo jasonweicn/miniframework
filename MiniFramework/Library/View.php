@@ -7,6 +7,8 @@
 // | Author: Jason.wei <jasonwei06@hotmail.com>
 // +------------------------------------------------------------
 
+namespace Mini;
+
 class View
 {
     /**
@@ -90,7 +92,7 @@ class View
      */
     public function display()
     {
-        $view = APP_PATH . DIRECTORY_SEPARATOR .  'Views' . DIRECTORY_SEPARATOR . strtolower($this->_controller) . DIRECTORY_SEPARATOR . $this->_action . '.php';
+        $view = APP_PATH . DIRECTORY_SEPARATOR .  'View' . DIRECTORY_SEPARATOR . strtolower($this->_controller) . DIRECTORY_SEPARATOR . $this->_action . '.php';
         
         if (!file_exists($view)) {
             throw new Exceptions('View "' . $this->_action . '" does not exist.', 404);
@@ -107,6 +109,7 @@ class View
         } else {
             echo $content;
         }
+        
         die();
     }
     

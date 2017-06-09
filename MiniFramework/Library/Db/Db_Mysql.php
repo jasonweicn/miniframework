@@ -7,6 +7,10 @@
 // | Author: Jason.wei <jasonwei06@hotmail.com>
 // +------------------------------------------------------------
 
+namespace Mini\Db;
+
+use \PDO;
+
 class Db_Mysql extends Db_Abstract
 {
     /**

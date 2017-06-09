@@ -7,6 +7,8 @@
 // | Author: Jason.wei <jasonwei06@hotmail.com>
 // +------------------------------------------------------------
 
+namespace Mini\Db;
+
 abstract class Db_Abstract
 {
     /**

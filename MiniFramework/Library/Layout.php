@@ -7,6 +7,8 @@
 // | Author: Jason.wei <jasonwei06@hotmail.com>
 // +------------------------------------------------------------
 
+namespace Mini;
+
 class Layout
 {
     /**
@@ -21,7 +23,7 @@ class Layout
      * 
      * @var mixed
      */
-    private $_layout_path;
+    private $_layoutPath;
     
     /**
      * 布局名称
@@ -77,7 +79,7 @@ class Layout
      */
     public function setLayoutPath($path)
     {
-        $this->_layout_path = (string) $path;
+        $this->_layoutPath = (string) $path;
         
         return $this;
     }
@@ -88,7 +90,7 @@ class Layout
      */
     public function getLayoutPath()
     {
-        return $this->_layout_path;
+        return $this->_layoutPath;
     }
     
     /**

@@ -7,6 +7,10 @@
 // | Author: Jason.wei <jasonwei06@hotmail.com>
 // +------------------------------------------------------------
 
+namespace Mini\Cache;
+
+use \Memcache;
+
 class Cache_Memcache extends Cache_Abstract
 {
     /**

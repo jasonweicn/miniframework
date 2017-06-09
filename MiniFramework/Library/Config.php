@@ -7,6 +7,8 @@
 // | Author: Jason.wei <jasonwei06@hotmail.com>
 // +------------------------------------------------------------
 
+namespace Mini;
+
 class Config
 {
     /**
@@ -33,10 +35,18 @@ class Config
     /**
      * 读取配置
      * 
-     * @param string $configName
+     * @param string $config
      */
-    public function load($configName)
+    public function load($config)
     {
+        $lastPos = strpos($config, ':');
+        if ($lastPos !== false) {
+            $configName = strstr($config, ':', true);
+            $configKey = substr($config, $lastPos+1);
+        } else {
+            $configName = $config;
+        }
+        
         if (!isset($this->_configArray[$configName])) {
             
             $configFile = CONFIG_PATH . DIRECTORY_SEPARATOR . $configName . '.php';
@@ -48,15 +58,19 @@ class Config
             }
             
             if (isset(${$configName})) {
-                $config = ${$configName};
-                $this->_configArray[$configName] = $config;
+                $configData = ${$configName};
+                $this->_configArray[$configName] = $configData;
             } else {
                 return null;
             }
         } else {
-            $config = $this->_configArray[$configName];
+            $configData = $this->_configArray[$configName];
         }
         
-        return $config;
+        if (isset($configKey) && isset($configData[$configKey])) {
+            return $configData[$configKey];
+        }
+        
+        return $configData;
     }
 }

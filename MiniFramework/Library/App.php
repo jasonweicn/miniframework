@@ -7,6 +7,8 @@
 // | Author: Jason.wei <jasonwei06@hotmail.com>
 // +------------------------------------------------------------
 
+namespace Mini;
+
 class App
 {
     /**
@@ -94,15 +96,14 @@ class App
         $this->controller = $request->_controller;
         $this->action = $request->_action;
         
-        $controllerName = ucfirst($this->controller) . 'Controller';
-        $controllerFile = APP_PATH . DIRECTORY_SEPARATOR . 'Controllers' . DIRECTORY_SEPARATOR . $controllerName . '.php';
-        
-        if (file_exists($controllerFile)) {
-            include_once($controllerFile);
-        } else {
+        $controllerName = ucfirst($this->controller);
+        $controllerFile = APP_PATH . DIRECTORY_SEPARATOR . 'Controller' . DIRECTORY_SEPARATOR . $controllerName . '.php';
+                
+        if (!file_exists($controllerFile)) {
             throw new Exceptions('Controller "' . $controllerFile . '" not found.', 404);
         }
         
+        $controllerName = APP_NAMESPACE . '\\Controller\\' . $controllerName;
         if (class_exists($controllerName)) {
             $controller = new $controllerName();
         } else {

@@ -7,6 +7,8 @@
 // | Author: Jason.wei <jasonwei06@hotmail.com>
 // +------------------------------------------------------------
 
+namespace Mini\Cache;
+
 class Cache_Redis extends Cache_Abstract
 {
     /**
