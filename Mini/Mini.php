@@ -9,7 +9,6 @@
 
 if (!defined('MINI_PATH'))          define('MINI_PATH',             dirname(__FILE__));
 if (!defined('APP_PATH'))           define('APP_PATH',              dirname($_SERVER['SCRIPT_FILENAME']));
-if (!defined('APP_NAMESPACE'))      define('APP_NAMESPACE',         'App');
 if (!defined('SHOW_ERROR'))         define('SHOW_ERROR',            false);
 if (!defined('SHOW_DEBUG'))         define('SHOW_DEBUG',            true);
 if (!defined('CACHE_PATH'))         define('CACHE_PATH',            APP_PATH . DIRECTORY_SEPARATOR . 'Cache');
