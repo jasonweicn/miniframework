@@ -1,6 +1,11 @@
 MiniFramework Change Log
 =========================
 
+2017-06-10 (Version 0.10.1 released.)
+
+* 修正Db模块未对传入的params参数校验的Bug
+* 修正Cache模块未对传入的params参数校验的Bug
+
 2017-06-05 (Version 0.10.0 released.)
 
 * 增加对Composer的支持
