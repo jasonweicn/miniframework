@@ -17,12 +17,25 @@ class Cache
      */
     public static function factory($adapter = 'Memcache', $params = array())
     {
-        if (!is_array($params)) {
-            throw new Exceptions('Adapter params must be in an array.');
-        }
-        
         if (!is_string($adapter) || empty($adapter)) {
             throw new Exceptions('Adapter name must be specified in a string.');
+        }
+        
+        if (in_array($adapter, array('Memcache', 'Redis'))) {
+            
+            if (!function_exists($adapter)) {
+                throw new Exceptions('Class ' . $adapter . ' not found');
+            }
+            
+            if (!is_array($params)) {
+                throw new Exceptions('Cache params invalid.');
+            }
+            
+            if (!isset($params['host'])) {
+                throw new Exceptions('Cache(' . $adapter . ') host is not defined.');
+            } elseif (!isset($params['port'])) {
+                throw new Exceptions('Cache(' . $adapter . ') port is not defined.');
+            }
         }
         
         $adapterName = 'Cache_' . ucwords($adapter);
