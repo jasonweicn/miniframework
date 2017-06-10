@@ -78,7 +78,12 @@ class App
      */
     public function run()
     {
-        if ('rewrite' == $this->_router->getRouteType()) {
+        if ('cli' == $this->_router->getRouteType()) {
+            $cliParams = $this->_router->getCliParamsArray();
+            if (!empty($cliParams)) {
+                $this->_params->setParams($cliParams);
+            }
+        } elseif ('rewrite' == $this->_router->getRouteType()) {
             $this->uriToParams($this->_router->getUriArray());
         }
         
