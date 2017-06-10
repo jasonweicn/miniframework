@@ -23,7 +23,7 @@ class Params
      * 
      * @var array
      */
-    public $_params;
+    public $_params = array();
     
     /**
      * POST数组
