@@ -17,12 +17,28 @@ class Db
      */
     public static function factory($adapter = 'Mysql', $params = array())
     {
+        if (!is_string($adapter) || empty($adapter)) {
+            throw new Exceptions('Adapter name must be specified in a string.');
+        }
+        
+        if (!in_array($adapter, array('Mysql'))) {
+            throw new Exceptions('Adapter "' . $adapter . '" does not exist.');
+        }
+        
         if (!is_array($params)) {
             throw new Exceptions('Adapter params must be in an array.');
         }
         
-        if (!is_string($adapter) || empty($adapter)) {
-            throw new Exceptions('Adapter name must be specified in a string.');
+        if (!isset($params['host'])) {
+            throw new Exceptions('Database(' . $adapter . ') host is not defined.');
+        } elseif (!isset($params['port'])) {
+            throw new Exceptions('Database(' . $adapter . ') port is not defined.');
+        } elseif (!isset($params['username'])) {
+            throw new Exceptions('Database(' . $adapter . ') username is not defined.');
+        } elseif (!isset($params['passwd'])) {
+            throw new Exceptions('Database(' . $adapter . ') passwd is not defined.');
+        } elseif (!isset($params['dbname'])) {
+            throw new Exceptions('Database(' . $adapter . ') dbname is not defined.');
         }
         
         $adapterName = 'Db_' . ucwords($adapter);
