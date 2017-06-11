@@ -23,6 +23,13 @@ class Cache_Redis extends Cache_Abstract
         } catch (Exceptions $e) {
             throw new Exceptions($e);
         }
+        
+        if (isset($this->_params['passwd'])) {
+            $authStatus = $redis->auth($this->_params['passwd']);
+            if ($authStatus === false) {
+                throw new Exceptions('Redis connection failed.');
+            }
+        }
     }
     
     public function set($name, $value, $expire = null)
