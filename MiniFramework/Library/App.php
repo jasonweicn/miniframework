@@ -143,33 +143,6 @@ class App
     }
     
     /**
-     * 提取地址中的参数
-     * 
-     * @param array $uriArray
-     */
-    private function uriToParams($uriArray = null)
-    {
-        $array = null;
-        if (is_array($uriArray)) array_splice($uriArray, 0, 3);
-        
-        if (!empty($uriArray)) {
-            foreach ($uriArray as $key => $value) {
-                if ($key % 2 == 0) {
-                    $array[$value] = null;
-                } else {
-                    $array[$uriArray[$key - 1]] = $value;
-                }
-            }
-            
-            foreach ($array as $key => $value) {
-                if ($value !== null) {
-                    $this->_params->setParam($key, $value);
-                }
-            }
-        }
-    }
-    
-    /**
      * 加载函数库
      * @param string $func
      * @throws Exception
