@@ -35,6 +35,18 @@ class Request
     public $_action;
     
     /**
+     * QUERY_STRING转化的数组
+     * @var array
+     */
+    protected $_queryStringArray;
+    
+    /**
+     * 请求参数数组
+     * @var array
+     */
+    protected $_requestParams = array();
+    
+    /**
      * 获取实例
      *
      */
@@ -100,5 +112,93 @@ class Request
     public function setActionName($value)
     {
         $this->_action = $value;
+    }
+    
+    /**
+     * 获取QUERY_STRING数组
+     */
+    public function getQueryStringArray()
+    {
+        if (isset($this->_queryStringArray)) {
+            return $this->_queryStringArray;
+        }
+    
+        $queryStringArray = array();
+        parse_str($_SERVER['QUERY_STRING'], $queryStringArray);
+        $this->_queryStringArray = $queryStringArray;
+    
+        return $queryStringArray;
+    }
+    
+    /**
+     * 解析请求参数
+     * @throws Exceptions
+     * @return array
+     */
+    public function parseRequestParams($routeType)
+    {
+        $requestParams = array();
+        
+        if ($routeType == 'cli') {
+            
+            if ($_SERVER['argc'] > 2) {
+                for ($i=2; $i<$_SERVER['argc']; $i++) {
+                    if (strpos($_SERVER['argv'][$i], '=') > 0) {
+                        $curParam = explode('=', $_SERVER['argv'][$i]);
+                        $requestParams[$curParam[0]] = $curParam[1];
+                    } else {
+                        throw new Exceptions('Request params invalid.');
+                    }
+                }
+            }
+        
+        } elseif ($routeType == 'rewrite') {
+            
+            $requestUri = '';
+            
+            if (empty($_SERVER['QUERY_STRING'])) {
+                $requestUri = $_SERVER['REQUEST_URI'];
+            } else {
+                $requestUri = str_replace('?' . $_SERVER['QUERY_STRING'], '', $_SERVER['REQUEST_URI']);
+                $queryStringArray = $this->getQueryStringArray();
+            }
+            
+            if ($requestUri != $this->_baseUrl) {
+                $requestUri = str_replace($this->_baseUrl, '', $requestUri);
+            }
+            
+            $uriArray = explode('/', $requestUri);
+            
+            $array = null;
+            array_splice($uriArray, 0, 3);
+            
+            if (!empty($uriArray)) {
+                foreach ($uriArray as $key => $value) {
+                    if ($key % 2 == 0) {
+                        $array[$value] = null;
+                    } else {
+                        $array[$uriArray[$key - 1]] = $value;
+                    }
+                }
+                foreach ($array as $key => $value) {
+                    if ($key != '' && $value !== null) {
+                        $requestParams[$key] = $value;
+                    }
+                }
+            }
+            
+            if (!empty($queryStringArray)) {
+                $requestParams = array_merge($requestParams, $queryStringArray);
+            }
+        
+        } elseif ($routeType == 'get') {
+            
+            if (!empty($_SERVER['QUERY_STRING'])) {
+                $requestParams = $this->getQueryStringArray();
+            }
+        
+        }
+        
+        return $requestParams;
     }
 }

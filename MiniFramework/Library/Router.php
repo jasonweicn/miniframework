@@ -50,6 +50,8 @@ class Router
      */
     protected $_cliParamsArray = array();
     
+    
+    
     /**
      * 构造
      * 
@@ -70,10 +72,8 @@ class Router
                     $controller = isset($m[1]) ? $m[1] : 'index';
                     $action = isset($m[2]) ? $m[2]: 'index';
                 } else {
-                    throw new \Exception('Params invalid.');
+                    throw new Exceptions('Request params invalid.');
                 }
-                
-                $this->_cliParamsArray = $this->parseCliParamsToArray();
                 
             } else {
                 $controller = $action = 'index';
@@ -88,7 +88,7 @@ class Router
             
             $controller = (isset($this->_uriArray[1]) && !empty($this->_uriArray[1])) ? $this->_uriArray[1] : 'index';
             $action = (isset($this->_uriArray[2]) && !empty($this->_uriArray[2])) ? $this->_uriArray[2] : 'index';
-            
+        
         } else {
             
             //GET (/index.php?c=index&a=index)
@@ -97,10 +97,9 @@ class Router
             if (empty($_SERVER['QUERY_STRING'])) {
                 $controller = $action = 'index';
             } else {
-                parse_str($_SERVER['QUERY_STRING'], $urlParams);
-                
-                $controller = isset($urlParams['c']) ? $urlParams['c'] : 'index';
-                $action = isset($urlParams['a']) ? $urlParams['a'] : 'index';
+                $queryStringArray = $this->_request->getQueryStringArray();
+                $controller = isset($queryStringArray['c']) ? $queryStringArray['c'] : 'index';
+                $action = isset($queryStringArray['a']) ? $queryStringArray['a'] : 'index';
             }
             
         }
@@ -108,13 +107,13 @@ class Router
         if ($this->checkRoute($controller)) {
             $this->_request->setControllerName($controller);
         } else {
-            throw new Exceptions('Controller "' . $controller . '" not found.', 404);
+            throw new Exceptions('Controller name invalid.', 404);
         }
         
         if ($this->checkRoute($action)) {
             $this->_request->setActionName(strtolower($action));
         } else {
-            throw new Exceptions('Action "' . $action . '" does not exist.', 404);
+            throw new Exceptions('Action name invalid.', 404);
         }
     }
     
@@ -135,19 +134,11 @@ class Router
     }
     
     /**
-     * 获取uri数组
-     */
-    public function getUriArray()
-    {
-        return $this->_uriArray;
-    }
-    
-    /**
      * 解析Url为数组
      * 
      * @return array
      */
-    public function parseUrlToArray()
+    private function parseUrlToArray()
     {
         $requestUri = '';
         
@@ -163,35 +154,8 @@ class Router
             $requestUri = str_replace($baseUrl, '', $requestUri);
         }
         $uriArray = explode('/', $requestUri);
-        var_dump($uriArray);die();
+        
         return $uriArray;
-    }
-    
-    /**
-     * 解析命令行参数为数组
-     * 
-     * @return array
-     */
-    public function parseCliParamsToArray()
-    {
-        $cliParamsArray = array();
-        
-        if ($_SERVER['argc'] > 2) {
-            for ($i=2; $i<$_SERVER['argc']; $i++) {
-                $curParam = explode('=', $_SERVER['argv'][$i]);
-                $cliParamsArray[$curParam[0]] = $curParam[1];
-            }
-        }
-        
-        return $cliParamsArray;
-    }
-    
-    /**
-     * 获取命令行参数数组
-     */
-    public function getCliParamsArray()
-    {
-        return $this->_cliParamsArray;
     }
     
     /**

@@ -44,6 +44,13 @@ class App
     protected $_params;
     
     /**
+     * Request实例
+     *
+     * @var Request
+     */
+    protected $_request;
+    
+    /**
      * App实例
      * 
      * @var App
@@ -70,6 +77,8 @@ class App
     {
         $this->_params = Params::getInstance();
         $this->getRouter();
+        
+        $this->_request = Request::getInstance();
     }
     
     /**
@@ -78,13 +87,10 @@ class App
      */
     public function run()
     {
-        if ('cli' == $this->_router->getRouteType()) {
-            $cliParams = $this->_router->getCliParamsArray();
-            if (!empty($cliParams)) {
-                $this->_params->setParams($cliParams);
-            }
-        } elseif ('rewrite' == $this->_router->getRouteType()) {
-            $this->uriToParams($this->_router->getUriArray());
+        $requestParams = $this->_request->parseRequestParams($this->_router->getRouteType());
+        
+        if (!empty($requestParams)) {
+            $this->_params->setParams($requestParams);
         }
         
         $this->loadFunc('global');
@@ -105,14 +111,14 @@ class App
         $controllerFile = APP_PATH . DIRECTORY_SEPARATOR . 'Controller' . DIRECTORY_SEPARATOR . $controllerName . '.php';
                 
         if (!file_exists($controllerFile)) {
-            throw new Exceptions('Controller "' . $controllerFile . '" not found.', 404);
+            throw new Exceptions('Controller file "' . $controllerFile . '" not found.', 404);
         }
         
         $controllerName = APP_NAMESPACE . '\\Controller\\' . $controllerName;
         if (class_exists($controllerName)) {
             $controller = new $controllerName();
         } else {
-            throw new Exceptions($controllerName . ' does not exist.', 404);
+            throw new Exceptions('Controller "' . $controllerName . '" does not exist.', 404);
         }
         
         $action = $this->action . 'Action';
@@ -120,7 +126,7 @@ class App
         if (method_exists($controller, $action)) {
             $controller->$action();
         } else {
-            throw new Exceptions('Action "' . $this->_router->_action . '" does not exist.', 404);
+            throw new Exceptions('Action "' . $this->action . '" does not exist.', 404);
         }
     }
     
