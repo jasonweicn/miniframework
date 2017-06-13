@@ -150,4 +150,31 @@ function isDate($date, $formats = array('Y-m-d', 'Y/m/d'))
 
     return false;
 }
-?>
+
+/**
+ * 变量输出
+ * @param unknown $var
+ * @param string $label
+ * @param bool $echo
+ */
+function dump($var, $label = null, $echo = true)
+{
+    ob_start();
+    var_dump($var);
+    $output = ob_get_clean();
+    $output = preg_replace("/\]\=\>\n(\s+)/m", "] => ", $output);
+    
+    $cli = preg_match("/cli/i", PHP_SAPI) ? true : false;
+
+    if ($cli === true) {
+        $output = PHP_EOL . $label . PHP_EOL . $output. PHP_EOL;
+    } else {
+        $output = '<pre>' . PHP_EOL . $label . PHP_EOL . $output . '</pre>' . PHP_EOL;
+    }
+    
+    if ($echo) {
+        echo $output;
+    }
+    
+    return $output;
+}

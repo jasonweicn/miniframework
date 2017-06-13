@@ -13,24 +13,28 @@ class View
 {
     /**
      * 控制器
+     * 
      * @var string
      */
     private $_controller;
     
     /**
      * 动作
+     * 
      * @var string
      */
     private $_action;
     
     /**
      * Request实例
+     * 
      * @var Request
      */
     private $_request;
     
     /**
      * 基础路径
+     * 
      * @var string
      */
     protected $_baseUrl;

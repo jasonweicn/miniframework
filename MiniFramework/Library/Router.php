@@ -13,6 +13,7 @@ class Router
 {    
     /**
      * Request实例
+     * 
      * @var Request
      */
     private $_request;
@@ -47,6 +48,8 @@ class Router
     
     /**
      * 命令行参数数组
+     * 
+     * @var array
      */
     protected $_cliParamsArray = array();
     
@@ -127,6 +130,8 @@ class Router
     
     /**
      * 读取路由方式
+     * 
+     * @return string
      */
     public function getRouteType()
     {
@@ -171,6 +176,8 @@ class Router
     
     /**
      * 判断PHP是否处于CLI模式下运行
+     * 
+     * @return bool
      */
     public function isCli()
     {

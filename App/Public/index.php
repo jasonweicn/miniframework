@@ -16,4 +16,4 @@ define('SHOW_ERROR',    true);
 define('LAYOUT_ON',     true);
 
 //引入 MiniFramework 就是这么简单
-require '../../MiniFramework/Mini.php';
+require dirname(APP_PATH) . DIRECTORY_SEPARATOR . 'MiniFramework' . DIRECTORY_SEPARATOR . 'Bootstrap.php';

@@ -18,6 +18,11 @@ class Request
      */
     protected static $_instance;
     
+    /**
+     * 基础地址
+     * 
+     * @var string
+     */
     protected $_baseUrl = null;
     
     /**
@@ -36,12 +41,14 @@ class Request
     
     /**
      * QUERY_STRING转化的数组
+     * 
      * @var array
      */
     protected $_queryStringArray;
     
     /**
      * 请求参数数组
+     * 
      * @var array
      */
     protected $_requestParams = array();
@@ -49,6 +56,7 @@ class Request
     /**
      * 获取实例
      *
+     * @return obj
      */
     public static function getInstance()
     {
@@ -70,6 +78,7 @@ class Request
     /**
      * 从$_SERVER['PHP_SELF']中提取基础地址
      *
+     * @return string
      */
     public function setBaseUrl()
     {
@@ -85,6 +94,7 @@ class Request
     /**
      * 获取基础地址
      *
+     * @return string
      */
     public function getBaseUrl()
     {
@@ -116,6 +126,8 @@ class Request
     
     /**
      * 获取QUERY_STRING数组
+     * 
+     * @return array
      */
     public function getQueryStringArray()
     {
@@ -132,6 +144,7 @@ class Request
     
     /**
      * 解析请求参数
+     * 
      * @throws Exceptions
      * @return array
      */

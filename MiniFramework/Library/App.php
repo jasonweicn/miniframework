@@ -13,18 +13,21 @@ class App
 {
     /**
      * 控制器
+     * 
      * @var string
      */
     public $controller;
     
     /**
      * 动作
+     * 
      * @var string
      */
     public $action;
     
     /**
      * 函数库清单数组
+     * 
      * @var array
      */
     private static $_funcs = array();
@@ -60,6 +63,7 @@ class App
     /**
      * 获取实例
      * 
+     * @return obj
      */
     public static function getInstance()
     {
@@ -93,7 +97,7 @@ class App
             $this->_params->setParams($requestParams);
         }
         
-        $this->loadFunc('global');
+        $this->loadFunc('Global');
         
         $this->dispatch();
     }
@@ -133,6 +137,7 @@ class App
     /**
      * 获取路由器对象
      * 
+     * @return obj
      */
     public function getRouter()
     {
@@ -144,13 +149,15 @@ class App
     
     /**
      * 加载函数库
+     * 
      * @param string $func
      * @throws Exception
      * @return boolean
      */
     private function loadFunc($func)
     {
-        $file = MINI_PATH . DIRECTORY_SEPARATOR . 'Functions' . DIRECTORY_SEPARATOR . $func . '.func.php';
+        $file = MINI_PATH . DIRECTORY_SEPARATOR . 'Functions' . DIRECTORY_SEPARATOR . ucfirst($func) . '.func.php';
+        
         $key = md5($file);
         if (!isset(self::$_funcs[$key])) {
             if (file_exists($file)) {
