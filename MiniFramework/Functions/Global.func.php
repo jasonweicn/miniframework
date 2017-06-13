@@ -115,18 +115,25 @@ function base64EncodeImage ($image_file)
 }
 
 /**
- * 输出JSON并终止程序
+ * 输出JSON
  * 
  * @param mixed $data
+ * @param bool $push (true: echo & die | false: return)
  */
-function pushJson ($data)
+function pushJson ($data, $push = true)
 {
     if (version_compare(PHP_VERSION, '5.4.0', '>=')) {
-        echo json_encode($data, JSON_UNESCAPED_UNICODE);
+        $json = json_encode($data, JSON_UNESCAPED_UNICODE);
     } else {
-        echo json_encode($data);
+        $json = json_encode($data);
     }
-    die();
+    
+    if ($push === true) {
+        echo $json;
+        die();
+    }
+    
+    return $json;
 }
 
 /**
@@ -153,7 +160,7 @@ function isDate($date, $formats = array('Y-m-d', 'Y/m/d'))
 
 /**
  * 变量输出
- * @param unknown $var
+ * @param mixed $var
  * @param string $label
  * @param bool $echo
  */
@@ -177,4 +184,75 @@ function dump($var, $label = null, $echo = true)
     }
     
     return $output;
+}
+
+/**
+ * 输出XML
+ * 
+ * @param mixed $data
+ * @param bool $push (true: echo & die | false: return)
+ * @param bool $indent
+ * @param string $root
+ * @param string $item
+ * @param string $id
+ * @param string $encoding
+ * @return string
+ */
+function pushXml($data, $push = true, $indent = false, $root = 'data', $item = 'item', $id = 'id', $encoding = 'utf-8')
+{
+    $eol = ($indent === true) ? PHP_EOL : '';
+    $space = ($indent === true) ? '  ' : '';
+    
+    $xml  = '<?xml version="1.0" encoding="' . $encoding .'"?>' . $eol;
+    $xml .= '<' . $root . '>' . $eol;
+    $xml .= parseDataToXml($data, $item, $id, $indent);
+    $xml .= '</' . $root . '>';
+    
+    if ($push === true) {
+        echo $xml;
+        die();
+    }
+    
+    return $xml;
+}
+
+/**
+ * 数据转换XML
+ * @param mixed $data
+ * @param string $item
+ * @param string $id
+ * @param string $indent
+ * @param int $level
+ * @return string
+ */
+function parseDataToXml($data, $item = 'item', $id = 'id', $indent = false, $level = 1)
+{
+    $eol = ($indent === true) ? PHP_EOL : '';
+    $space = ($indent === true) ? str_repeat('  ', $level) : '';
+    
+    $xml = $attr = '';
+    
+    foreach ($data as $key => $val) {
+        if (is_int($key) && $key >= 0) {
+            if (!empty($id)) {
+                $attr = ' ' . $id . '="' . $key . '"';
+            }
+            
+            $key = $item;
+        }
+        
+        $xml .= $space . '<' . $key . $attr . '>';
+        
+        if (is_array($val) || is_object($val)) {
+            $level++;
+            $xml .= $eol . parseDataToXml($val, $item, $id, $indent, $level);
+            $level--;
+            $xml .= $space . '</' . $key . '>' . $eol;
+        } else {
+            $xml .= $val;
+            $xml .= '</' . $key . '>' . $eol;
+        }
+    }
+    
+    return $xml;
 }
