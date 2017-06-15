@@ -25,15 +25,8 @@
 
 namespace Mini;
 
-class Action
+class Rest
 {
-    /**
-     * View实例
-     * 
-     * @var View
-     */
-    protected $view;
-    
     /**
      * Params实例
      * 
@@ -44,9 +37,16 @@ class Action
     /**
      * Request实例
      * 
-     * @var mixed
+     * @var Http
      */
     protected $_request;
+    
+    /**
+     * Http实例
+     * 
+     * @var Http
+     */
+    protected $http;
     
     /**
      * 数据库对象池
@@ -56,25 +56,32 @@ class Action
     public $_db;
     
     /**
-     * Action Instance
+     * Rest Instance
      *
-     * @var Action
+     * @var Rest
      */
     protected static $_instance;
     
     /**
      * 构造
-     * 
-     * @param string $controller
-     * @param string $action
-     * @return Action
      */
     function __construct()
     {
         self::$_instance = $this;
-        $this->view = new View();
         $this->params = Params::getInstance();
         $this->_request = Request::getInstance();
+        $this->http = Http::getInstance();
+        
+        $requestMethod = $this->_request->method();
+        
+        if ($requestMethod == 'POST') {
+            $this->params->setParams($this->params->_post);
+        } elseif ($requestMethod == 'PUT') {
+            parse_str(file_get_contents('php://input'), $arguments);
+            if (!empty($arguments)) {
+                $this->params->setParams($arguments);
+            }
+        }
         
         if (DB_AUTO_CONNECT === true) {
             $dbConfig = Config::getInstance()->load('database');
@@ -88,39 +95,59 @@ class Action
         if (method_exists($this, '_init')) {
             $this->_init();
         }
-    }
-    
-    /**
-     * 向View传入变量
-     * 
-     * @param mixed $variable
-     * @param mixed $value
-     */
-    protected function assign($variable, $value)
-    {
-        $this->view->assign($variable, $value);
-    }
-    
-    /**
-     * 转至给定的控制器和动作
-     * 
-     * @param string $action
-     * @param string $controller
-     * @param array $params
-     */
-    final protected function _forward($action, $controller = null, array $params = NULL)
-    {
-        if ($controller !== null) {
-            $this->_request->setControllerName($controller);
-        }
-
-        $this->_request->setActionName($action);
         
-        App::getInstance()->dispatch();
+        $requestMethod = strtolower($requestMethod);
+        
+        if (method_exists($this, $requestMethod)) {
+            $this->$requestMethod();
+        }
     }
     
     /**
-     * 获取Action实例
+     * 发送JSON
+     * 
+     * @param int $code HTTP状态码
+     * @param string $msg 服务器返回给客户端的消息
+     * @param string $data 返回的数据
+     */
+    public function responseJson($code = 200, $msg = '', $data = null)
+    {
+        if ($msg == '') {
+            $msg = Http::isStatus($code) === false ? '' : Http::isStatus($code);
+        }
+        
+        $content = array(
+                'code'  => $code,
+                'msg'   => $msg,
+                'data'  => $data
+        );
+        $json = pushJson($content, false);
+        
+        $this->http->header('Content-Type', 'application/json')->response($code, $json);
+    }
+    
+    /**
+     * 发送XML
+     * @param int $code HTTP状态码
+     * @param string $msg 服务器返回给客户端的消息
+     * @param string $data 返回的数据
+     */
+    public function responseXml($code = 200, $msg = '', $data = array())
+    {
+        if ($msg == '') {
+            $msg = Http::isStatus($code) === false ? '' : Http::isStatus($code);
+        }
+        
+        $xml = pushXml($data, false, false, 'data', array(
+                'code'  => $code,
+                'msg'   => $msg
+        ));
+        
+        $this->http->header('Content-Type', 'application/xml')->response($code, $xml);
+    }
+    
+    /**
+     * 获取实例
      * 
      */
     public static function getInstance()

@@ -1,9 +1,9 @@
 <?php
-// +--------------------------------------------------------------------------------
+// +---------------------------------------------------------------------------
 // | Mini Framework
-// +--------------------------------------------------------------------------------
+// +---------------------------------------------------------------------------
 // | Copyright (c) 2015-2017 http://www.sunbloger.com
-// +--------------------------------------------------------------------------------
+// +---------------------------------------------------------------------------
 // | Licensed under the Apache License, Version 2.0 (the "License");
 // | you may not use this file except in compliance with the License.
 // | You may obtain a copy of the License at
@@ -15,13 +15,13 @@
 // | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // | See the License for the specific language governing permissions and
 // | limitations under the License.
-// +--------------------------------------------------------------------------------
+// +---------------------------------------------------------------------------
 // | Source: https://github.com/jasonweicn/MiniFramework
-// +--------------------------------------------------------------------------------
+// +---------------------------------------------------------------------------
 // | Author: Jason Wei <jasonwei06@hotmail.com>
-// +--------------------------------------------------------------------------------
+// +---------------------------------------------------------------------------
 // | Website: http://www.sunbloger.com/miniframework
-// +--------------------------------------------------------------------------------
+// +---------------------------------------------------------------------------
 
 /**
  * 获取客户端IP地址
@@ -122,7 +122,8 @@ function base64EncodeImage ($image_file)
     if (is_file($image_file)) {
         $image_info = getimagesize($image_file);
         $image_data = fread(fopen($image_file, 'r'), filesize($image_file));
-        $base64_image = 'data:' . $image_info['mime'] . ';base64,' . chunk_split(base64_encode($image_data));
+        $base64_image  = 'data:' . $image_info['mime'] . ';base64,';
+        $base64_image .= chunk_split(base64_encode($image_data));
     } else {
         return false;
     }
@@ -205,22 +206,28 @@ function dump($var, $label = null, $echo = true)
 /**
  * 输出XML
  * 
- * @param mixed $data
- * @param bool $push (true: echo & die | false: return)
- * @param bool $indent
- * @param string $root
- * @param string $item
- * @param string $id
- * @param string $encoding
+ * @param mixed $data 数据
+ * @param bool $push (true: echo & die | false: return) 是否立即显示并终止程序
+ * @param bool $indent 是否格式化缩进
+ * @param string $root 根标签名称
+ * @param array $attr 根标签属性数组
+ * @param string $item 项目标签名称
+ * @param string $id 当数据为索引数组时，项目标签属性的名称
+ * @param string $encoding 编码
  * @return string
  */
-function pushXml($data, $push = true, $indent = false, $root = 'data', $item = 'item', $id = 'id', $encoding = 'utf-8')
+function pushXml($data, $push = true, $indent = false, $root = 'data', $attr = array(), $item = 'item', $id = 'id', $encoding = 'utf-8')
 {
     $eol = ($indent === true) ? PHP_EOL : '';
     $space = ($indent === true) ? '  ' : '';
     
+    $_attr = '';
+    foreach ($attr as $key => $val) {
+        $_attr .= ' ' . $key . '="' . $val . '"';
+    }
+    
     $xml  = '<?xml version="1.0" encoding="' . $encoding .'"?>' . $eol;
-    $xml .= '<' . $root . '>' . $eol;
+    $xml .= '<' . $root . $_attr . '>' . $eol;
     $xml .= parseDataToXml($data, $item, $id, $indent);
     $xml .= '</' . $root . '>';
     
@@ -247,6 +254,10 @@ function parseDataToXml($data, $item = 'item', $id = 'id', $indent = false, $lev
     $space = ($indent === true) ? str_repeat('  ', $level) : '';
     
     $xml = $attr = '';
+    
+    if (empty($data)) {
+        return $xml;
+    }
     
     foreach ($data as $key => $val) {
         if (is_int($key) && $key >= 0) {

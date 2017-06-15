@@ -1,9 +1,9 @@
 <?php
-// +--------------------------------------------------------------------------------
+// +---------------------------------------------------------------------------
 // | Mini Framework
-// +--------------------------------------------------------------------------------
+// +---------------------------------------------------------------------------
 // | Copyright (c) 2015-2017 http://www.sunbloger.com
-// +--------------------------------------------------------------------------------
+// +---------------------------------------------------------------------------
 // | Licensed under the Apache License, Version 2.0 (the "License");
 // | you may not use this file except in compliance with the License.
 // | You may obtain a copy of the License at
@@ -15,13 +15,13 @@
 // | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // | See the License for the specific language governing permissions and
 // | limitations under the License.
-// +--------------------------------------------------------------------------------
+// +---------------------------------------------------------------------------
 // | Source: https://github.com/jasonweicn/MiniFramework
-// +--------------------------------------------------------------------------------
+// +---------------------------------------------------------------------------
 // | Author: Jason Wei <jasonwei06@hotmail.com>
-// +--------------------------------------------------------------------------------
+// +---------------------------------------------------------------------------
 // | Website: http://www.sunbloger.com/miniframework
-// +--------------------------------------------------------------------------------
+// +---------------------------------------------------------------------------
 
 namespace Mini;
 
@@ -112,7 +112,8 @@ class View
      */
     public function display()
     {
-        $view = APP_PATH . DIRECTORY_SEPARATOR .  'View' . DIRECTORY_SEPARATOR . strtolower($this->_controller) . DIRECTORY_SEPARATOR . $this->_action . '.php';
+        $view  = APP_PATH . DS .  'View' . DS;
+        $view .= strtolower($this->_controller) . DS . $this->_action . '.php';
         
         if (!file_exists($view)) {
             throw new Exceptions('View "' . $this->_action . '" does not exist.', 404);

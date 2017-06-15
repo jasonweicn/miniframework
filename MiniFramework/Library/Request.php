@@ -1,9 +1,9 @@
 <?php
-// +--------------------------------------------------------------------------------
+// +---------------------------------------------------------------------------
 // | Mini Framework
-// +--------------------------------------------------------------------------------
+// +---------------------------------------------------------------------------
 // | Copyright (c) 2015-2017 http://www.sunbloger.com
-// +--------------------------------------------------------------------------------
+// +---------------------------------------------------------------------------
 // | Licensed under the Apache License, Version 2.0 (the "License");
 // | you may not use this file except in compliance with the License.
 // | You may obtain a copy of the License at
@@ -15,13 +15,13 @@
 // | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // | See the License for the specific language governing permissions and
 // | limitations under the License.
-// +--------------------------------------------------------------------------------
+// +---------------------------------------------------------------------------
 // | Source: https://github.com/jasonweicn/MiniFramework
-// +--------------------------------------------------------------------------------
+// +---------------------------------------------------------------------------
 // | Author: Jason Wei <jasonwei06@hotmail.com>
-// +--------------------------------------------------------------------------------
+// +---------------------------------------------------------------------------
 // | Website: http://www.sunbloger.com/miniframework
-// +--------------------------------------------------------------------------------
+// +---------------------------------------------------------------------------
 
 namespace Mini;
 
@@ -118,6 +118,24 @@ class Request
             $this->_baseUrl = $this->setBaseUrl();
         }
         return $this->_baseUrl;
+    }
+    
+    /**
+     * 获取请求方法
+     */
+    public function method()
+    {
+        if (isset($_SERVER['REQUEST_METHOD'])) {
+            $method = $_SERVER['REQUEST_METHOD'];
+        } elseif (isset($_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'])) {
+            $method = $_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'];
+        } elseif (isset($_REQUEST['_method'])) {
+            $method = $_REQUEST['_method'];
+        } else {
+            $method = 'GET';
+        }
+        
+        return strtoupper($method);
     }
     
     /**

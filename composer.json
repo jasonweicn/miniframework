@@ -1,7 +1,7 @@
 {
     "name": "jasonwei/miniframework",
     "description": "MiniFramework",
-    "license": "GPL-2.0",
+    "license": "Apache2",
     "authors": [
         {
             "name": "Jason Wei",

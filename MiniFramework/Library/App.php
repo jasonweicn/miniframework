@@ -1,9 +1,9 @@
 <?php
-// +--------------------------------------------------------------------------------
+// +---------------------------------------------------------------------------
 // | Mini Framework
-// +--------------------------------------------------------------------------------
+// +---------------------------------------------------------------------------
 // | Copyright (c) 2015-2017 http://www.sunbloger.com
-// +--------------------------------------------------------------------------------
+// +---------------------------------------------------------------------------
 // | Licensed under the Apache License, Version 2.0 (the "License");
 // | you may not use this file except in compliance with the License.
 // | You may obtain a copy of the License at
@@ -15,13 +15,13 @@
 // | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // | See the License for the specific language governing permissions and
 // | limitations under the License.
-// +--------------------------------------------------------------------------------
+// +---------------------------------------------------------------------------
 // | Source: https://github.com/jasonweicn/MiniFramework
-// +--------------------------------------------------------------------------------
+// +---------------------------------------------------------------------------
 // | Author: Jason Wei <jasonwei06@hotmail.com>
-// +--------------------------------------------------------------------------------
+// +---------------------------------------------------------------------------
 // | Website: http://www.sunbloger.com/miniframework
-// +--------------------------------------------------------------------------------
+// +---------------------------------------------------------------------------
 
 namespace Mini;
 
@@ -107,7 +107,8 @@ class App
      */
     public function run()
     {
-        $requestParams = $this->_request->parseRequestParams($this->_router->getRouteType());
+        $requestParams = $this->_request->parseRequestParams(
+                $this->_router->getRouteType());
         
         if (!empty($requestParams)) {
             $this->_params->setParams($requestParams);
@@ -128,25 +129,52 @@ class App
         $this->action = $request->_action;
         
         $controllerName = ucfirst($this->controller);
-        $controllerFile = APP_PATH . DIRECTORY_SEPARATOR . 'Controller' . DIRECTORY_SEPARATOR . $controllerName . '.php';
-                
-        if (!file_exists($controllerFile)) {
-            throw new Exceptions('Controller file "' . $controllerFile . '" not found.', 404);
-        }
+        $isApi = (REST_ON === true && $controllerName == 'Api') ? true : false;
         
-        $controllerName = APP_NAMESPACE . '\\Controller\\' . $controllerName;
-        if (class_exists($controllerName)) {
-            $controller = new $controllerName();
+        if ($isApi === true) {
+            
+            $apiName = ucfirst($this->action);
+            $apiFile = APP_PATH . DS . 'Api' . DS . $apiName . '.php';
+            
+            if (!file_exists($apiFile)) {
+                throw new Exceptions('Api file "' . $apiFile . '" not found.', 404);
+            }
+            
+            $apiName = APP_NAMESPACE . '\\Api\\' . $apiName;
+            $pClass = get_parent_class($apiName);
+            if ($pClass !== 'Mini\\Rest') {
+                throw new Exceptions('Api not extends "Rest" class.');
+            }
+            
+            if (class_exists($apiName)) {
+                $api = new $apiName();
+            } else {
+                throw new Exceptions('Api "' . $apiName . '" does not exist.', 404);
+            }
+            
         } else {
-            throw new Exceptions('Controller "' . $controllerName . '" does not exist.', 404);
-        }
-        
-        $action = $this->action . 'Action';
-        
-        if (method_exists($controller, $action)) {
-            $controller->$action();
-        } else {
-            throw new Exceptions('Action "' . $this->action . '" does not exist.', 404);
+            
+            $controllerFile = APP_PATH . DS . 'Controller' . DS . $controllerName . '.php';
+            
+            if (!file_exists($controllerFile)) {
+                throw new Exceptions('Controller file "' . $controllerFile . '" not found.', 404);
+            }
+            
+            $controllerName = APP_NAMESPACE . '\\Controller\\' . $controllerName;
+            if (class_exists($controllerName)) {
+                $controller = new $controllerName();
+            } else {
+                throw new Exceptions('Controller "' . $controllerName . '" does not exist.', 404);
+            }
+            
+            $action = $this->action . 'Action';
+            
+            if (method_exists($controller, $action)) {
+                $controller->$action();
+            } else {
+                throw new Exceptions('Action "' . $this->action . '" does not exist.', 404);
+            }
+            
         }
     }
     
@@ -172,7 +200,7 @@ class App
      */
     private function loadFunc($func)
     {
-        $file = MINI_PATH . DIRECTORY_SEPARATOR . 'Functions' . DIRECTORY_SEPARATOR . ucfirst($func) . '.func.php';
+        $file = MINI_PATH . DS . 'Functions' . DS . ucfirst($func) . '.func.php';
         
         $key = md5($file);
         if (!isset(self::$_funcs[$key])) {

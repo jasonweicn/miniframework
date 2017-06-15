@@ -1,9 +1,9 @@
 <?php
-// +--------------------------------------------------------------------------------
+// +---------------------------------------------------------------------------
 // | Mini Framework
-// +--------------------------------------------------------------------------------
+// +---------------------------------------------------------------------------
 // | Copyright (c) 2015-2017 http://www.sunbloger.com
-// +--------------------------------------------------------------------------------
+// +---------------------------------------------------------------------------
 // | Licensed under the Apache License, Version 2.0 (the "License");
 // | you may not use this file except in compliance with the License.
 // | You may obtain a copy of the License at
@@ -15,13 +15,13 @@
 // | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // | See the License for the specific language governing permissions and
 // | limitations under the License.
-// +--------------------------------------------------------------------------------
+// +---------------------------------------------------------------------------
 // | Source: https://github.com/jasonweicn/MiniFramework
-// +--------------------------------------------------------------------------------
+// +---------------------------------------------------------------------------
 // | Author: Jason Wei <jasonwei06@hotmail.com>
-// +--------------------------------------------------------------------------------
+// +---------------------------------------------------------------------------
 // | Website: http://www.sunbloger.com/miniframework
-// +--------------------------------------------------------------------------------
+// +---------------------------------------------------------------------------
 
 namespace Mini;
 
@@ -91,7 +91,7 @@ class Layout
     /**
      * 设置布局文件所在路径
      * 
-     * @param mixed $path
+     * @param string $path
      */
     public function setLayoutPath($path)
     {
@@ -141,7 +141,7 @@ class Layout
      */
     public function getLayoutScript()
     {
-        $layoutScript = $this->getLayoutPath() . DIRECTORY_SEPARATOR . $this->getLayout() . '.php';
+        $layoutScript = $this->getLayoutPath() . DS . $this->getLayout() . '.php';
         if (!file_exists($layoutScript)) {
             throw new Exceptions('Layout "' . $this->getLayout() . '" does not exist.');
         }
