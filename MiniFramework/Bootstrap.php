@@ -80,7 +80,9 @@ if (!defined('REST_ON'))
     define('REST_ON',               false);
 
 if (SHOW_ERROR === true) {
-    ini_set('display_errors', 1);
+    ini_set('display_errors', 'On');
+} else {
+    ini_set('display_errors', 'Off');
 }
 
 require(LIB_PATH . DS . 'Mini' . DS . 'Loader.php');
