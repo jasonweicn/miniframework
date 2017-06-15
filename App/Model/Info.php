@@ -1,15 +1,14 @@
 <?php
-/**
- * 这是一个模型的案例
- * 由于 MiniFramework 全面启动了命名空间，在创建模型时，在文件顶部需要放置 namespace App\Model; 进行声明。
- */
-
 namespace App\Model;
 
 use Mini\Model;
 //use Mini\Db;
 //use Mini\Config;
 
+/**
+ * 这是一个模型的案例
+ * MiniFramework 从 1.0.0 开始全面启用了命名空间，创建模型时，需在文件顶部放置 namespace App\Model; 进行声明。
+ */
 class Info extends Model
 {
     public function getInfo()

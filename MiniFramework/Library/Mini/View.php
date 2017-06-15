@@ -108,7 +108,6 @@ class View
     
     /**
      * 显示
-     * 
      */
     public function display()
     {

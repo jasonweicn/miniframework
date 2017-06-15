@@ -3,8 +3,14 @@ namespace App\Controller;
 
 use Mini\Action;
 
+/**
+ * 这是一个控制器的案例
+ */
 class Index extends Action
 {
+    /**
+     * 初始化
+     */
     function _init()
     {
         $this->view->title = 'MiniFramework';
@@ -14,6 +20,9 @@ class Index extends Action
         $this->view->_layout->header = $this->view->render(LAYOUT_PATH . '/header.php');
     }
     
+    /**
+     * 默认动作
+     */
     function indexAction()
     {
         //实例化一个模型

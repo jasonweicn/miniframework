@@ -23,12 +23,17 @@
 // | Website: http://www.sunbloger.com/miniframework
 // +---------------------------------------------------------------------------
 
+// 系统目录分隔符
 if (!defined('DS'))
     define('DS',                    DIRECTORY_SEPARATOR);
 
 // MiniFramework 核心文件路径
 if (!defined('MINI_PATH'))
     define('MINI_PATH',             dirname(__FILE__));
+
+// 类库路径
+if (!defined('LIB_PATH'))
+    define('LIB_PATH',              MINI_PATH . DS . 'Library');
 
 // 应用路径
 if (!defined('APP_PATH'))
@@ -78,8 +83,8 @@ if (SHOW_ERROR === true) {
     ini_set('display_errors', 1);
 }
 
-require(MINI_PATH . DS . 'Library' . DS . 'Loader.php');
-Mini\Loader::getInstance(MINI_PATH);
+require(LIB_PATH . DS . 'Mini' . DS . 'Loader.php');
+Mini\Loader::getInstance();
 
 //一切由此开始
 Mini\App::getInstance()->run();

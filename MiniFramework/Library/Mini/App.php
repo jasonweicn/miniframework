@@ -157,7 +157,7 @@ class App
             $controllerFile = APP_PATH . DS . 'Controller' . DS . $controllerName . '.php';
             
             if (!file_exists($controllerFile)) {
-                throw new Exceptions('Controller file "' . $controllerFile . '" not found.', 404);
+                throw new Exceptions('Controller file "' . $controllerFile . '" not found.', 123);
             }
             
             $controllerName = APP_NAMESPACE . '\\Controller\\' . $controllerName;

@@ -30,6 +30,8 @@ class Exceptions extends \Exception
     /**
      * 构造
      *
+     * @param string $message 错误信息
+     * @param int $code 错误代码
      */
     public function __construct($message, $code = 0)
     {
@@ -55,23 +57,18 @@ class Exceptions extends \Exception
      */
     private function showErrorPage($code)
     {
-        $status = Http::isStatus($code);
+        $http = Http::getInstance();
+        $status = $http->isStatus($code);
         
         if ($status === false) {
             $code = 500;
-        }
-        
-        $flag = Http::sendHttpStatus($code);
-        
-        if ($flag === true) {
-            $errMsg = $status;
-        } else {
-            $errMsg = 'unknown error';
+            $status = $http->isStatus($code);
         }
         
         $info = '<html><head><title>Error</title></head><body><h1>An error occurred</h1>';
-        $info.= '<h2>' . $code . ' ' . $errMsg . '</h2></body></html>';
-        echo $info;
+        $info.= '<h2>' . $code . ' ' . $status . '</h2></body></html>';
+        
+        $http->header('Content-Type', 'text/html; charset=utf-8')->response($code, $info);
         
         die();
     }

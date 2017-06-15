@@ -3,14 +3,22 @@ namespace App\Api;
 
 use Mini\Rest;
 
-//这是一个应用REST模式的API接口案例
+/**
+ * 这是一个应用REST模式的API接口案例
+ */
 class Version extends Rest
 {
+    /**
+     * 初始化
+     */
     function _init()
     {
         //do something...
     }
     
+    /**
+     * GET
+     */
     function get()
     {
         $version = '1.0.0';
@@ -30,6 +38,9 @@ class Version extends Rest
         }
     }
     
+    /**
+     * POST
+     */
     function post()
     {
         //获取POST参数
@@ -38,6 +49,9 @@ class Version extends Rest
         //do something...
     }
     
+    /**
+     * PUT
+     */
     function put()
     {
         //获取PUT参数（POST和PUT参数均可通过此方法获得）
@@ -46,6 +60,9 @@ class Version extends Rest
         //do something...
     }
     
+    /**
+     * DELETE
+     */
     function delete()
     {
         //返回HTTP状态码403（在REST中表示对于拒绝访问）

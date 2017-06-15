@@ -60,7 +60,7 @@ class Db
         }
         
         $adapterName    = 'Db_' . ucwords($adapter);
-        $adapterPath    = MINI_PATH . DS . 'Library' . DS . 'Db';
+        $adapterPath    = LIB_PATH . DS . 'Db';
         $adapterFile    = $adapterPath . DS . $adapterName . '.php';
         $adapterName    = 'Mini\\Db\\' . $adapterName;
         if (!class_exists($adapterName, false)) {

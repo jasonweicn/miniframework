@@ -53,7 +53,6 @@ class Loader
     
     protected function __construct()
     {
-        set_include_path(get_include_path() . PATH_SEPARATOR . MINI_PATH);
         spl_autoload_register(array(__CLASS__, 'Mini\Loader::autoload'));
     }
     
@@ -85,14 +84,14 @@ class Loader
         $lastPos = strripos($className, '\\');
         
         if ($lastPos !== false) {
-            $namespace = str_replace('Mini', 'Library', substr($className, 0, $lastPos));
+            $namespace = substr($className, 0, $lastPos);
             $classPath = str_replace('\\', DS, $namespace);
             $name = strstr($namespace, '\\', true);
             
             if ($name == APP_NAMESPACE) {
                 $classPath = APP_PATH . ltrim($classPath, APP_NAMESPACE);
             } else {
-                $classPath = MINI_PATH . DS . $classPath;
+                $classPath = LIB_PATH . DS . $classPath;
             }
             
             $className = substr($className, $lastPos + 1);
