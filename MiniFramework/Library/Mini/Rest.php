@@ -37,7 +37,7 @@ class Rest
     /**
      * Request实例
      * 
-     * @var Http
+     * @var Request
      */
     protected $_request;
     

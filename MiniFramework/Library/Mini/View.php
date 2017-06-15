@@ -78,6 +78,9 @@ class View
         }
     }
     
+    /**
+     * 获取基础路径
+     */
     public function baseUrl()
     {
         if ($this->_baseUrl === null) {
