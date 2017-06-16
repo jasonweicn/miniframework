@@ -1,6 +1,10 @@
 MiniFramework Change Log
 =========================
 
+2017-06-16 (Version 1.0.1 released.)
+
+* 更新composer.json
+
 2017-06-16 (Version 1.0.0 released.)
 
 * 新增对命名空间的支持
