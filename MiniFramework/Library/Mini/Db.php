@@ -59,14 +59,10 @@ class Db
             throw new Exceptions('Database(' . $adapter . ') dbname is not defined.');
         }
         
-        $adapterName    = 'Db_' . ucwords($adapter);
-        $adapterPath    = LIB_PATH . DS . 'Mini' . DS . 'Db';
-        $adapterFile    = $adapterPath . DS . $adapterName . '.php';
-        $adapterName    = 'Mini\\Db\\' . $adapterName;
-        if (!class_exists($adapterName, false)) {
-            if (!file_exists($adapterFile)) {
-                throw new Exceptions('Adapter "' . $adapterName . '" not found.');
-            }
+        $adapterName    = '\\Mini\\Db\\Db_' . ucwords($adapter);
+        
+        if (!class_exists($adapterName)) {
+            throw new Exceptions('Adapter "' . $adapterName . '" not found.');
         }
         
         $dbAdapter = new $adapterName($params);

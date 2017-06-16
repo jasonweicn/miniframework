@@ -56,15 +56,10 @@ class Cache
             }
         }
         
-        $adapterName = 'Cache_' . ucwords($adapter);
-        $adapterPath    = LIB_PATH . DS . 'Mini' . DS . 'Cache';
-        $adapterFile    = $adapterPath . DS . $adapterName . '.php';
-        $adapterName    = 'Mini\\Cache\\' . $adapterName;
+        $adapterName = '\\Mini\\Cache\\Cache_' . ucwords($adapter);
         
-        if (!class_exists($adapterName, false)) {
-            if (!file_exists($adapterFile)) {
-                throw new Exceptions('Adapter "' . $adapterName . '" not found.');
-            }
+        if (!class_exists($adapterName)) {
+            throw new Exceptions('Adapter "' . $adapterName . '" not found.');
         }
         
         $cacheAdapter = new $adapterName($params);
