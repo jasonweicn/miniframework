@@ -1,6 +1,10 @@
 MiniFramework Change Log
 =========================
 
+2017-06-16 (Version 0.10.3 released.)
+
+* 更新composer.json
+
 2017-06-12 (Version 0.10.2 released.)
 
 * 修正调用Params的setParams()方法时出现报错的Bug
