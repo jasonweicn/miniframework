@@ -57,7 +57,7 @@ class Cache
         }
         
         $adapterName = 'Cache_' . ucwords($adapter);
-        $adapterPath    = LIB_PATH . DS . 'Cache';
+        $adapterPath    = LIB_PATH . DS . 'Mini' . DS . 'Cache';
         $adapterFile    = $adapterPath . DS . $adapterName . '.php';
         $adapterName    = 'Mini\\Cache\\' . $adapterName;
         
