@@ -23,61 +23,51 @@
 // | Website: http://www.sunbloger.com/miniframework
 // +---------------------------------------------------------------------------
 
+/**
+ * MiniFramework引导程序
+ */
+
 // 系统目录分隔符
-if (!defined('DS'))
-    define('DS',                    DIRECTORY_SEPARATOR);
+defined('DS') or define('DS', DIRECTORY_SEPARATOR);
 
 // MiniFramework 核心文件路径
-if (!defined('MINI_PATH'))
-    define('MINI_PATH',             dirname(__FILE__));
+defined('MINI_PATH') or define('MINI_PATH', dirname(__FILE__));
 
 // 类库路径
-if (!defined('LIB_PATH'))
-    define('LIB_PATH',              MINI_PATH . DS . 'Library');
+defined('LIB_PATH') or  define('LIB_PATH', MINI_PATH . DS . 'Library');
 
 // 应用路径
-if (!defined('APP_PATH'))
-    define('APP_PATH',              dirname(dirname($_SERVER['SCRIPT_FILENAME'])));
+defined('APP_PATH') or define('APP_PATH', dirname(dirname($_SERVER['SCRIPT_FILENAME'])));
 
 // 应用命名空间名称
-if (!defined('APP_NAMESPACE'))
-    define('APP_NAMESPACE',         'App');
+defined('APP_NAMESPACE') or define('APP_NAMESPACE', 'App');
 
 // 是否显示错误信息
-if (!defined('SHOW_ERROR'))
-    define('SHOW_ERROR',            false);
+defined('SHOW_ERROR') or define('SHOW_ERROR', false);
 
 // 是否显示开发者调试信息
-if (!defined('SHOW_DEBUG'))
-    define('SHOW_DEBUG',            true);
+defined('SHOW_DEBUG') or define('SHOW_DEBUG', true);
 
 // 缓存路径
-if (!defined('CACHE_PATH'))
-    define('CACHE_PATH',            APP_PATH . DS . 'Cache');
+defined('CACHE_PATH') or define('CACHE_PATH', APP_PATH . DS . 'Cache');
 
 // 配置文件路径
-if (!defined('CONFIG_PATH'))
-    define('CONFIG_PATH',           APP_PATH . DS . 'Config');
+defined('CONFIG_PATH') or define('CONFIG_PATH', APP_PATH . DS . 'Config');
 
 // 布局功能开关
-if (!defined('LAYOUT_ON'))
-    define('LAYOUT_ON',             false);
+defined('LAYOUT_ON') or define('LAYOUT_ON', false);
 
 // 布局文件路径
-if (!defined('LAYOUT_PATH'))
-    define('LAYOUT_PATH',           APP_PATH . DS . 'Layout');
+defined('LAYOUT_PATH') or define('LAYOUT_PATH', APP_PATH . DS . 'Layout');
 
 // HTTP缓存
-if (!defined('HTTP_CACHE_CONTROL'))
-    define('HTTP_CACHE_CONTROL',    'private');
+defined('HTTP_CACHE_CONTROL') or define('HTTP_CACHE_CONTROL', 'private');
 
 // 数据库自动连接
-if (!defined('DB_AUTO_CONNECT'))
-    define('DB_AUTO_CONNECT',       false);
+defined('DB_AUTO_CONNECT') or define('DB_AUTO_CONNECT', false);
 
 // REST接口功能开关（提示：开启后，原有使用Api命名的Controller将会失效）
-if (!defined('REST_ON'))
-    define('REST_ON',               false);
+defined('REST_ON') or define('REST_ON', false);
 
 if (SHOW_ERROR === true) {
     ini_set('display_errors', 'On');
