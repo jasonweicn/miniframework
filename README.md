@@ -88,7 +88,9 @@ require dirname(APP_PATH) . DIRECTORY_SEPARATOR . 'MiniFramework' . DIRECTORY_SE
 
 ```
 RewriteEngine on
-RewriteRule !.(bmp|gif|ico|jpg|png|js|css)$ index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [L]
 ```
 
 运行于 Nginx 的设置方法：
