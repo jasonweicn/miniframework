@@ -1,6 +1,12 @@
 MiniFramework Change Log
 =========================
 
+2017-06-20 (Version 1.0.3 released.)
+
+* 改进用于Apache的.htaccess文件
+* 优化引导程序中对于常量定义的判断方式
+* 其他一些优化工作
+
 2017-06-16 (Version 1.0.2 released.)
 
 * 修正因变更核心类库存放路径导致的Db和Cache类加载报错的Bug (Close #2)
