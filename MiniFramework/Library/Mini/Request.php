@@ -70,6 +70,13 @@ class Request
     protected $_requestParams = array();
     
     /**
+     * 存放请求的Header信息数组
+     * 
+     * @var array
+     */
+    protected $_headers = array();
+    
+    /**
      * 获取实例
      *
      * @return obj
@@ -247,5 +254,27 @@ class Request
         }
         
         return $requestParams;
+    }
+    
+    /**
+     * 获取请求Header信息数组
+     * @param string $name
+     * @return multitype:
+     */
+    public function getHeaders($name = null)
+    {
+        if (empty($this->_headers)) {
+            foreach ($_SERVER as $key => $val) {
+                if ('HTTP_' == substr($key, 0, 5)) {
+                    $this->_headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($key, 5)))))] = $val;
+                }
+            }
+        }
+        
+        if (isset($this->_headers[$name])) {
+            return $this->_headers[$name];
+        }
+        
+        return $this->_headers;
     }
 }
