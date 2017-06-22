@@ -34,7 +34,7 @@ class Config
      */
     protected static $_instance;
     
-    private $_configArray = array();
+    private $_confData = array();
     
     /**
      * 获取实例
@@ -57,36 +57,36 @@ class Config
     {
         $lastPos = strpos($config, ':');
         if ($lastPos !== false) {
-            $configName = strstr($config, ':', true);
-            $configKey = substr($config, $lastPos+1);
+            $confName = strstr($config, ':', true);
+            $confKey = substr($config, $lastPos+1);
         } else {
-            $configName = $config;
+            $confName = $config;
         }
         
-        if (!isset($this->_configArray[$configName])) {
+        if (!isset($this->_confData[$confName])) {
             
-            $configFile = CONFIG_PATH . DS . $configName . '.php';
+            $confFile = CONFIG_PATH . DS . $confName . '.php';
         
-            if (file_exists($configFile)) {
-                include($configFile);
+            if (file_exists($confFile)) {
+                include($confFile);
             } else {
-                throw new Exceptions('Config "' . $configName . '" not found.');
+                throw new Exceptions('Config "' . $confName . '" not found.');
             }
             
-            if (isset(${$configName})) {
-                $configData = ${$configName};
-                $this->_configArray[$configName] = $configData;
+            if (isset(${$confName})) {
+                $this->_confData[$confName] = ${$confName};
             } else {
                 return null;
             }
+            
         } else {
-            $configData = $this->_configArray[$configName];
+            $configData = $this->_confData[$confName];
         }
         
-        if (isset($configKey) && isset($configData[$configKey])) {
-            return $configData[$configKey];
+        if (isset($confKey) && isset($this->_confData[$confName][$confKey])) {
+            return $this->_confData[$confName][$confKey];
         }
         
-        return $configData;
+        return $this->_confData[$confName];
     }
 }

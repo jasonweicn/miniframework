@@ -106,8 +106,7 @@ class Request
     public function setBaseUrl()
     {
         if ($this->_baseUrl === null) {
-            $phpSelf = $_SERVER['PHP_SELF'];
-            $urlArray = explode('/', $phpSelf);
+            $urlArray = explode('/', $_SERVER['PHP_SELF']);
             unset($urlArray[count($urlArray) - 1]);
             $this->_baseUrl = implode('/', $urlArray);
         }

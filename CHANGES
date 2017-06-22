@@ -1,6 +1,11 @@
 MiniFramework Change Log
 =========================
 
+2017-06-22 (Version 1.0.4 released.)
+
+* 新增用于获取请求头数据的方法
+* 优化部分核心类，减少内存占用
+
 2017-06-20 (Version 1.0.3 released.)
 
 * 改进用于Apache的.htaccess文件

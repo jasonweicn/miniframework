@@ -88,6 +88,11 @@ class Http
      */
     protected static $_instance;
     
+    /**
+     * 用于输出的Header信息数组
+     * 
+     * @var array
+     */
     protected $_headers = array();
     
     /**
