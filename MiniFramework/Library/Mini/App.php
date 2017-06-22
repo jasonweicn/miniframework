@@ -77,6 +77,13 @@ class App
     protected static $_instance;
     
     /**
+     * 数据库对象池
+     * 
+     * @var array
+     */
+    private $_dbPool;
+    
+    /**
      * 获取实例
      * 
      * @return obj
@@ -115,6 +122,10 @@ class App
         }
         
         $this->loadFunc('Global');
+        
+        if (DB_AUTO_CONNECT === true) {
+            $this->initDbPool();
+        }
         
         $this->dispatch();
     }
@@ -157,7 +168,7 @@ class App
             $controllerFile = APP_PATH . DS . 'Controller' . DS . $controllerName . '.php';
             
             if (!file_exists($controllerFile)) {
-                throw new Exceptions('Controller file "' . $controllerFile . '" not found.', 123);
+                throw new Exceptions('Controller file "' . $controllerFile . '" not found.', 404);
             }
             
             $controllerName = APP_NAMESPACE . '\\Controller\\' . $controllerName;
@@ -213,5 +224,37 @@ class App
         }
         
         return true;        
+    }
+    
+    /**
+     * 初始化数据库对象池
+     * @throws Exceptions
+     * @return boolean
+     */
+    private function initDbPool()
+    {
+        $dbConfig = Config::getInstance()->load('database');
+        if (is_array($dbConfig)) {
+            foreach ($dbConfig as $dbKey => $dbParams) {
+                $this->_dbPool[$dbKey] = Db::factory ('Mysql', $dbParams);
+            }
+        } else {
+            throw new Exceptions('Config "database" invalid.');
+        }
+        
+        return true;
+    }
+    
+    /**
+     * 获取数据库对象池
+     * @return Object | NULL
+     */
+    public function getDbPool()
+    {
+        if (!isset($this->_dbPool)) {
+            return null;
+        }
+        
+        return $this->_dbPool;
     }
 }

@@ -49,13 +49,6 @@ class Rest
     protected $http;
     
     /**
-     * 数据库对象池
-     * 
-     * @var array
-     */
-    public $_db;
-    
-    /**
      * Rest Instance
      *
      * @var Rest
@@ -80,15 +73,6 @@ class Rest
             parse_str(file_get_contents('php://input'), $arguments);
             if (!empty($arguments)) {
                 $this->params->setParams($arguments);
-            }
-        }
-        
-        if (DB_AUTO_CONNECT === true) {
-            $dbConfig = Config::getInstance()->load('database');
-            if (is_array($dbConfig)) {
-                foreach ($dbConfig as $dbKey => $dbParams) {
-                    $this->_db[$dbKey] = Db::factory ('Mysql', $dbParams);
-                }
             }
         }
         

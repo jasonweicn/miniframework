@@ -28,11 +28,11 @@ namespace Mini;
 abstract class Model
 {
     /**
-     * 数据库对象
+     * 数据库对象池
      * 
      * @var object
      */
-    protected $_db;
+    protected $_dbPool;
     
     /**
      * 构造
@@ -42,16 +42,16 @@ abstract class Model
     function __construct()
     {        
         if (DB_AUTO_CONNECT === true) {
-            $this->_db = Action::getInstance()->_db;
+            $this->_dbPool = App::getInstance()->getDbPool();
         }
     }
     
     public function loadDb($key)
     {
-        if (!isset($this->_db[$key])) {
+        if (!isset($this->_dbPool[$key])) {
             return null;
         }
         
-        return $this->_db[$key];
+        return $this->_dbPool[$key];
     }
 }
