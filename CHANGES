@@ -1,6 +1,10 @@
 MiniFramework Change Log
 =========================
 
+2017-06-23 (Version 1.0.5 released.)
+
+* 修正自动连接数据库功能在REST模式的API接口中失效的Bug
+
 2017-06-22 (Version 1.0.4 released.)
 
 * 新增用于获取请求头数据的方法
