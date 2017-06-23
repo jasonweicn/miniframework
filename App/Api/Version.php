@@ -55,7 +55,7 @@ class Version extends Rest
      */
     function put()
     {
-        // 禁止访问（输出403）
+        // 禁止访问输出403（ forbidden()方法从 1.0.6 版开始支持 ）
         $this->forbidden();
     }
 
