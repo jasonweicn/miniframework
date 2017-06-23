@@ -223,7 +223,7 @@ class App
 
     /**
      * 初始化数据库对象池
-     * 
+     *
      * @throws Exceptions
      * @return boolean
      */
@@ -243,7 +243,7 @@ class App
 
     /**
      * 获取数据库对象池
-     * 
+     *
      * @return Object | NULL
      */
     public function getDbPool()
