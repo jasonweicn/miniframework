@@ -8,14 +8,15 @@ use Mini\Rest;
  */
 class Version extends Rest
 {
+
     /**
      * 初始化
      */
     function _init()
     {
-        //do something...
+        // do something...
     }
-    
+
     /**
      * GET
      */
@@ -27,45 +28,42 @@ class Version extends Rest
         
         if (empty($type) || $type == 'json') {
             
-            //输出JSON
+            // 输出JSON
             $this->responseJson(200, 'success', $version);
-            
         } elseif ($type == 'xml') {
             
-            //输出XML
-            $this->responseXml(200, 'success', array('version' => $version));
-            
+            // 输出XML
+            $this->responseXml(200, 'success', array(
+                'version' => $version
+            ));
         }
     }
-    
+
     /**
      * POST
      */
     function post()
     {
-        //获取POST参数
+        // 获取POST参数
         $params = $this->params->getParams();
         
-        //do something...
+        $this->responseJson(201, 'success', $params);
     }
-    
+
     /**
      * PUT
      */
     function put()
     {
-        //获取PUT参数（POST和PUT参数均可通过此方法获得）
-        $params = $this->params->getParams();
-        
-        //do something...
+        // 禁止访问（输出403）
+        $this->forbidden();
     }
-    
+
     /**
      * DELETE
      */
-    function delete()
-    {
-        //返回HTTP状态码403（在REST中表示对于拒绝访问）
-        $this->responseJson(403);
-    }
+    //function delete()
+    //{
+        // 当某个方法不存在时，会自动输出403
+    //}
 }

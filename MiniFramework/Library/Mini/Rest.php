@@ -84,6 +84,8 @@ class Rest
         
         if (method_exists($this, $requestMethod)) {
             $this->$requestMethod();
+        } else {
+            $this->forbidden();
         }
     }
 
@@ -115,7 +117,7 @@ class Rest
 
     /**
      * 发送XML
-     * 
+     *
      * @param int $code
      *            HTTP状态码
      * @param string $msg
@@ -138,7 +140,49 @@ class Rest
     }
 
     /**
+     * 禁止访问（输出403）
+     */
+    public function forbidden()
+    {
+        $this->http->response(403, '403 - Forbidden');
+    }
+
+    /**
+     * 默认的GET方法
+     */
+    public function get()
+    {
+        $this->forbidden();
+    }
+
+    /**
+     * 默认的POST方法
+     */
+    public function post()
+    {
+        $this->forbidden();
+    }
+
+    /**
+     * 默认的PUT方法
+     */
+    public function put()
+    {
+        $this->forbidden();
+    }
+
+    /**
+     * 默认的DELETE方法
+     */
+    public function delete()
+    {
+        $this->forbidden();
+    }
+
+    /**
      * 获取实例
+     *
+     * @return Rest
      */
     public static function getInstance()
     {
