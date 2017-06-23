@@ -46,14 +46,14 @@ class Params
      *
      * @var array
      */
-    public $_post;
+    public $_post = array();
 
     /**
      * GET数组
      *
      * @var array
      */
-    public $_get;
+    public $_get = array();
 
     /**
      * 获取实例
