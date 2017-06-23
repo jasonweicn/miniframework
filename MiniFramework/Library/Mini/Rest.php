@@ -8,7 +8,7 @@
 // | you may not use this file except in compliance with the License.
 // | You may obtain a copy of the License at
 // |
-// |   http://www.apache.org/licenses/LICENSE-2.0
+// | http://www.apache.org/licenses/LICENSE-2.0
 // |
 // | Unless required by applicable law or agreed to in writing, software
 // | distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,39 +22,39 @@
 // +---------------------------------------------------------------------------
 // | Website: http://www.sunbloger.com/miniframework
 // +---------------------------------------------------------------------------
-
 namespace Mini;
 
 class Rest
 {
+
     /**
      * Params实例
-     * 
+     *
      * @var Params
      */
     protected $params;
-    
+
     /**
      * Request实例
-     * 
+     *
      * @var Request
      */
     protected $_request;
-    
+
     /**
      * Http实例
-     * 
+     *
      * @var Http
      */
     protected $http;
-    
+
     /**
      * Rest Instance
      *
      * @var Rest
      */
     protected static $_instance;
-    
+
     /**
      * 构造
      */
@@ -71,7 +71,7 @@ class Rest
             $this->params->setParams($this->params->_post);
         } elseif ($requestMethod == 'PUT') {
             parse_str(file_get_contents('php://input'), $arguments);
-            if (!empty($arguments)) {
+            if (! empty($arguments)) {
                 $this->params->setParams($arguments);
             }
         }
@@ -86,13 +86,16 @@ class Rest
             $this->$requestMethod();
         }
     }
-    
+
     /**
      * 发送JSON
-     * 
-     * @param int $code HTTP状态码
-     * @param string $msg 服务器返回给客户端的消息
-     * @param string $data 返回的数据
+     *
+     * @param int $code
+     *            HTTP状态码
+     * @param string $msg
+     *            服务器返回给客户端的消息
+     * @param string $data
+     *            返回的数据
      */
     public function responseJson($code = 200, $msg = '', $data = null)
     {
@@ -101,20 +104,24 @@ class Rest
         }
         
         $content = array(
-                'code'  => $code,
-                'msg'   => $msg,
-                'data'  => $data
+            'code' => $code,
+            'msg' => $msg,
+            'data' => $data
         );
         $json = pushJson($content, false);
         
         $this->http->header('Content-Type', 'application/json')->response($code, $json);
     }
-    
+
     /**
      * 发送XML
-     * @param int $code HTTP状态码
-     * @param string $msg 服务器返回给客户端的消息
-     * @param string $data 返回的数据
+     * 
+     * @param int $code
+     *            HTTP状态码
+     * @param string $msg
+     *            服务器返回给客户端的消息
+     * @param string $data
+     *            返回的数据
      */
     public function responseXml($code = 200, $msg = '', $data = array())
     {
@@ -123,16 +130,15 @@ class Rest
         }
         
         $xml = pushXml($data, false, false, 'data', array(
-                'code'  => $code,
-                'msg'   => $msg
+            'code' => $code,
+            'msg' => $msg
         ));
         
         $this->http->header('Content-Type', 'application/xml')->response($code, $xml);
     }
-    
+
     /**
      * 获取实例
-     * 
      */
     public static function getInstance()
     {

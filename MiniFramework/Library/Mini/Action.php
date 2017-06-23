@@ -8,7 +8,7 @@
 // | you may not use this file except in compliance with the License.
 // | You may obtain a copy of the License at
 // |
-// |   http://www.apache.org/licenses/LICENSE-2.0
+// | http://www.apache.org/licenses/LICENSE-2.0
 // |
 // | Unless required by applicable law or agreed to in writing, software
 // | distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,44 +22,44 @@
 // +---------------------------------------------------------------------------
 // | Website: http://www.sunbloger.com/miniframework
 // +---------------------------------------------------------------------------
-
 namespace Mini;
 
 class Action
 {
+
     /**
      * View实例
-     * 
+     *
      * @var View
      */
     protected $view;
-    
+
     /**
      * Params实例
-     * 
+     *
      * @var Params
      */
     protected $params;
-    
+
     /**
      * Request实例
-     * 
+     *
      * @var mixed
      */
     protected $_request;
-    
+
     /**
      * Action Instance
      *
      * @var Action
      */
     protected static $_instance;
-    
+
     /**
      * 构造
-     * 
-     * @param string $controller
-     * @param string $action
+     *
+     * @param string $controller            
+     * @param string $action            
      * @return Action
      */
     function __construct()
@@ -73,39 +73,38 @@ class Action
             $this->_init();
         }
     }
-    
+
     /**
      * 向View传入变量
-     * 
-     * @param mixed $variable
-     * @param mixed $value
+     *
+     * @param mixed $variable            
+     * @param mixed $value            
      */
     protected function assign($variable, $value)
     {
         $this->view->assign($variable, $value);
     }
-    
+
     /**
      * 转至给定的控制器和动作
-     * 
-     * @param string $action
-     * @param string $controller
-     * @param array $params
+     *
+     * @param string $action            
+     * @param string $controller            
+     * @param array $params            
      */
     final protected function _forward($action, $controller = null, array $params = NULL)
     {
         if ($controller !== null) {
             $this->_request->setControllerName($controller);
         }
-
+        
         $this->_request->setActionName($action);
         
         App::getInstance()->dispatch();
     }
-    
+
     /**
      * 获取Action实例
-     * 
      */
     public static function getInstance()
     {

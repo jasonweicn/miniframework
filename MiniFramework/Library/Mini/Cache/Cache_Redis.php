@@ -8,7 +8,7 @@
 // | you may not use this file except in compliance with the License.
 // | You may obtain a copy of the License at
 // |
-// |   http://www.apache.org/licenses/LICENSE-2.0
+// | http://www.apache.org/licenses/LICENSE-2.0
 // |
 // | Unless required by applicable law or agreed to in writing, software
 // | distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,18 +22,18 @@
 // +---------------------------------------------------------------------------
 // | Website: http://www.sunbloger.com/miniframework
 // +---------------------------------------------------------------------------
-
 namespace Mini\Cache;
 
 class Cache_Redis extends Cache_Abstract
 {
+
     /**
      * 连接Redis
-     * 
      */
     protected function _connect()
     {
-        if ($this->_cache_server) return;
+        if ($this->_cache_server)
+            return;
         
         try {
             $this->_cache_server = new Redis();
@@ -49,7 +49,7 @@ class Cache_Redis extends Cache_Abstract
             }
         }
     }
-    
+
     public function set($name, $value, $expire = null)
     {
         if (is_null($expire)) {
@@ -61,21 +61,22 @@ class Cache_Redis extends Cache_Abstract
             $this->_cache_server->expire($name, $expire);
         }
     }
-    
+
     public function get($name)
     {
         $this->_connect();
         return $this->_cache_server->get($name);
     }
-    
+
     public function del($name)
     {
         $this->_connect();
         return $this->_cache_server->delete($name);
     }
-    
+
     /**
      * 获取Redis实例化对象，便于使用其他未封装的方法
+     * 
      * @return obj
      */
     public function getRedisObj()
@@ -83,7 +84,7 @@ class Cache_Redis extends Cache_Abstract
         $this->_connect();
         return $this->_cache_server;
     }
-    
+
     /**
      * 关闭Redis连接
      */

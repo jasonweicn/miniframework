@@ -8,7 +8,7 @@
 // | you may not use this file except in compliance with the License.
 // | You may obtain a copy of the License at
 // |
-// |   http://www.apache.org/licenses/LICENSE-2.0
+// | http://www.apache.org/licenses/LICENSE-2.0
 // |
 // | Unless required by applicable law or agreed to in writing, software
 // | distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,20 +22,20 @@
 // +---------------------------------------------------------------------------
 // | Website: http://www.sunbloger.com/miniframework
 // +---------------------------------------------------------------------------
-
 namespace Mini\Cache;
 
 use \Memcache;
 
 class Cache_Memcache extends Cache_Abstract
 {
+
     /**
      * 连接Memcache
-     * 
      */
     protected function _connect()
     {
-        if ($this->_cache_server) return;
+        if ($this->_cache_server)
+            return;
         
         try {
             $this->_cache_server = new Memcache();
@@ -46,11 +46,11 @@ class Cache_Memcache extends Cache_Abstract
         
         $memStats = $this->_cache_server->getExtendedStats();
         $available = (bool) $memStats[$this->_params['host'] . ':' . $this->_params['port']];
-        if (!$available) {
+        if (! $available) {
             throw new Exceptions('Memcached connection failed.');
         }
     }
-    
+
     public function set($name, $value, $expire = null)
     {
         if (is_null($expire)) {
@@ -60,21 +60,22 @@ class Cache_Memcache extends Cache_Abstract
         $this->_connect();
         $this->_cache_server->set($name, $value, $compress_flag, $expire);
     }
-    
+
     public function get($name)
     {
         $this->_connect();
         return $this->_cache_server->get($name);
     }
-    
+
     public function del($name)
     {
         $this->_connect();
         return $this->_cache_server->delete($name);
     }
-    
+
     /**
      * 获取Memcache实例化对象，便于使用其他未封装的方法
+     * 
      * @return obj
      */
     public function getMemcacheObj()
@@ -82,7 +83,7 @@ class Cache_Memcache extends Cache_Abstract
         $this->_connect();
         return $this->_cache_server;
     }
-    
+
     /**
      * 关闭Memcache连接
      */

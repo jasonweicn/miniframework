@@ -8,7 +8,7 @@
 // | you may not use this file except in compliance with the License.
 // | You may obtain a copy of the License at
 // |
-// |   http://www.apache.org/licenses/LICENSE-2.0
+// | http://www.apache.org/licenses/LICENSE-2.0
 // |
 // | Unless required by applicable law or agreed to in writing, software
 // | distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,33 +22,33 @@
 // +---------------------------------------------------------------------------
 // | Website: http://www.sunbloger.com/miniframework
 // +---------------------------------------------------------------------------
-
 namespace Mini;
 
 abstract class Model
 {
+
     /**
      * 数据库对象池
-     * 
+     *
      * @var object
      */
     protected $_dbPool;
-    
+
     /**
      * 构造
-     * 
+     *
      * @return Action
      */
     function __construct()
-    {        
+    {
         if (DB_AUTO_CONNECT === true) {
             $this->_dbPool = App::getInstance()->getDbPool();
         }
     }
-    
+
     public function loadDb($key)
     {
-        if (!isset($this->_dbPool[$key])) {
+        if (! isset($this->_dbPool[$key])) {
             return null;
         }
         

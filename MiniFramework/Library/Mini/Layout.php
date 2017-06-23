@@ -8,7 +8,7 @@
 // | you may not use this file except in compliance with the License.
 // | You may obtain a copy of the License at
 // |
-// |   http://www.apache.org/licenses/LICENSE-2.0
+// | http://www.apache.org/licenses/LICENSE-2.0
 // |
 // | Unless required by applicable law or agreed to in writing, software
 // | distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,41 +22,41 @@
 // +---------------------------------------------------------------------------
 // | Website: http://www.sunbloger.com/miniframework
 // +---------------------------------------------------------------------------
-
 namespace Mini;
 
 class Layout
 {
+
     /**
      * 布局变量容器
-     * 
+     *
      * @var array
      */
     protected $_container;
-    
+
     /**
      * 布局文件路径
-     * 
+     *
      * @var mixed
      */
     private $_layoutPath;
-    
+
     /**
      * 布局名称
+     *
      * @var string
      */
     protected $_layout;
-    
+
     /**
      * Layout Instance
      *
      * @var Layout
      */
     protected static $_instance;
-    
+
     /**
      * 获取实例
-     *
      */
     public static function getInstance()
     {
@@ -65,33 +65,26 @@ class Layout
         }
         return self::$_instance;
     }
-    
-    /**
-     * 构造
-     */
-    function __construct()
-    {
-        //reserve...
-    }
-    
+
     public function __set($key, $value)
     {
         $this->_container[$key] = $value;
     }
-    
+
     public function __get($key)
     {
         if (isset($this->_container[$key])) {
             return $this->_container[$key];
         }
-
+        
         return null;
     }
-    
+
     /**
      * 设置布局文件所在路径
-     * 
+     *
      * @param string $path
+     *            布局文件存放路径
      */
     public function setLayoutPath($path)
     {
@@ -99,23 +92,24 @@ class Layout
         
         return $this;
     }
-    
+
     /**
      * 获取布局文件所在路径
-     * 
      */
     public function getLayoutPath()
     {
         return $this->_layoutPath;
     }
-    
+
     /**
      * 设置布局
-     * 
+     *
+     * @param string $name
+     *            布局名称
      */
     public function setLayout($name)
     {
-        if (!preg_match('/^[a-zA-Z][a-zA-Z0-9_]*$/', $name)) {
+        if (! preg_match('/^[a-zA-Z][a-zA-Z0-9_]*$/', $name)) {
             throw new Exceptions('Layout "' . $name . '"  invalid.');
         }
         
@@ -123,26 +117,26 @@ class Layout
         
         return $this;
     }
-    
+
     /**
      * 获取布局
-     * 
-     * @param string $name
+     *
+     * @param string $name            
      */
     public function getLayout()
     {
         return $this->_layout;
     }
-    
+
     /**
      * 获取布局脚本
-     * 
-     * @param string $layoutScript
+     *
+     * @param string $layoutScript            
      */
     public function getLayoutScript()
     {
         $layoutScript = $this->getLayoutPath() . DS . $this->getLayout() . '.php';
-        if (!file_exists($layoutScript)) {
+        if (! file_exists($layoutScript)) {
             throw new Exceptions('Layout "' . $this->getLayout() . '" does not exist.');
         }
         

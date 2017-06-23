@@ -8,7 +8,7 @@
 // | you may not use this file except in compliance with the License.
 // | You may obtain a copy of the License at
 // |
-// |   http://www.apache.org/licenses/LICENSE-2.0
+// | http://www.apache.org/licenses/LICENSE-2.0
 // |
 // | Unless required by applicable law or agreed to in writing, software
 // | distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,21 +22,20 @@
 // +---------------------------------------------------------------------------
 // | Website: http://www.sunbloger.com/miniframework
 // +---------------------------------------------------------------------------
-
 namespace Mini;
 
 class Loader
 {
+
     /**
      * Loader Instance
-     * 
+     *
      * @var Loader
      */
     protected static $_instance;
-    
+
     /**
      * 获取实例
-     * 
      */
     public static function getInstance()
     {
@@ -45,21 +44,22 @@ class Loader
         }
         return self::$_instance;
     }
-    
+
     /**
      * 构造
-     * 
      */
-    
     protected function __construct()
     {
-        spl_autoload_register(array(__CLASS__, 'Mini\Loader::autoload'));
+        spl_autoload_register(array(
+            __CLASS__,
+            'Mini\Loader::autoload'
+        ));
     }
-    
+
     /**
      * 自动载入
-     * 
-     * @param string $class
+     *
+     * @param string $class            
      */
     public function autoload($class)
     {
@@ -70,10 +70,11 @@ class Loader
             return false;
         }
     }
-    
+
     /**
      * 载入类
-     * @param string $class
+     * 
+     * @param string $class            
      * @throws Exceptions
      */
     public static function loadClass($class)
@@ -102,7 +103,7 @@ class Loader
         $classfile = $classPath . DS . $className . '.php';
         
         if (file_exists($classfile)) {
-            include_once($classfile);
+            include_once ($classfile);
         } else {
             throw new Exceptions('Library "' . $className . '" not found.');
         }

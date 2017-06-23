@@ -8,7 +8,7 @@
 // | you may not use this file except in compliance with the License.
 // | You may obtain a copy of the License at
 // |
-// |   http://www.apache.org/licenses/LICENSE-2.0
+// | http://www.apache.org/licenses/LICENSE-2.0
 // |
 // | Unless required by applicable law or agreed to in writing, software
 // | distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,70 +22,70 @@
 // +---------------------------------------------------------------------------
 // | Website: http://www.sunbloger.com/miniframework
 // +---------------------------------------------------------------------------
-
 namespace Mini;
 
 class App
 {
+
     /**
      * 控制器
-     * 
+     *
      * @var string
      */
     public $controller;
-    
+
     /**
      * 动作
-     * 
+     *
      * @var string
      */
     public $action;
-    
+
     /**
      * 函数库清单数组
-     * 
+     *
      * @var array
      */
     private static $_funcs = array();
-    
+
     /**
      * Router实例
-     * 
+     *
      * @var Router
      */
     protected $_router;
-    
+
     /**
      * Params实例
-     * 
+     *
      * @var Params
      */
     protected $_params;
-    
+
     /**
      * Request实例
      *
      * @var Request
      */
     protected $_request;
-    
+
     /**
      * App实例
-     * 
+     *
      * @var App
      */
     protected static $_instance;
-    
+
     /**
      * 数据库对象池
-     * 
+     *
      * @var array
      */
     private $_dbPool;
-    
+
     /**
      * 获取实例
-     * 
+     *
      * @return obj
      */
     public static function getInstance()
@@ -95,10 +95,9 @@ class App
         }
         return self::$_instance;
     }
-    
+
     /**
      * 构造
-     * 
      */
     protected function __construct()
     {
@@ -107,17 +106,15 @@ class App
         
         $this->_request = Request::getInstance();
     }
-    
+
     /**
      * 开始
-     * 
      */
     public function run()
     {
-        $requestParams = $this->_request->parseRequestParams(
-                $this->_router->getRouteType());
+        $requestParams = $this->_request->parseRequestParams($this->_router->getRouteType());
         
-        if (!empty($requestParams)) {
+        if (! empty($requestParams)) {
             $this->_params->setParams($requestParams);
         }
         
@@ -129,7 +126,7 @@ class App
         
         $this->dispatch();
     }
-    
+
     /**
      * 调派
      */
@@ -147,7 +144,7 @@ class App
             $apiName = ucfirst($this->action);
             $apiFile = APP_PATH . DS . 'Api' . DS . $apiName . '.php';
             
-            if (!file_exists($apiFile)) {
+            if (! file_exists($apiFile)) {
                 throw new Exceptions('Api file "' . $apiFile . '" not found.', 404);
             }
             
@@ -162,12 +159,11 @@ class App
             } else {
                 throw new Exceptions('Api "' . $apiName . '" does not exist.', 404);
             }
-            
         } else {
             
             $controllerFile = APP_PATH . DS . 'Controller' . DS . $controllerName . '.php';
             
-            if (!file_exists($controllerFile)) {
+            if (! file_exists($controllerFile)) {
                 throw new Exceptions('Controller file "' . $controllerFile . '" not found.', 404);
             }
             
@@ -185,13 +181,12 @@ class App
             } else {
                 throw new Exceptions('Action "' . $this->action . '" does not exist.', 404);
             }
-            
         }
     }
-    
+
     /**
      * 获取路由器对象
-     * 
+     *
      * @return obj
      */
     public function getRouter()
@@ -201,11 +196,11 @@ class App
         }
         return $this->_router;
     }
-    
+
     /**
      * 加载函数库
-     * 
-     * @param string $func
+     *
+     * @param string $func            
      * @throws Exception
      * @return boolean
      */
@@ -214,20 +209,21 @@ class App
         $file = MINI_PATH . DS . 'Functions' . DS . ucfirst($func) . '.func.php';
         
         $key = md5($file);
-        if (!isset(self::$_funcs[$key])) {
+        if (! isset(self::$_funcs[$key])) {
             if (file_exists($file)) {
-                include($file);
+                include ($file);
                 self::$_funcs[$key] = true;
             } else {
                 throw new Exceptions('Function "' . $func . '" not found.');
             }
         }
         
-        return true;        
+        return true;
     }
-    
+
     /**
      * 初始化数据库对象池
+     * 
      * @throws Exceptions
      * @return boolean
      */
@@ -236,7 +232,7 @@ class App
         $dbConfig = Config::getInstance()->load('database');
         if (is_array($dbConfig)) {
             foreach ($dbConfig as $dbKey => $dbParams) {
-                $this->_dbPool[$dbKey] = Db::factory ('Mysql', $dbParams);
+                $this->_dbPool[$dbKey] = Db::factory('Mysql', $dbParams);
             }
         } else {
             throw new Exceptions('Config "database" invalid.');
@@ -244,14 +240,15 @@ class App
         
         return true;
     }
-    
+
     /**
      * 获取数据库对象池
+     * 
      * @return Object | NULL
      */
     public function getDbPool()
     {
-        if (!isset($this->_dbPool)) {
+        if (! isset($this->_dbPool)) {
             return null;
         }
         

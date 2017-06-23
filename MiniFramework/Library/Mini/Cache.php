@@ -8,7 +8,7 @@
 // | you may not use this file except in compliance with the License.
 // | You may obtain a copy of the License at
 // |
-// |   http://www.apache.org/licenses/LICENSE-2.0
+// | http://www.apache.org/licenses/LICENSE-2.0
 // |
 // | Unless required by applicable law or agreed to in writing, software
 // | distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,43 +22,46 @@
 // +---------------------------------------------------------------------------
 // | Website: http://www.sunbloger.com/miniframework
 // +---------------------------------------------------------------------------
-
 namespace Mini;
 
 class Cache
 {
+
     /**
      * 工厂模式获取缓存实例
-     * 
-     * @param string $adapter
-     * @param array $params
+     *
+     * @param string $adapter            
+     * @param array $params            
      */
     public static function factory($adapter = 'Memcache', $params = array())
     {
-        if (!is_string($adapter) || empty($adapter)) {
+        if (! is_string($adapter) || empty($adapter)) {
             throw new Exceptions('Adapter name must be specified in a string.');
         }
         
-        if (in_array($adapter, array('Memcache', 'Redis'))) {
+        if (in_array($adapter, array(
+            'Memcache',
+            'Redis'
+        ))) {
             
-            if (!function_exists($adapter)) {
+            if (! function_exists($adapter)) {
                 throw new Exceptions('Class ' . $adapter . ' not found');
             }
             
-            if (!is_array($params)) {
+            if (! is_array($params)) {
                 throw new Exceptions('Cache params invalid.');
             }
             
-            if (!isset($params['host'])) {
+            if (! isset($params['host'])) {
                 throw new Exceptions('Cache(' . $adapter . ') host is not defined.');
-            } elseif (!isset($params['port'])) {
+            } elseif (! isset($params['port'])) {
                 throw new Exceptions('Cache(' . $adapter . ') port is not defined.');
             }
         }
         
         $adapterName = '\\Mini\\Cache\\Cache_' . ucwords($adapter);
         
-        if (!class_exists($adapterName)) {
+        if (! class_exists($adapterName)) {
             throw new Exceptions('Adapter "' . $adapterName . '" not found.');
         }
         
@@ -67,7 +70,7 @@ class Cache
         if (! $cacheAdapter instanceof \Mini\Cache\Cache_Abstract) {
             throw new Exceptions('Adapter class "' . $adapterName . '" does not extend Cache_Abstract.');
         }
-
+        
         return $cacheAdapter;
     }
 }

@@ -8,7 +8,7 @@
 // | you may not use this file except in compliance with the License.
 // | You may obtain a copy of the License at
 // |
-// |   http://www.apache.org/licenses/LICENSE-2.0
+// | http://www.apache.org/licenses/LICENSE-2.0
 // |
 // | Unless required by applicable law or agreed to in writing, software
 // | distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,21 +22,20 @@
 // +---------------------------------------------------------------------------
 // | Website: http://www.sunbloger.com/miniframework
 // +---------------------------------------------------------------------------
-
 namespace Mini;
 
 class Registry extends \ArrayObject
 {
+
     /**
      * Registry Instance
-     * 
+     *
      * @var Registry
      */
     protected static $_instance;
-    
+
     /**
      * 获取实例
-     * 
      */
     public static function getInstance()
     {
@@ -45,30 +44,30 @@ class Registry extends \ArrayObject
         }
         return self::$_instance;
     }
-    
+
     /**
      * 存入
-     * 
-     * @param string $index
-     * @param mixed $value
+     *
+     * @param string $index            
+     * @param mixed $value            
      */
     public static function set($index, $value)
     {
         $instance = self::getInstance();
         $instance->offsetSet($index, $value);
     }
-    
+
     /**
      * 读出
-     * 
-     * @param string $index
+     *
+     * @param string $index            
      * @return mixed
      */
     public static function get($index)
     {
         $instance = self::getInstance();
         
-        if (!$instance->offsetExists($index)) {
+        if (! $instance->offsetExists($index)) {
             throw new Exceptions('"' . $index . '" not registered.');
         }
         

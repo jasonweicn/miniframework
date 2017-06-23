@@ -8,7 +8,7 @@
 // | you may not use this file except in compliance with the License.
 // | You may obtain a copy of the License at
 // |
-// |   http://www.apache.org/licenses/LICENSE-2.0
+// | http://www.apache.org/licenses/LICENSE-2.0
 // |
 // | Unless required by applicable law or agreed to in writing, software
 // | distributed under the License is distributed on an "AS IS" BASIS,
@@ -34,7 +34,7 @@ defined('DS') or define('DS', DIRECTORY_SEPARATOR);
 defined('MINI_PATH') or define('MINI_PATH', dirname(__FILE__));
 
 // 类库路径
-defined('LIB_PATH') or  define('LIB_PATH', MINI_PATH . DS . 'Library');
+defined('LIB_PATH') or define('LIB_PATH', MINI_PATH . DS . 'Library');
 
 // 应用路径
 defined('APP_PATH') or define('APP_PATH', dirname(dirname($_SERVER['SCRIPT_FILENAME'])));
@@ -75,8 +75,8 @@ if (SHOW_ERROR === true) {
     ini_set('display_errors', 'Off');
 }
 
-require(LIB_PATH . DS . 'Mini' . DS . 'Loader.php');
+require (LIB_PATH . DS . 'Mini' . DS . 'Loader.php');
 Mini\Loader::getInstance();
 
-//一切由此开始
+// 一切由此开始
 Mini\App::getInstance()->run();

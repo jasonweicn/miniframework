@@ -8,7 +8,7 @@
 // | you may not use this file except in compliance with the License.
 // | You may obtain a copy of the License at
 // |
-// |   http://www.apache.org/licenses/LICENSE-2.0
+// | http://www.apache.org/licenses/LICENSE-2.0
 // |
 // | Unless required by applicable law or agreed to in writing, software
 // | distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,17 +22,17 @@
 // +---------------------------------------------------------------------------
 // | Website: http://www.sunbloger.com/miniframework
 // +---------------------------------------------------------------------------
-
 namespace Mini\Cache;
 
 class Cache_File extends Cache_Abstract
 {
+
     /**
      * 写入缓存
-     * 
-     * @param string $name
-     * @param mixed $value
-     * @param int $expire
+     *
+     * @param string $name            
+     * @param mixed $value            
+     * @param int $expire            
      */
     public function set($name, $value, $expire = null)
     {
@@ -48,22 +48,22 @@ class Cache_File extends Cache_Abstract
         }
         $cache_value = sprintf('%012d', $expire) . $compress_flag . $cache_value;
         
-        if (!file_exists(CACHE_PATH) && !is_dir(CACHE_PATH)) {
+        if (! file_exists(CACHE_PATH) && ! is_dir(CACHE_PATH)) {
             mkdir(CACHE_PATH, 0744, true);
         }
         file_put_contents(CACHE_PATH . DS . $cache_key, $cache_value);
     }
-    
+
     /**
      * 读取缓存
-     * 
-     * @param string $name
+     *
+     * @param string $name            
      */
     public function get($name)
     {
         $cache_key = $this->getCacheKey($name);
         $cache_file = CACHE_PATH . DS . $cache_key;
-        if (!file_exists($cache_file)) {
+        if (! file_exists($cache_file)) {
             return false;
         }
         $cache_value = file_get_contents($cache_file);
@@ -72,26 +72,26 @@ class Cache_File extends Cache_Abstract
             return false;
         }
         
-        $expire = (int)substr($cache_value, 0, 12);
+        $expire = (int) substr($cache_value, 0, 12);
         if ($expire != 0 && time() > filemtime($cache_file) + $expire) {
             unlink($cache_file);
             return false;
         }
         
-        $compress_flag = (int)substr($cache_value, 12, 1);
+        $compress_flag = (int) substr($cache_value, 12, 1);
         if ($compress_flag == 1 && function_exists('gzcompress')) {
             $value = unserialize(gzuncompress(substr($cache_value, 13)));
         } else {
             $value = unserialize(substr($cache_value, 13));
         }
         
-        return $value;        
+        return $value;
     }
-    
+
     /**
      * 删除缓存
-     * 
-     * @param string $name
+     *
+     * @param string $name            
      */
     public function del($name)
     {
@@ -99,14 +99,14 @@ class Cache_File extends Cache_Abstract
         $cache_file = CACHE_PATH . DS . $cache_key;
         @unlink($cache_file);
     }
-    
+
     /**
      * 获取缓存文件KEY值
-     * 
-     * @param string $name
+     *
+     * @param string $name            
      * @return string
      */
-    private function getCacheKey ($name)
+    private function getCacheKey($name)
     {
         return md5($name);
     }

@@ -8,7 +8,7 @@
 // | you may not use this file except in compliance with the License.
 // | You may obtain a copy of the License at
 // |
-// |   http://www.apache.org/licenses/LICENSE-2.0
+// | http://www.apache.org/licenses/LICENSE-2.0
 // |
 // | Unless required by applicable law or agreed to in writing, software
 // | distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,46 +22,46 @@
 // +---------------------------------------------------------------------------
 // | Website: http://www.sunbloger.com/miniframework
 // +---------------------------------------------------------------------------
-
 namespace Mini;
 
 class View
 {
+
     /**
      * 控制器
-     * 
+     *
      * @var string
      */
     private $_controller;
-    
+
     /**
      * 动作
-     * 
+     *
      * @var string
      */
     private $_action;
-    
+
     /**
      * Request实例
-     * 
+     *
      * @var Request
      */
     private $_request;
-    
+
     /**
      * 基础路径
-     * 
+     *
      * @var string
      */
     protected $_baseUrl;
-    
+
     /**
      * Layout实例
-     * 
+     *
      * @var Layout
      */
     public $_layout;
-    
+
     /**
      * 构造
      */
@@ -77,7 +77,7 @@ class View
             $this->_layout->setLayoutPath(LAYOUT_PATH);
         }
     }
-    
+
     /**
      * 获取基础路径
      */
@@ -88,7 +88,7 @@ class View
         }
         return $this->_baseUrl;
     }
-    
+
     public function __set($variable, $value)
     {
         $this->assign($variable, $value);
@@ -96,9 +96,9 @@ class View
 
     /**
      * 接收来自于控制器的变量
-     * 
-     * @param string $variable
-     * @param mixed $value
+     *
+     * @param string $variable            
+     * @param mixed $value            
      */
     public function assign($variable, $value)
     {
@@ -108,16 +108,16 @@ class View
         }
         return false;
     }
-    
+
     /**
      * 显示
      */
     public function display()
     {
-        $view  = APP_PATH . DS .  'View' . DS;
+        $view = APP_PATH . DS . 'View' . DS;
         $view .= strtolower($this->_controller) . DS . $this->_action . '.php';
         
-        if (!file_exists($view)) {
+        if (! file_exists($view)) {
             throw new Exceptions('View "' . $this->_action . '" does not exist.', 404);
         }
         
@@ -128,25 +128,26 @@ class View
         if (LAYOUT_ON === true) {
             $this->_layout->content = $content;
             $layoutScript = $this->_layout->getLayoutScript();
-            include($layoutScript);
+            include ($layoutScript);
         } else {
             echo $content;
         }
         
         die();
     }
-    
+
     /**
      * 渲染器
-     * 
-     * @param string $script
-     * @param bool $check (true | false)
+     *
+     * @param string $script            
+     * @param bool $check
+     *            (true | false)
      * @return string
      */
     public function render($script, $check = true)
     {
         if ($check === true) {
-            if (!file_exists($script)) {
+            if (! file_exists($script)) {
                 throw new Exceptions('File "' . $script . '" does not exist.', 404);
             }
         }
@@ -156,7 +157,7 @@ class View
         }
         
         ob_start();
-        include($script);
+        include ($script);
         $content = ob_get_contents();
         ob_end_clean();
         ob_start();

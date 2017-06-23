@@ -8,7 +8,7 @@
 // | you may not use this file except in compliance with the License.
 // | You may obtain a copy of the License at
 // |
-// |   http://www.apache.org/licenses/LICENSE-2.0
+// | http://www.apache.org/licenses/LICENSE-2.0
 // |
 // | Unless required by applicable law or agreed to in writing, software
 // | distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,23 +22,22 @@
 // +---------------------------------------------------------------------------
 // | Website: http://www.sunbloger.com/miniframework
 // +---------------------------------------------------------------------------
-
 namespace Mini;
 
 class Config
 {
+
     /**
      * Config Instance
-     * 
+     *
      * @var Config
      */
     protected static $_instance;
-    
+
     private $_confData = array();
-    
+
     /**
      * 获取实例
-     * 
      */
     public static function getInstance()
     {
@@ -47,28 +46,28 @@ class Config
         }
         return self::$_instance;
     }
-    
+
     /**
      * 读取配置
-     * 
-     * @param string $config
+     *
+     * @param string $config            
      */
     public function load($config)
     {
         $lastPos = strpos($config, ':');
         if ($lastPos !== false) {
             $confName = strstr($config, ':', true);
-            $confKey = substr($config, $lastPos+1);
+            $confKey = substr($config, $lastPos + 1);
         } else {
             $confName = $config;
         }
         
-        if (!isset($this->_confData[$confName])) {
+        if (! isset($this->_confData[$confName])) {
             
             $confFile = CONFIG_PATH . DS . $confName . '.php';
-        
+            
             if (file_exists($confFile)) {
-                include($confFile);
+                include ($confFile);
             } else {
                 throw new Exceptions('Config "' . $confName . '" not found.');
             }
@@ -78,7 +77,6 @@ class Config
             } else {
                 return null;
             }
-            
         } else {
             $configData = $this->_confData[$confName];
         }

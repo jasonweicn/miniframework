@@ -8,7 +8,7 @@
 // | you may not use this file except in compliance with the License.
 // | You may obtain a copy of the License at
 // |
-// |   http://www.apache.org/licenses/LICENSE-2.0
+// | http://www.apache.org/licenses/LICENSE-2.0
 // |
 // | Unless required by applicable law or agreed to in writing, software
 // | distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,16 +22,15 @@
 // +---------------------------------------------------------------------------
 // | Website: http://www.sunbloger.com/miniframework
 // +---------------------------------------------------------------------------
-
 namespace Mini\Db;
 
 use \PDO;
 
 class Db_Mysql extends Db_Abstract
 {
+
     /**
      * 创建一个数据源
-     * 
      */
     private function _dsn()
     {
@@ -56,19 +55,19 @@ class Db_Mysql extends Db_Abstract
         foreach ($dsn as $key => $val) {
             $dsn[$key] = "$key=$val";
         }
-
+        
         return 'mysql:' . implode(';', $dsn);
     }
-    
+
     /**
      * 创建一个数据库连接
-     * 
      */
     protected function _connect()
     {
-        if ($this->_dbh) return;
+        if ($this->_dbh)
+            return;
         
-        if (!class_exists('PDO')) {
+        if (! class_exists('PDO')) {
             throw new Exceptions('Not support PDO.');
         }
         
@@ -91,32 +90,28 @@ class Db_Mysql extends Db_Abstract
         }
         
         try {
-            $this->_dbh = new PDO(
-                $dsn,
-                $this->_params['username'],
-                $this->_params['passwd'],
-                $this->_params['options']
-            );
+            $this->_dbh = new PDO($dsn, $this->_params['username'], $this->_params['passwd'], $this->_params['options']);
         } catch (Exceptions $e) {
             throw new Exceptions('Database connection failed.');
         }
         
-        if (version_compare(PHP_VERSION, '5.3.6', '<') && !defined('PDO::MYSQL_ATTR_INIT_COMMAND')) {
+        if (version_compare(PHP_VERSION, '5.3.6', '<') && ! defined('PDO::MYSQL_ATTR_INIT_COMMAND')) {
             $this->_dbh->exec('SET NAMES ' . $this->_params['charset']);
         }
     }
-    
+
     /**
      * 执行SQL语句
      *
-     * @param string $sql
+     * @param string $sql            
      * @return int
      */
     public function execSql($sql = null)
     {
         $this->_connect();
         $this->_setLastSql($sql);
-        if ($this->_debug === true) $this->_debugSql($sql);
+        if ($this->_debug === true)
+            $this->_debugSql($sql);
         try {
             $affected = $this->_dbh->exec($sql);
             if ($affected === false) {
@@ -127,19 +122,22 @@ class Db_Mysql extends Db_Abstract
             throw new Exceptions($e);
         }
     }
-    
+
     /**
      * 查询SQL语句
      *
-     * @param string $sql SQL语句
-     * @param string $queryMode 查询方式(All or Row)
+     * @param string $sql
+     *            SQL语句
+     * @param string $queryMode
+     *            查询方式(All or Row)
      * @return array
      */
     public function query($sql = null, $queryMode = 'All')
     {
         $this->_connect();
         $this->_setLastSql($sql);
-        if ($this->_debug === true) $this->_debugSql($sql);
+        if ($this->_debug === true)
+            $this->_debugSql($sql);
         try {
             $recordset = $this->_dbh->query($sql);
             if ($recordset === false) {
@@ -160,12 +158,14 @@ class Db_Mysql extends Db_Abstract
             throw new Exceptions($e);
         }
     }
-    
+
     /**
      * 插入记录
      *
-     * @param string $table 表名
-     * @param array $data 数据 array(col => value)
+     * @param string $table
+     *            表名
+     * @param array $data
+     *            数据 array(col => value)
      * @return int
      */
     public function insert($table, array $data)
@@ -174,15 +174,17 @@ class Db_Mysql extends Db_Abstract
         
         return $this->execSql($sql);
     }
-    
+
     /**
      * 批量插入记录
-     * @param string $table
-     * @param array $dataArray = array(
-     *     0 => array(col1 => value1, col2 => value2),
-     *     1 => array(col1 => value1, col2 => value2),
-     *     ...
-     * )
+     * 
+     * @param string $table            
+     * @param array $dataArray
+     *            = array(
+     *            0 => array(col1 => value1, col2 => value2),
+     *            1 => array(col1 => value1, col2 => value2),
+     *            ...
+     *            )
      * @return int
      */
     public function insertAll($table, array $dataArray)
@@ -197,19 +199,22 @@ class Db_Mysql extends Db_Abstract
         
         return $this->execSql($sql);
     }
-    
+
     /**
      * 更新记录
      *
-     * @param string $table 表名
-     * @param array $data 数据 array(col => value)
-     * @param string $where 条件
+     * @param string $table
+     *            表名
+     * @param array $data
+     *            数据 array(col => value)
+     * @param string $where
+     *            条件
      * @return int
      */
     public function update($table, array $data, $where = '')
     {
         $sql = '';
-        if (!empty($data)) {
+        if (! empty($data)) {
             foreach ($data as $key => $value) {
                 $sql .= ", `$key`='$value'";
             }
@@ -219,12 +224,14 @@ class Db_Mysql extends Db_Abstract
         
         return $this->execSql($sql);
     }
-    
+
     /**
      * 替换记录
      *
-     * @param string $table 表名
-     * @param array $data 数据 array(col => value)
+     * @param string $table
+     *            表名
+     * @param array $data
+     *            数据 array(col => value)
      * @return int
      */
     public function replace($table, array $data)
@@ -233,12 +240,14 @@ class Db_Mysql extends Db_Abstract
         
         return $this->execSql($sql);
     }
-    
+
     /**
      * 删除记录
      *
-     * @param string $table 表名
-     * @param string $where 条件
+     * @param string $table
+     *            表名
+     * @param string $where
+     *            条件
      * @return int
      */
     public function delete($table, $where = '')
@@ -246,13 +255,13 @@ class Db_Mysql extends Db_Abstract
         $sql = "DELETE FROM `$table`" . (($where) ? " WHERE $where" : '');
         return $this->execSql($sql);
     }
-    
+
     /**
      * 按指定条件查询行数
-     * 
-     * @param string $table
-     * @param string $col
-     * @param string $where
+     *
+     * @param string $table            
+     * @param string $col            
+     * @param string $where            
      * @return int
      */
     public function countRow($table, $col = '*', $where = '')
@@ -261,13 +270,16 @@ class Db_Mysql extends Db_Abstract
         $result = $this->query($sql, 'Row');
         return $result['rows'];
     }
-    
+
     /**
      * 获取字段最大值
-     * 
-     * @param string $table 表名
-     * @param string $col 字段名
-     * @param string $where 条件
+     *
+     * @param string $table
+     *            表名
+     * @param string $col
+     *            字段名
+     * @param string $where
+     *            条件
      */
     public function getMaxValue($table, $col, $where = '')
     {
@@ -279,11 +291,12 @@ class Db_Mysql extends Db_Abstract
         }
         return $maxValue;
     }
-    
+
     /**
      * 获取表引擎
-     * 
-     * @param string $table 表名
+     *
+     * @param string $table
+     *            表名
      * @return string
      */
     public function getTableEngine($table)
@@ -292,7 +305,7 @@ class Db_Mysql extends Db_Abstract
         $result = $this->query($sql);
         return $result[0]['Engine'];
     }
-    
+
     /**
      * 事务开始
      */
@@ -300,7 +313,7 @@ class Db_Mysql extends Db_Abstract
     {
         $this->_dbh->beginTransaction();
     }
-    
+
     /**
      * 事务提交
      */
@@ -308,7 +321,7 @@ class Db_Mysql extends Db_Abstract
     {
         $this->_dbh->commit();
     }
-    
+
     /**
      * 事务回滚
      */
@@ -316,11 +329,11 @@ class Db_Mysql extends Db_Abstract
     {
         $this->_dbh->rollBack();
     }
-    
+
     /**
      * 通过事务处理多条SQL语句
      *
-     * @param array $arraySql
+     * @param array $arraySql            
      * @return boolean
      */
     public function execTrans(array $arraySql)
@@ -328,7 +341,8 @@ class Db_Mysql extends Db_Abstract
         $flag = true;
         $this->_beginTransaction();
         foreach ($arraySql as $sql) {
-            if ($this->execSql($sql) == 0) $flag = false;
+            if ($this->execSql($sql) == 0)
+                $flag = false;
         }
         if ($flag === false) {
             $this->_rollBack();
@@ -338,17 +352,16 @@ class Db_Mysql extends Db_Abstract
             return true;
         }
     }
-    
+
     /**
      * 获得最后一次插入记录的自增主键
-     * 
      */
     public function lastInsertId()
     {
         $this->_connect();
         return $this->_dbh->lastInsertId();
     }
-    
+
     /**
      * 捕获PDO错误信息
      */
@@ -360,7 +373,7 @@ class Db_Mysql extends Db_Abstract
             throw new Exceptions($errorInfo[2]);
         }
     }
-    
+
     /**
      * 关闭数据库连接
      */
