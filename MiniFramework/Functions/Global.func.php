@@ -8,7 +8,7 @@
 // | you may not use this file except in compliance with the License.
 // | You may obtain a copy of the License at
 // |
-// |   http://www.apache.org/licenses/LICENSE-2.0
+// | http://www.apache.org/licenses/LICENSE-2.0
 // |
 // | Unless required by applicable law or agreed to in writing, software
 // | distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,13 +25,16 @@
 
 /**
  * 获取客户端IP地址
+ * 
  * @return NULL|string|unknown
  */
-function getClientIp ()
+function getClientIp()
 {
     $ip = null;
-
-    if ($ip !== null) return $ip;
+    
+    if ($ip !== null) {
+        return $ip;
+    }
     if (isset($_SERVER)) {
         if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
             $arr = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
@@ -65,19 +68,19 @@ function getClientIp ()
         }
     }
     preg_match("/[\d\.]{7,15}/", $ip, $matches);
-    $ip = !empty($matches[0]) ? $matches[0] : '0.0.0.0';
+    $ip = ! empty($matches[0]) ? $matches[0] : '0.0.0.0';
     
     return $ip;
 }
 
 /**
  * 改变数组KEY
- * 
- * @param array $array
- * @param mixed $field
+ *
+ * @param array $array            
+ * @param mixed $field            
  * @return array
  */
-function chgArrayKey ($array, $field)
+function chgArrayKey($array, $field)
 {
     $tmp = array();
     if (is_array($array)) {
@@ -93,18 +96,19 @@ function chgArrayKey ($array, $field)
 
 /**
  * 获取一个指定长度的随机字符串
- * 
- * @param int $len
+ *
+ * @param int $len            
  * @return string
  */
-function getRandomString ($len = 8)
+function getRandomString($len = 8)
 {
     $str = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
     $strLen = strlen($str);
     $randomString = '';
-    if (!is_int($len) || $len <= 0) $len = 8;
-    for ($i=0; $i<$len; $i++) {
-        $randomString .= substr($str, rand(0, $strLen-1), 1);
+    if (! is_int($len) || $len <= 0)
+        $len = 8;
+    for ($i = 0; $i < $len; $i ++) {
+        $randomString .= substr($str, rand(0, $strLen - 1), 1);
     }
     
     return $randomString;
@@ -112,17 +116,17 @@ function getRandomString ($len = 8)
 
 /**
  * 对图片进行base64编码转换
- * 
- * @param string $image_file
+ *
+ * @param string $image_file            
  * @return string
  */
-function base64EncodeImage ($image_file)
+function base64EncodeImage($image_file)
 {
     $base64_image = '';
     if (is_file($image_file)) {
         $image_info = getimagesize($image_file);
         $image_data = fread(fopen($image_file, 'r'), filesize($image_file));
-        $base64_image  = 'data:' . $image_info['mime'] . ';base64,';
+        $base64_image = 'data:' . $image_info['mime'] . ';base64,';
         $base64_image .= chunk_split(base64_encode($image_data));
     } else {
         return false;
@@ -133,11 +137,12 @@ function base64EncodeImage ($image_file)
 
 /**
  * 输出JSON
- * 
- * @param mixed $data
- * @param bool $push (true: echo & die | false: return)
+ *
+ * @param mixed $data            
+ * @param bool $push
+ *            (true: echo & die | false: return)
  */
-function pushJson ($data, $push = true)
+function pushJson($data, $push = true)
 {
     if (version_compare(PHP_VERSION, '5.4.0', '>=')) {
         $json = json_encode($data, JSON_UNESCAPED_UNICODE);
@@ -156,14 +161,16 @@ function pushJson ($data, $push = true)
 /**
  * 校验日期格式是否正确
  *
- * @param string $date 日期
- * @param string $formats 需要检验的格式数组
+ * @param string $date
+ *            日期
+ * @param string $formats
+ *            需要检验的格式数组
  * @return boolean
  */
 function isDate($date, $formats = array('Y-m-d', 'Y/m/d'))
 {
     $timestamp = strtotime($date);
-    if (!$timestamp) {
+    if (! $timestamp) {
         return false;
     }
     foreach ($formats as $format) {
@@ -171,15 +178,16 @@ function isDate($date, $formats = array('Y-m-d', 'Y/m/d'))
             return true;
         }
     }
-
+    
     return false;
 }
 
 /**
  * 变量输出
- * @param mixed $var
- * @param string $label
- * @param bool $echo
+ * 
+ * @param mixed $var            
+ * @param string $label            
+ * @param bool $echo            
  */
 function dump($var, $label = null, $echo = true)
 {
@@ -189,9 +197,9 @@ function dump($var, $label = null, $echo = true)
     $output = preg_replace("/\]\=\>\n(\s+)/m", "] => ", $output);
     
     $cli = preg_match("/cli/i", PHP_SAPI) ? true : false;
-
+    
     if ($cli === true) {
-        $output = PHP_EOL . $label . PHP_EOL . $output. PHP_EOL;
+        $output = PHP_EOL . $label . PHP_EOL . $output . PHP_EOL;
     } else {
         $output = '<pre>' . PHP_EOL . $label . PHP_EOL . $output . '</pre>' . PHP_EOL;
     }
@@ -205,15 +213,23 @@ function dump($var, $label = null, $echo = true)
 
 /**
  * 输出XML
- * 
- * @param mixed $data 数据
- * @param bool $push (true: echo & die | false: return) 是否立即显示并终止程序
- * @param bool $indent 是否格式化缩进
- * @param string $root 根标签名称
- * @param array $attr 根标签属性数组
- * @param string $item 项目标签名称
- * @param string $id 当数据为索引数组时，项目标签属性的名称
- * @param string $encoding 编码
+ *
+ * @param mixed $data
+ *            数据
+ * @param bool $push
+ *            (true: echo & die | false: return) 是否立即显示并终止程序
+ * @param bool $indent
+ *            是否格式化缩进
+ * @param string $root
+ *            根标签名称
+ * @param array $attr
+ *            根标签属性数组
+ * @param string $item
+ *            项目标签名称
+ * @param string $id
+ *            当数据为索引数组时，项目标签属性的名称
+ * @param string $encoding
+ *            编码
  * @return string
  */
 function pushXml($data, $push = true, $indent = false, $root = 'data', $attr = array(), $item = 'item', $id = 'id', $encoding = 'utf-8')
@@ -226,7 +242,7 @@ function pushXml($data, $push = true, $indent = false, $root = 'data', $attr = a
         $_attr .= ' ' . $key . '="' . $val . '"';
     }
     
-    $xml  = '<?xml version="1.0" encoding="' . $encoding .'"?>' . $eol;
+    $xml = '<?xml version="1.0" encoding="' . $encoding . '"?>' . $eol;
     $xml .= '<' . $root . $_attr . '>' . $eol;
     $xml .= parseDataToXml($data, $item, $id, $indent);
     $xml .= '</' . $root . '>';
@@ -241,11 +257,12 @@ function pushXml($data, $push = true, $indent = false, $root = 'data', $attr = a
 
 /**
  * 数据转换XML
- * @param mixed $data
- * @param string $item
- * @param string $id
- * @param string $indent
- * @param int $level
+ * 
+ * @param mixed $data            
+ * @param string $item            
+ * @param string $id            
+ * @param string $indent            
+ * @param int $level            
  * @return string
  */
 function parseDataToXml($data, $item = 'item', $id = 'id', $indent = false, $level = 1)
@@ -261,7 +278,7 @@ function parseDataToXml($data, $item = 'item', $id = 'id', $indent = false, $lev
     
     foreach ($data as $key => $val) {
         if (is_int($key) && $key >= 0) {
-            if (!empty($id)) {
+            if (! empty($id)) {
                 $attr = ' ' . $id . '="' . $key . '"';
             }
             
@@ -271,9 +288,9 @@ function parseDataToXml($data, $item = 'item', $id = 'id', $indent = false, $lev
         $xml .= $space . '<' . $key . $attr . '>';
         
         if (is_array($val) || is_object($val)) {
-            $level++;
+            $level ++;
             $xml .= $eol . parseDataToXml($val, $item, $id, $indent, $level);
-            $level--;
+            $level --;
             $xml .= $space . '</' . $key . '>' . $eol;
         } else {
             $xml .= $val;
