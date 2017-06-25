@@ -1,30 +1,51 @@
-MiniFramework Change Log
-=========================
+# CHANGES #
+-----------
 
-2017-06-23 (Version 1.0.5 released.)
+## Version 1.0.6 released. ( 2017-06-25 ) ##
+--------------------------
+
+* 新增在REST模式的API接口中使用$this->forbidden()方法直接输出403禁止访问的信息
+* 新增向REST模式的API接口中不存在的方法发起请求时，自动输出403禁止访问的信息
+* 修正Params类中的Bug
+* 按PSR-2标准规范代码格式
+* 启用支持Markdown的CHANGES.md
+
+
+## Version 1.0.5 released. ( 2017-06-23 ) ##
+--------------------------
 
 * 修正自动连接数据库功能在REST模式的API接口中失效的Bug
 
-2017-06-22 (Version 1.0.4 released.)
+
+## Version 1.0.4 released. ( 2017-06-22 ) ##
+--------------------------
 
 * 新增用于获取请求头数据的方法
 * 优化部分核心类，减少内存占用
 
-2017-06-20 (Version 1.0.3 released.)
+
+## Version 1.0.3 released. ( 2017-06-20 ) ##
+--------------------------
 
 * 改进用于Apache的.htaccess文件
 * 优化引导程序中对于常量定义的判断方式
 * 其他一些优化工作
 
-2017-06-16 (Version 1.0.2 released.)
+
+## Version 1.0.2 released. ( 2017-06-16 ) ##
+--------------------------
 
 * 修正因变更核心类库存放路径导致的Db和Cache类加载报错的Bug (Close #2)
 
-2017-06-16 (Version 1.0.1 released.)
+
+## Version 1.0.1 released. ( 2017-06-16 ) ##
+--------------------------
 
 * 更新composer.json
 
-2017-06-16 (Version 1.0.0 released.)
+
+## Version 1.0.0 released. ( 2017-06-16 ) ##
+--------------------------
 
 * 新增对命名空间的支持
 * 新增对RESTful的支持
@@ -54,17 +75,23 @@ MiniFramework Change Log
 * 完善注释
 * 启用Apache2开源协议
 
-2017-06-12 (Version 0.10.2 released.)
+
+## Version 0.10.2 released. ( 2017-06-12 ) ##
+---------------------------
 
 * 修正调用Params的setParams()方法时出现报错的Bug
 * 修正无法正常连接需要验证密码的Redis主机的Bug
 
-2017-06-10 (Version 0.10.1 released.)
+
+## Version 0.10.1 released. ( 2017-06-10 ) ##
+---------------------------
 
 * 修正Db模块未对传入的params参数校验的Bug
 * 修正Cache模块未对传入的params参数校验的Bug
 
-2017-06-05 (Version 0.10.0 released.)
+
+## Version 0.10.0 released. ( 2017-06-05 ) ##
+---------------------------
 
 * 增加对Composer的支持
 * 新增Config类，用于读取配置信息
@@ -80,7 +107,9 @@ MiniFramework Change Log
 * 更新了README
 * 完善注释
 
-2017-05-31 (Version 0.9.0 released.)
+
+## Version 0.9.0 released. ( 2017-05-31 ) ##
+--------------------------
 
 * 新增Layout类，用于替代原有的布局控制方法。
 * 从View中移除getLayout()方法，新的布局控制方法请查阅Layout类。
@@ -90,122 +119,94 @@ MiniFramework Change Log
 * 新增常量LAYOUT_ON，用于开启或关闭布局控制功能（默认值为false）
 * 新增常量LAYOUT_PATH，用于设置布局脚本存放的路径
 
-2017-05-28 (Version 0.8.2 released.)
+
+## Version 0.8.2 released. ( 2017-05-28 ) ##
+--------------------------
 
 * 修正全局函数库中base64EncodeImage()方法的一处bug
 * 重新调整了CHANGES的格式
 
-2016-08-18 (Version 0.8.1 released.)
+
+## Version 0.8.1 released. ( 2016-08-18 ) ##
+--------------------------
 
 * 修正Db_Mysql中的一处bug
 
-2016-08-14 (Version 0.8.0 released.)
 
-* 改写了view的渲染方式
-* 在Params里新增了getPost和getQuery两个方法
-
-2016-08-09
-
-* 在Params中的checkInject()里，用preg_match替换ereg
-
-2016-08-03
-
-* 向全局函数库中新增了pushJson()，用于输出JSON并终止程序运行
-* 针对PHP 5.3.6以前可能存在注入的漏洞进行修补
-
-2016-06-21
-
-* 在Action类中，增加了存放Request实例的属性，供在动作中调用。
-
-2016-06-17
+## Version 0.8.0 released. ( 2016-08-14 ) ##
+--------------------------
 
 * 新增Registry类，用于全局存取变量
-
-2016-06-16
-
-* 在View中新增getLayout()方法，用于在视图中的指定位置调入布局文件
-
-2016-06-15
-
-* 在Action中新增_forward()方法
-* 在Request中新增setControllerName()和setActionName()方法
-
-2016-04-29
-
 * 新增支持Redis的缓存类库
 * 新增使用Memcache或Redis缓存类库时，可通过getMemcacheObj()或getRedisObj()获取实例化对象，
   便于使用未封装的方法。
-
-2016-04-28
-
+* 在Action类中，增加了存放Request实例的属性，供在动作中调用。
+* 在View中新增getLayout()方法，用于在视图中的指定位置调入布局文件
+* 在Action中新增_forward()方法
+* 在Request中新增setControllerName()和setActionName()方法
+* 在Params里新增了getPost和getQuery两个方法
 * 向全局函数库中新增了base64EncodeImage()用于将图片转换为base64编码
-
-2016-01-14
-
+* 向全局函数库中新增了pushJson()，用于输出JSON并终止程序运行
+* 改写了view的渲染方式
+* 在Params中的checkInject()里，用preg_match替换ereg
+* 针对PHP 5.3.6以前可能存在注入的漏洞进行修补
 * Bug fix
 
-2016-01-13 (Version 0.7.0 released.)
 
+## Version 0.7.0 released. ( 2016-01-13 ) ##
+--------------------------
+
+* 新增全局函数库
 * 新增支持文件存取的缓存类库
+* 新增支持Memcache的缓存类库
 * 从Cache_Abstract中移除_connect()和close()方法
 * 在Cache_Abstract中，将_set()方法更名为set()
 * 在Cache_Abstract中，将_get()方法更名为get()
 * 在Cache_Abstract中，将_unset()方法更名为del()
-
-2016-01-11
-
-* 新增支持Memcache的缓存类库
 * 向全局函数库中新增2个函数chgArrayKey()和getRandomString()
 
-2016-01-10
 
-* 新增全局函数库
+## Version 0.6.3 released. ( 2015-02-08 ) ##
+--------------------------
 
-2015-02-08 (Version 0.6.0 released.)
-
-* 优化完善了Loader中的loadClass方法。
+* 框架更名为Mini Framework，缩写依旧为：MF
+* 优化完善了Loader中的loadClass方法
+* Db_Abstract中新增debug方法
+* 新增数据库的异常控制
+* Router中新增checkRoute方法
 * Bug fix
 
-2015-02-04
 
-* Db_Abstract中新增debug方法，
-  用法：$db->debug()->insert('tablename', array('col'=>'val'));。
-* 新增数据库的异常控制。
+## Version 0.5.0 released. ( 2015-02-02 ) ##
+--------------------------
 
-2015-02-03
+* Db_Mysql中新增insertAll方法
+* Exceptions中新增sendHttpStatus方法
+* 新增Request类库
+* 框架性能优化
 
-* 框架更名为Mini Framework，缩写依旧为：MF。
-* Router中新增checkRoute方法。
-* Bug fix.
 
-2015-02-02 (Version 0.5.0 released.)
+## Version 0.4.0 released. ( 2015-01-30 ) ##
+--------------------------
 
-* Db_Mysql中新增insertAll方法。
-* Exceptions中新增sendHttpStatus方法。
-* 框架性能优化。
+* 新增基于PDO的MySQL的类库
 
-2015-02-01
 
-* 新增Request类库。
-* 框架性能优化。
+## Version 0.3.0 released. ( 2015-01-28 ) ##
+--------------------------
 
-2015-01-30 (Version 0.4.0 released.)
+* 新增异常控制机制
+* 新增处理GET和POST数据的类库
+* Bug fix
 
-* 新增基于PDO的MySQL的类库。
 
-2015-01-28 (Version 0.4.0 released.)
+## Version 0.2.0 released. ( 2015-01-26 ) ##
+--------------------------
 
-* 新增异常控制机制。
+* 新增Rewrite路由模式
 
-2015-01-27
 
-* 新增处理GET和POST数据的类库。
-* Bug fix.
-
-2015-01-26 (Version 0.2.0 released.)
-
-* 新增Rewrite路由模式。
-
-2015-01-25 (Version 0.1.0 released.)
+## Version 0.1.0 released. ( 2015-01-25 ) ##
+--------------------------
 
 * The first public version.

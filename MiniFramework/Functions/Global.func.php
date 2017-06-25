@@ -25,7 +25,7 @@
 
 /**
  * 获取客户端IP地址
- * 
+ *
  * @return NULL|string|unknown
  */
 function getClientIp()
@@ -184,7 +184,7 @@ function isDate($date, $formats = array('Y-m-d', 'Y/m/d'))
 
 /**
  * 变量输出
- * 
+ *
  * @param mixed $var            
  * @param string $label            
  * @param bool $echo            
@@ -257,7 +257,7 @@ function pushXml($data, $push = true, $indent = false, $root = 'data', $attr = a
 
 /**
  * 数据转换XML
- * 
+ *
  * @param mixed $data            
  * @param string $item            
  * @param string $id            
