@@ -28,7 +28,7 @@ class Cache_Redis extends Cache_Abstract
 {
 
     /**
-     * 连接Redis
+     * 连接
      */
     protected function _connect()
     {
@@ -52,14 +52,14 @@ class Cache_Redis extends Cache_Abstract
 
     public function set($name, $value, $expire = null)
     {
-        if (is_null($expire)) {
-            $expire = $this->_expire;
-        }
         $this->_connect();
-        $this->_cache_server->set($name, $value);
-        if ($expire > 0) {
-            $this->_cache_server->expire($name, $expire);
+        if (! isset($expire) || empty($expire)) {
+            $result = $this->_cache_server->set($name, $value);
+        } else {
+            $result = $this->_cache_server->setex($name, $expire, $value);
         }
+        
+        return $result;
     }
 
     public function get($name)
@@ -71,12 +71,12 @@ class Cache_Redis extends Cache_Abstract
     public function del($name)
     {
         $this->_connect();
-        return $this->_cache_server->delete($name);
+        return $this->_cache_server->del($name);
     }
 
     /**
      * 获取Redis实例化对象，便于使用其他未封装的方法
-     * 
+     *
      * @return obj
      */
     public function getRedisObj()
@@ -86,7 +86,7 @@ class Cache_Redis extends Cache_Abstract
     }
 
     /**
-     * 关闭Redis连接
+     * 关闭连接
      */
     public function close()
     {

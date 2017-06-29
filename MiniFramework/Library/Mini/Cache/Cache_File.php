@@ -36,8 +36,8 @@ class Cache_File extends Cache_Abstract
      */
     public function set($name, $value, $expire = null)
     {
-        if (is_null($expire)) {
-            $expire = $this->_expire;
+        if (! isset($expire) || empty($expire)) {
+            $expire = 0;
         }
         $cache_key = $this->getCacheKey($name);
         $cache_value = serialize($value);

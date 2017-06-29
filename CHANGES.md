@@ -1,5 +1,12 @@
 # CHANGES #
 
+## Version 1.0.7 released. ( 2017-06-29 ) ##
+
+* 新增Cache_Memcached类，用于对PHP的Memcached扩展的支持
+* 改进Cache缓存类，增加支持写入永久有效缓存数据的特性，不再强制缓存具有有效期
+* 修正Cache缓存类中的验证具体类是否存在的Bug（Close #4）
+* 修正Cache_Redis类中del()方法的Bug
+
 ## Version 1.0.6 released. ( 2017-06-25 ) ##
 
 * 新增在REST模式的API接口中使用$this->forbidden()方法直接输出403禁止访问的信息
@@ -150,7 +157,7 @@
 * 向全局函数库中新增2个函数chgArrayKey()和getRandomString()
 
 
-## Version 0.6.3 released. ( 2015-02-08 ) ##
+## Version 0.6.0 released. ( 2015-02-08 ) ##
 
 * 框架更名为Mini Framework，缩写依旧为：MF
 * 优化完善了Loader中的loadClass方法

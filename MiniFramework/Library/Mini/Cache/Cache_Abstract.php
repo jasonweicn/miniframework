@@ -29,7 +29,7 @@ abstract class Cache_Abstract
 
     /**
      * Exceptions实例
-     * 
+     *
      * @var Exceptions
      */
     protected $_exception;
@@ -42,15 +42,8 @@ abstract class Cache_Abstract
     protected $_params = array();
 
     /**
-     * 缓存过期时间（单位：秒）
-     *
-     * @var int
-     */
-    protected $_expire = 1800;
-
-    /**
      * 是否压缩缓存数据
-     * 
+     *
      * @var bool
      */
     protected $_compress_flag = true;

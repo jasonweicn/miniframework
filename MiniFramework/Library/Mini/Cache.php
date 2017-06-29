@@ -41,15 +41,16 @@ class Cache
         
         if (in_array($adapter, array(
             'Memcache',
+            'Memcached',
             'Redis'
         ))) {
             
-            if (! function_exists($adapter)) {
-                throw new Exceptions('Class ' . $adapter . ' not found');
+            if (! class_exists($adapter)) {
+                throw new Exceptions('Adapter ' . $adapter . ' not found');
             }
             
             if (! is_array($params)) {
-                throw new Exceptions('Cache params invalid.');
+                throw new Exceptions('Adapter params invalid.');
             }
             
             if (! isset($params['host'])) {

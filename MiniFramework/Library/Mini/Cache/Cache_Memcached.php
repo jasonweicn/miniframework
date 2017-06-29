@@ -24,9 +24,9 @@
 // +---------------------------------------------------------------------------
 namespace Mini\Cache;
 
-use \Memcache;
+use \Memcached;
 
-class Cache_Memcache extends Cache_Abstract
+class Cache_Memcached extends Cache_Abstract
 {
 
     /**
@@ -38,13 +38,13 @@ class Cache_Memcache extends Cache_Abstract
             return;
         
         try {
-            $this->_cache_server = new Memcache();
-            $this->_cache_server->connect($this->_params['host'], $this->_params['port']);
+            $this->_cache_server = new Memcached();
+            $this->_cache_server->addServer($this->_params['host'], $this->_params['port']);
         } catch (Exceptions $e) {
             throw new Exceptions($e);
         }
         
-        $memStats = $this->_cache_server->getExtendedStats();
+        $memStats = $this->_cache_server->getStats();
         $available = (bool) $memStats[$this->_params['host'] . ':' . $this->_params['port']];
         if (! $available) {
             throw new Exceptions('Memcache connection failed.');
@@ -56,9 +56,12 @@ class Cache_Memcache extends Cache_Abstract
         if (! isset($expire) || empty($expire)) {
             $expire = 0;
         }
-        $compress_flag = $this->_compress_flag ? MEMCACHE_COMPRESSED : 0;
         $this->_connect();
-        return $this->_cache_server->set($name, $value, $compress_flag, $expire);
+        if ($this->_compress_flag === true) {
+            $this->_cache_server->setOption(Memcached::OPT_COMPRESSION, true);
+        }
+        
+        return $this->_cache_server->set($name, $value, $expire);
     }
 
     public function get($name)
@@ -74,11 +77,11 @@ class Cache_Memcache extends Cache_Abstract
     }
 
     /**
-     * 获取Memcache实例化对象，便于使用其他未封装的方法
+     * 获取Memcached实例化对象，便于使用其他未封装的方法
      *
      * @return obj
      */
-    public function getMemcacheObj()
+    public function getMemcachedObj()
     {
         $this->_connect();
         return $this->_cache_server;
@@ -90,7 +93,7 @@ class Cache_Memcache extends Cache_Abstract
     public function close()
     {
         try {
-            $this->_cache_server->close();
+            $this->_cache_server->quit();
             $this->_cache_server = null;
         } catch (Exceptions $e) {
             throw new Exceptions($e);
