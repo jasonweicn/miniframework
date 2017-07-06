@@ -112,6 +112,11 @@ class Rest
         );
         $json = pushJson($content, false);
         
+        $headers = $this->_request->getHeaders();
+        if (isset($headers['Ver']) && preg_match("/^\d+$/", $headers['Ver'])) {
+            $this->http->header('X-Api-Ver', $headers['Ver']);
+        }
+        
         $this->http->header('Content-Type', 'application/json')->response($code, $json);
     }
 
@@ -135,6 +140,11 @@ class Rest
             'code' => $code,
             'msg' => $msg
         ));
+        
+        $headers = $this->_request->getHeaders();
+        if (isset($headers['Ver']) && preg_match("/^\d+$/", $headers['Ver'])) {
+            $this->http->header('X-Api-Ver', $headers['Ver']);
+        }
         
         $this->http->header('Content-Type', 'application/xml')->response($code, $xml);
     }

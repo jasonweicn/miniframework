@@ -1,5 +1,10 @@
 # CHANGES #
 
+## Version 1.0.8 released. ( 2017-07-06 ) ##
+
+* 新增在REST模式的API接口中，向Header传入Ver（版本号）实现调用不同版本的API接口的功能
+* 新增用于演示API接口版本调用的两个demo文件，分别是Info.php和Info_V2.php
+
 ## Version 1.0.7 released. ( 2017-06-29 ) ##
 
 * 新增Cache_Memcached类，用于对PHP的Memcached扩展的支持

@@ -142,6 +142,11 @@ class App
         if ($isApi === true) {
             
             $apiName = ucfirst($this->action);
+            
+            $headers = $this->_request->getHeaders();
+            if (isset($headers['Ver']) && preg_match("/^\d+$/", $headers['Ver'])) {
+                $apiName .= '_V' . $headers['Ver'];
+            }
             $apiFile = APP_PATH . DS . 'Api' . DS . $apiName . '.php';
             
             if (! file_exists($apiFile)) {
