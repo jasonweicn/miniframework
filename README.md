@@ -17,7 +17,7 @@ MiniFramework快速入门学习文档：[http://www.miniframework.com/docv1/guid
 参与开发的流程：
 
 * 首先，您应具有一个 GitHub 账号，在 GitHub 登录您的账号；
-* 进入 MiniFramework 项目页面（https://github.com/jasonweicn/MiniFramework）；
+* 进入 MiniFramework 项目页面 https://github.com/jasonweicn/MiniFramework；
 * 将 MiniFramework 项目源码 Fork 到自己的账号下，然后 Clone 到本地计算机硬盘中；
 * 完成代码编写并 Commit 到您账号下的 MiniFramework 副本中；
 * 通过 Pull request 提交您的代码（提交时请详细填写改动细节），等待审核通过。
