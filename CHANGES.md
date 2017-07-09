@@ -1,5 +1,9 @@
 # CHANGES #
 
+## Version 1.0.9 released. ( 2017-07-10 ) ##
+
+* 修正开启Layout功能同时未调用布局文件时，视图渲染输出时报错的Bug
+
 ## Version 1.0.8 released. ( 2017-07-06 ) ##
 
 * 新增在REST模式的API接口中，向Header传入Ver（版本号）实现调用不同版本的API接口的功能

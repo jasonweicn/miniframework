@@ -125,7 +125,7 @@ class View
         header('Cache-Control: ' . HTTP_CACHE_CONTROL);
         header('X-Powered-By: MiniFramework');
         
-        if (LAYOUT_ON === true) {
+        if (LAYOUT_ON === true && $this->_layout->getLayout()) {
             $this->_layout->content = $content;
             $layoutScript = $this->_layout->getLayoutScript();
             include ($layoutScript);

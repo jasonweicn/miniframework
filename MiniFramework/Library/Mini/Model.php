@@ -46,6 +46,12 @@ abstract class Model
         }
     }
 
+    /**
+     * 加载数据库对象
+     *
+     * @param string $key
+     * @return NULL|object
+     */
     public function loadDb($key)
     {
         if (! isset($this->_dbPool[$key])) {
