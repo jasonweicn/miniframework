@@ -210,6 +210,11 @@ class Request
                 $requestUri = str_replace($this->_baseUrl, '', $requestUri);
             }
             
+            if (strtolower((substr($requestUri, -5))) == '.html') {
+                $requestUri = substr($requestUri, 0, -5);
+                $requestUri = str_replace('_', '/', $requestUri);
+            }
+            
             $uriArray = explode('/', $requestUri);
             
             $array = null;

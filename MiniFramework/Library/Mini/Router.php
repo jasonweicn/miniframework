@@ -167,6 +167,12 @@ class Router
         if ($requestUri != $baseUrl) {
             $requestUri = str_replace($baseUrl, '', $requestUri);
         }
+        
+        if (strtolower((substr($requestUri, -5))) == '.html') {
+            $requestUri = substr($requestUri, 0, -5);
+            $requestUri = str_replace('_', '/', $requestUri);
+        }
+        
         $uriArray = explode('/', $requestUri);
         
         return $uriArray;
