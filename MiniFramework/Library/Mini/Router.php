@@ -154,25 +154,11 @@ class Router
      */
     private function parseUrlToArray()
     {
-        $requestUri = '';
-        
-        if (empty($_SERVER['QUERY_STRING'])) {
-            $requestUri = $_SERVER['REQUEST_URI'];
-        } else {
-            $requestUri = str_replace('?' . $_SERVER['QUERY_STRING'], '', $_SERVER['REQUEST_URI']);
-        }
-        
+        $requestUri = $this->_request->getRequestUri();
         $baseUrl = $this->_request->getBaseUrl();
-        
         if ($requestUri != $baseUrl) {
             $requestUri = str_replace($baseUrl, '', $requestUri);
         }
-        
-        if (strtolower((substr($requestUri, -5))) == '.html') {
-            $requestUri = substr($requestUri, 0, -5);
-            $requestUri = str_replace('_', '/', $requestUri);
-        }
-        
         $uriArray = explode('/', $requestUri);
         
         return $uriArray;

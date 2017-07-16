@@ -44,16 +44,9 @@ class Action
     /**
      * Request实例
      *
-     * @var mixed
+     * @var Request
      */
     protected $_request;
-
-    /**
-     * Action Instance
-     *
-     * @var Action
-     */
-    protected static $_instance;
 
     /**
      * 构造
@@ -64,7 +57,6 @@ class Action
      */
     function __construct()
     {
-        self::$_instance = $this;
         $this->view = new View();
         $this->params = Params::getInstance();
         $this->_request = Request::getInstance();
@@ -80,7 +72,7 @@ class Action
      * @param mixed $variable            
      * @param mixed $value            
      */
-    protected function assign($variable, $value)
+    final protected function assign($variable, $value)
     {
         $this->view->assign($variable, $value);
     }
@@ -101,13 +93,5 @@ class Action
         $this->_request->setActionName($action);
         
         App::getInstance()->dispatch();
-    }
-
-    /**
-     * 获取Action实例
-     */
-    public static function getInstance()
-    {
-        return self::$_instance;
     }
 }

@@ -74,7 +74,14 @@ class Request
      *
      * @var array
      */
-    protected $_headers = array();
+    private $_headers = array();
+
+    /**
+     * 预处理过的REQUEST_URI
+     *
+     * @var string
+     */
+    private $_requestUri;
 
     /**
      * 获取实例
@@ -88,6 +95,9 @@ class Request
         }
         return self::$_instance;
     }
+
+    private function __clone()
+    {}
 
     /**
      * 从$_SERVER['PHP_SELF']中提取基础地址
@@ -197,22 +207,14 @@ class Request
             }
         } elseif ($routeType == 'rewrite') {
             
-            $requestUri = '';
+            $requestUri = $this->getRequestUri();
             
-            if (empty($_SERVER['QUERY_STRING'])) {
-                $requestUri = $_SERVER['REQUEST_URI'];
-            } else {
-                $requestUri = str_replace('?' . $_SERVER['QUERY_STRING'], '', $_SERVER['REQUEST_URI']);
+            if (! empty($_SERVER['QUERY_STRING'])) {
                 $queryStringArray = $this->getQueryStringArray();
             }
             
             if ($requestUri != $this->_baseUrl) {
                 $requestUri = str_replace($this->_baseUrl, '', $requestUri);
-            }
-            
-            if (strtolower((substr($requestUri, -5))) == '.html') {
-                $requestUri = substr($requestUri, 0, -5);
-                $requestUri = str_replace('_', '/', $requestUri);
             }
             
             $uriArray = explode('/', $requestUri);
@@ -250,7 +252,7 @@ class Request
 
     /**
      * 获取请求Header信息数组
-     * 
+     *
      * @param string $name            
      * @return multitype:
      */
@@ -269,5 +271,36 @@ class Request
         }
         
         return $this->_headers;
+    }
+
+    /**
+     * 获取预处理后的REQUEST_URI
+     *
+     * @return string
+     */
+    public function getRequestUri()
+    {
+        if ($this->_requestUri === null) {
+            $requestUri = '';
+            if (empty($_SERVER['QUERY_STRING'])) {
+                $requestUri = $_SERVER['REQUEST_URI'];
+            } else {
+                $requestUri = str_replace('?' . $_SERVER['QUERY_STRING'], '', $_SERVER['REQUEST_URI']);
+            }
+            
+            // 遇到.html结尾时，转换可能存在的伪静态分隔符
+            if (strtolower((substr($requestUri, - 5))) == '.html') {
+                $requestUri = substr($requestUri, 0, - 5);
+                $pos = strrpos($requestUri, '/');
+                $dir = substr($requestUri, 0, $pos);
+                $file = substr($requestUri, $pos);
+                $file = str_replace('_', '/', $file);
+                $requestUri = $dir . $file;
+            }
+            
+            $this->_requestUri = $requestUri;
+        }
+        
+        return $this->_requestUri;
     }
 }

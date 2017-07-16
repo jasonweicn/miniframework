@@ -99,6 +99,9 @@ class Params
             }
         }
     }
+    
+    private function __clone()
+    {}
 
     /**
      * 获得一个整型变量

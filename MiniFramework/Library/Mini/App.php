@@ -113,7 +113,7 @@ class App
     public function run()
     {
         $requestParams = $this->_request->parseRequestParams($this->_router->getRouteType());
-        
+        unset($this->_router);
         if (! empty($requestParams)) {
             $this->_params->setParams($requestParams);
         }
@@ -132,9 +132,8 @@ class App
      */
     public function dispatch()
     {
-        $request = Request::getInstance();
-        $this->controller = $request->_controller;
-        $this->action = $request->_action;
+        $this->controller = $this->_request->_controller;
+        $this->action = $this->_request->_action;
         
         $controllerName = ucfirst($this->controller);
         $isApi = (REST_ON === true && $controllerName == 'Api') ? true : false;
@@ -142,7 +141,6 @@ class App
         if ($isApi === true) {
             
             $apiName = ucfirst($this->action);
-            
             $headers = $this->_request->getHeaders();
             if (isset($headers['Ver']) && preg_match("/^\d+$/", $headers['Ver'])) {
                 $apiName .= '_V' . $headers['Ver'];
@@ -165,7 +163,6 @@ class App
                 throw new Exceptions('Api "' . $apiName . '" does not exist.', 404);
             }
         } else {
-            
             $controllerFile = APP_PATH . DS . 'Controller' . DS . $controllerName . '.php';
             
             if (! file_exists($controllerFile)) {

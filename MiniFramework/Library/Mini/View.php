@@ -112,7 +112,7 @@ class View
     /**
      * 显示
      */
-    public function display()
+    final public function display()
     {
         $view = APP_PATH . DS . 'View' . DS;
         $view .= strtolower($this->_controller) . DS . $this->_action . '.php';
@@ -144,7 +144,7 @@ class View
      *            (true | false)
      * @return string
      */
-    public function render($script, $check = true)
+    final public function render($script, $check = true)
     {
         if ($check === true) {
             if (! file_exists($script)) {
