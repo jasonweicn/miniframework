@@ -1,5 +1,9 @@
 # CHANGES #
 
+## Version 1.0.12 released. ( 2017-10-19 ) ##
+
+* 新增Session类，用于读写会话数据
+
 ## Version 1.0.11 released. ( 2017-07-16 ) ##
 
 * 改进转换伪静态地址分隔符的机制
