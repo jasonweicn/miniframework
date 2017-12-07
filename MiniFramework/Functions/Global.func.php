@@ -1,4 +1,5 @@
 <?php
+
 // +---------------------------------------------------------------------------
 // | Mini Framework
 // +---------------------------------------------------------------------------
@@ -299,4 +300,34 @@ function parseDataToXml($data, $item = 'item', $id = 'id', $indent = false, $lev
     }
     
     return $xml;
+}
+
+/**
+ * 校验图片是否有效
+ * 
+ * @param string $file            
+ * @return boolean
+ */
+function isImage($file)
+{
+    $tmp = getimagesize($file);
+    switch ($tmp['mime']) {
+        case 'image/jpeg':
+            $img = imagecreatefromjpeg($file);
+            break;
+        case 'image/gif':
+            $img = imagecreatefromgif($file);
+            break;
+        case 'image/png':
+            $img = imagecreatefrompng($file);
+            break;
+        default:
+            return false;
+            break;
+    }
+    if ($img == false) {
+        return false;
+    } else {
+        return true;
+    }
 }
