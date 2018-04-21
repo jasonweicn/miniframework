@@ -338,18 +338,19 @@ class Db_Mysql extends Db_Abstract
      */
     public function execTrans(array $arraySql)
     {
-        $flag = true;
-        $this->_beginTransaction();
-        foreach ($arraySql as $sql) {
-            if ($this->execSql($sql) == 0)
-                $flag = false;
-        }
-        if ($flag === false) {
-            $this->_rollBack();
-            return false;
-        } else {
+        try {
+            $this->_connect();
+            $this->_dbh->setAttribute(PDO::ATTR_AUTOCOMMIT, false);
+            $this->_beginTransaction();
+            foreach ($arraySql as $sql) {
+                $this->execSql($sql);
+            }
             $this->_commit();
+            $this->_dbh->setAttribute(PDO::ATTR_AUTOCOMMIT, 1);
             return true;
+        } catch (PDOException $e) {
+            $this->_rollBack();
+            throw new Exceptions($e);
         }
     }
 

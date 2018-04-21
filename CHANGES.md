@@ -1,5 +1,12 @@
 # CHANGES #
 
+## Version 1.0.13 released. ( 2018-04-21 ) ##
+
+* 改进Db_Mysql中的execTrans方法
+* 改进渲染特性
+* 新增全局函数isImage()，用于判断文件是否为图像格式
+* 新增全局函数getStringLen()，用于获取字符串长度（支持UTF8编码的汉字）
+
 ## Version 1.0.12 released. ( 2017-10-19 ) ##
 
 * 新增Session类，用于读写会话数据

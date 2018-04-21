@@ -16,7 +16,7 @@ define('SHOW_ERROR',    true);
 define('LAYOUT_ON',     true);
 
 //是否开启REST模式的API接口功能（默认值：false）
-define('REST_ON',       true);
+define('REST_ON',       false);
 
 //引入 MiniFramework 就是这么简单
 require dirname(APP_PATH) . DIRECTORY_SEPARATOR . 'MiniFramework' . DIRECTORY_SEPARATOR . 'Bootstrap.php';

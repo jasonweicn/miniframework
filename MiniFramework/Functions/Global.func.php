@@ -331,3 +331,13 @@ function isImage($file)
         return true;
     }
 }
+
+/**
+ * 获取字符串长度
+ * @param string $string
+ * @return int
+ */
+function getStringLen($string)
+{
+    return (strlen($string) + mb_strlen($string, 'UTF8')) / 2;
+}
