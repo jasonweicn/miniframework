@@ -3,12 +3,16 @@ namespace App\Controller;
 
 use Mini\Action;
 use Mini\Captcha;
+use Mini\Session;
 
 /**
  * Example
  */
 class Example extends Action
 {
+    /**
+     * Example 1: Captcha
+     */
     function captchaAction()
     {
         if (!empty($_POST['code'])) {
@@ -29,5 +33,23 @@ class Example extends Action
     {
         $captcha = new Captcha();
         $captcha->create();
+    }
+    
+    /**
+     * Example 2: Session
+     */
+    function sessionAction()
+    {
+        $t = time();
+        $this->view->assign('t', $t);
+        
+        Session::start();
+        if (! Session::is_set('example_session')) {
+            Session::set('example_session', $t);
+        }
+        
+        $this->view->assign('session_time', Session::get('example_session'));
+        
+        $this->view->display();
     }
 }
