@@ -73,4 +73,23 @@ class Registry extends \ArrayObject
         
         return $instance->offsetGet($index);
     }
+    
+    /**
+     * 删除
+     * @param string $index
+     * @throws Exceptions
+     * @return bool
+     */
+    public static function unset($index)
+    {
+        $instance = self::getInstance();
+        
+        if (! $instance->offsetExists($index)) {
+            throw new Exceptions('"' . $index . '" not registered.');
+        }
+        
+        $instance->offsetUnset($index);
+        
+        return true;
+    }
 }
