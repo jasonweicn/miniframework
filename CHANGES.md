@@ -1,5 +1,12 @@
 # CHANGES #
 
+## Version 1.1.0 released. ( 2018-06-10 ) ##
+
+* 新增Captcha类，用于生成和校验图片验证码
+* 新增Registry类的unset方法，用于删除已注册的变量
+* 新增全局函数browserDownload()，用于让浏览器下载文件
+* 在App目录中，新增名为Example的控制器，其中包含部分功能的示例代码
+
 ## Version 1.0.13 released. ( 2018-04-21 ) ##
 
 * 改进Db_Mysql中的execTrans方法
