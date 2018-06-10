@@ -341,3 +341,21 @@ function getStringLen($string)
 {
     return (strlen($string) + mb_strlen($string, 'UTF8')) / 2;
 }
+
+/**
+ * 让浏览器下载文件
+ * @param string $file 文件路径
+ * @param string $customName 自定义文件名
+ * @return output | bool
+ */
+function browserDownload($file, $customName = null) {
+    if (file_exists($file)) {
+        $filename = empty($customName) ? basename($file) : $customName;
+        header('Content-length: ' . filesize($file));
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename="' . $filename. '"');
+        @readfile($file);
+    } else {
+        return false;
+    }
+}
