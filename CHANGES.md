@@ -1,5 +1,9 @@
 # CHANGES #
 
+## Version 1.1.1 released. ( 2018-06-19 ) ##
+
+* 修正Registry类命名冲突的bug，将其中的方法unset更名为del。
+
 ## Version 1.1.0 released. ( 2018-06-10 ) ##
 
 * 新增Captcha类，用于生成和校验图片验证码
