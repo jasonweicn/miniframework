@@ -80,7 +80,7 @@ class Registry extends \ArrayObject
      * @throws Exceptions
      * @return bool
      */
-    public static function unset($index)
+    public static function del($index)
     {
         $instance = self::getInstance();
         
