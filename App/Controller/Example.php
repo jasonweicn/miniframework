@@ -52,4 +52,20 @@ class Example extends Action
         
         $this->view->display();
     }
+    
+    function uploadAction()
+    {
+        if (! empty($_FILES)) {
+            $upload = new \Mini\Upload();
+            $res = $upload->save($_FILES['f1']);
+            if (! $res) {
+                $errmsg = $upload->getErrorMsg();
+                echo $errmsg;
+            } else {
+                dump($res);
+            }
+        }
+        
+        $this->view->display();
+    }
 }
