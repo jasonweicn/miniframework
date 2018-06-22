@@ -82,7 +82,7 @@ class Upload
         }
         
         if (isset($params['maxSize'])) {
-            if (! preg_match('/^d+$/', $params['maxSize'])) {
+            if (! preg_match('/^\d+$/', $params['maxSize'])) {
                 throw new Exceptions('Set upload max size error.');
             }
             $this->maxSize = $params['maxSize'];
