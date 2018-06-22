@@ -60,6 +60,9 @@ defined('LAYOUT_ON') or define('LAYOUT_ON', false);
 // 布局文件路径
 defined('LAYOUT_PATH') or define('LAYOUT_PATH', APP_PATH . DS . 'Layout');
 
+// WEB站点根目录对应的路径
+defined('PUBLIC_PATH') or define('PUBLIC_PATH', dirname($_SERVER['SCRIPT_FILENAME']));
+
 // HTTP缓存
 defined('HTTP_CACHE_CONTROL') or define('HTTP_CACHE_CONTROL', 'private');
 

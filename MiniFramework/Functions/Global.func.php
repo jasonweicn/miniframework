@@ -348,7 +348,8 @@ function getStringLen($string)
  * @param string $customName 自定义文件名
  * @return output | bool
  */
-function browserDownload($file, $customName = null) {
+function browserDownload($file, $customName = null)
+{
     if (file_exists($file)) {
         $filename = empty($customName) ? basename($file) : $customName;
         header('Content-length: ' . filesize($file));
@@ -358,4 +359,16 @@ function browserDownload($file, $customName = null) {
     } else {
         return false;
     }
+}
+
+/**
+ * 获取文件扩展名
+ * @param string $filename
+ * @return string
+ */
+function getFileExtName($filename)
+{
+    $tmp = explode('.', $filename);
+    
+    return $tmp[count($tmp) - 1];
 }
