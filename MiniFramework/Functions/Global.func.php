@@ -334,6 +334,7 @@ function isImage($file)
 
 /**
  * 获取字符串长度
+ * 
  * @param string $string
  * @return int
  */
@@ -344,6 +345,7 @@ function getStringLen($string)
 
 /**
  * 让浏览器下载文件
+ * 
  * @param string $file 文件路径
  * @param string $customName 自定义文件名
  * @return output | bool
@@ -363,6 +365,7 @@ function browserDownload($file, $customName = null)
 
 /**
  * 获取文件扩展名
+ * 
  * @param string $filename
  * @return string
  */
@@ -371,4 +374,18 @@ function getFileExtName($filename)
     $tmp = explode('.', $filename);
     
     return $tmp[count($tmp) - 1];
+}
+
+/**
+ * 获取一个指定长度INT类型HASH值
+ * 
+ * @param string $s
+ * @param number $len
+ * @return number
+ */
+function getHash($s, $len = 4)
+{
+    $h = sprintf('%u', crc32($s));
+    
+    return intval(fmod($h, $len));
 }
