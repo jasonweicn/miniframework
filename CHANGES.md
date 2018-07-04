@@ -1,5 +1,13 @@
 # CHANGES #
 
+## Version 1.2.0 released. ( 2018-07-04 ) ##
+
+* 新增Upload类，用于上传文件。
+* 新增全局函数getFileExtName()，用于获取文件扩展名。
+* 新增全局函数getHash()，用于在分库或分表场景下获取一个指定长度INT型HASH值。
+* 新增常量PUBLIC_PATH，用于定义WEB站点跟目录。
+* 改进Model类，新增支持连贯操作方式查询数据的特性。
+
 ## Version 1.1.1 released. ( 2018-06-19 ) ##
 
 * 修正Registry类命名冲突的bug，将其中的方法unset更名为del。
