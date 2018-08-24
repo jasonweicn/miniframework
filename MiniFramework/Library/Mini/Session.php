@@ -34,7 +34,7 @@ class Session
      */
     public static function start($params = array())
     {
-        if (! isset($_SESSION)) {
+        if (session_status() != 2) {
             if (! is_array($params)) {
                 throw new Exceptions('The session params must be an array.');
             }
@@ -125,11 +125,36 @@ class Session
      */
     public static function destroy()
     {
-        if (isset($_SESSION)) {
+        if (isset($_SESSION) && session_status() == 2) {
             unset($_SESSION);
             session_destroy();
         }
         
         return true;
+    }
+    
+    /**
+     * 写入会话数据并关闭会话连接
+     * 
+     * @return boolean
+     */
+    public static function commit()
+    {
+        if (session_status() == 2) {
+            session_commit();
+            return true;
+        }
+        
+        return false;
+    }
+    
+    /**
+     * 获取会话状态
+     * 
+     * @return int
+     */
+    public static function status()
+    {
+        return session_status();
     }
 }
