@@ -34,7 +34,18 @@ class Session
      */
     public static function start($params = array())
     {
-        if (session_status() != 2) {
+        $flag = false;
+        if (version_compare(PHP_VERSION, '5.4.0', '>=')) {
+            if (session_status() != 2) {
+                $flag = true;
+            }
+        } else {
+            if (! isset($_SESSION)) {
+                $flag = true;
+            }
+        }
+        
+        if ($flag === true) {
             if (! is_array($params)) {
                 throw new Exceptions('The session params must be an array.');
             }
@@ -125,7 +136,7 @@ class Session
      */
     public static function destroy()
     {
-        if (isset($_SESSION) && session_status() == 2) {
+        if (isset($_SESSION)) {
             unset($_SESSION);
             session_destroy();
         }
@@ -140,12 +151,7 @@ class Session
      */
     public static function commit()
     {
-        if (session_status() == 2) {
-            session_commit();
-            return true;
-        }
-        
-        return false;
+        return session_commit();
     }
     
     /**
@@ -155,6 +161,10 @@ class Session
      */
     public static function status()
     {
+        if (version_compare(PHP_VERSION, '5.4.0', '<')) {
+            throw new Exceptions('Not support session_status().');
+        }
+        
         return session_status();
     }
 }
