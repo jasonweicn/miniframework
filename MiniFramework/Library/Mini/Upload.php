@@ -69,7 +69,7 @@ class Upload
     
     /**
      * 错误信息
-     * @var string
+     * @var multitype: string | array
      */
     private $_errorMsg;
     
@@ -113,11 +113,11 @@ class Upload
         $info = array();
         foreach ($fileArray as $key => $file) {
             if (isset($file['tmp_name'])) {
-                $info[$key] = $this->saveOne($file);
+                $info[$key] = $this->saveOne($file, $key);
             } else {
                 if (is_array($file)) {
                     foreach ($file as $subKey => $subFile) {
-                        $info[$key][$subKey] = $this->saveOne($subFile);
+                        $info[$key][$subKey] = $this->saveOne($subFile, $key.':'.$subKey);
                     }
                 }
             }
@@ -126,26 +126,26 @@ class Upload
         return $info;
     }
     
-    public function saveOne($file)
+    public function saveOne($file, $fileKey = null)
     {
         if (! isset($file['tmp_name'])) {
-            $this->setErrorMsg('Upload fail: No uploaded files.');
+            $this->setErrorMsg('Upload fail: No uploaded files.', $fileKey);
             return false;
         }
         
         if (! is_uploaded_file($file['tmp_name'])) {
-            $this->setErrorMsg('Upload fail: No uploaded files.');
+            $this->setErrorMsg('Upload fail: No uploaded files.', $fileKey);
             return false;
         }
         
         if ($file['size'] > $this->maxSize) {
-            $this->setErrorMsg('Upload fail: Exceed the maximum size.');
+            $this->setErrorMsg('Upload fail: Exceed the maximum size.', $fileKey);
             return false;
         }
         
         $fileExtName = strtolower(getFileExtName($file['name']));
         if (! in_array($fileExtName, explode(',', $this->allowType))) {
-            $this->setErrorMsg('Upload fail: The "'.$fileExtName.'" is not allowed.');
+            $this->setErrorMsg('Upload fail: The "'.$fileExtName.'" is not allowed.', $fileKey);
             return false;
         }
         
@@ -158,7 +158,7 @@ class Upload
         $path = $this->rootPath;
         foreach ($savePathArray as $dir) {
             if (! is_writable($path)) {
-                throw new Exceptions('Upload fail: Permission denied.(' . $path . ')');
+                throw new Exceptions('Upload fail: Permission denied.(' . $path . ')', $fileKey);
             }
             $path .= DS . $dir;
             if (! file_exists($path) && ! is_dir($path)) {
@@ -178,7 +178,7 @@ class Upload
         $res = @move_uploaded_file($file['tmp_name'], $path . DS . $this->saveName);
         
         if (! $res) {
-            $this->setErrorMsg('Upload fail: Save fail.(' . $path . DS . $this->saveName . ')');
+            $this->setErrorMsg('Upload fail: Save fail.(' . $path . DS . $this->saveName . ')', $fileKey);
             return false;
         }
         
@@ -233,17 +233,13 @@ class Upload
         return true;
     }
     
-    private function saveArray(){}
-    
-    private function checks()
+    private function setErrorMsg($msg, $fileKey = null)
     {
-        //...
-    }
-    
-    
-    private function setErrorMsg($msg)
-    {
-        $this->_errorMsg = $msg;
+        if ($fileKey == null) {
+            $this->_errorMsg = $msg;
+        } else {
+            $this->_errorMsg[$fileKey] = $msg;
+        }
     }
     
     public function getErrorMsg()
