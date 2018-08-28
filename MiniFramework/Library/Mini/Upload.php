@@ -62,6 +62,12 @@ class Upload
     public $saveName;
     
     /**
+     * 保存的文件名长度
+     * @var int
+     */
+    private $_saveNameLen = 8;
+    
+    /**
      * 错误信息
      * @var string
      */
@@ -97,7 +103,30 @@ class Upload
         }
     }
     
-    public function save($file)
+    public function save($files)
+    {
+        if (isset($files['tmp_name'])) {
+            return $this->saveOne($files);
+        }
+        
+        $fileArray = $this->convertFileArray($files);
+        $info = array();
+        foreach ($fileArray as $key => $file) {
+            if (isset($file['tmp_name'])) {
+                $info[$key] = $this->saveOne($file);
+            } else {
+                if (is_array($file)) {
+                    foreach ($file as $subKey => $subFile) {
+                        $info[$key][$subKey] = $this->saveOne($subFile);
+                    }
+                }
+            }
+        }
+        
+        return $info;
+    }
+    
+    public function saveOne($file)
     {
         if (! isset($file['tmp_name'])) {
             $this->setErrorMsg('Upload fail: No uploaded files.');
@@ -140,7 +169,7 @@ class Upload
         $this->saveName = '';
         $do = true;
         while ($do) {
-            $this->saveName = getRandomString(8) . '.' . $fileExtName;
+            $this->saveName = getRandomString($this->_saveNameLen) . '.' . $fileExtName;
             if (! file_exists($path . DS . $this->saveName)) {
                 $do = false;
             }
@@ -160,6 +189,57 @@ class Upload
         
         return $info;
     }
+    
+    /**
+     * 转换文件数组形态
+     * 
+     * @param array $files
+     * @return array
+     */
+    private function convertFileArray($files)
+    {
+        $fileArray = array();
+        foreach ($files as $key => $file) {
+            if (is_array($file['tmp_name'])) {
+                $keys  = array_keys($file);
+                for ($i = 0; $i < count($file['tmp_name']); $i++) {
+                    foreach ($keys as $_key) {
+                        $fileArray[$key][$i][$_key] = $file[$_key][$i];
+                    }
+                    
+                }
+            } else {
+                $fileArray[$key] = $file;
+            }
+        }
+        
+        return $fileArray;
+    }
+    
+    /**
+     * 设置保存的文件名长度
+     * 
+     * @param int $len
+     * @return boolean
+     */
+    public function setSaveNameLen($len)
+    {
+        if (! is_int($len) || $len <= 0) {
+            return false;
+        }
+        
+        $this->_saveNameLen = $len;
+        
+        return true;
+    }
+    
+    private function saveArray(){}
+    
+    private function checks()
+    {
+        //...
+    }
+    
     
     private function setErrorMsg($msg)
     {
