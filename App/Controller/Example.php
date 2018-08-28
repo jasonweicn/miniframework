@@ -53,17 +53,21 @@ class Example extends Action
         $this->view->display();
     }
     
+    /**
+     * Example 3: Upload
+     */
     function uploadAction()
     {
         if (! empty($_FILES)) {
             $upload = new \Mini\Upload();
-            $res = $upload->save($_FILES['f1']);
-            if (! $res) {
-                $errmsg = $upload->getErrorMsg();
-                echo $errmsg;
-            } else {
-                dump($res);
-            }
+            $res = $upload->save($_FILES); // or $_FILES['f1']
+            
+            echo "<br />ErrorMsg:";
+            $errmsg = $upload->getErrorMsg();
+            dump($errmsg);
+            
+            echo "<br />Result:";
+            dump($res);
         }
         
         $this->view->display();
