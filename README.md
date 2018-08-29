@@ -31,6 +31,8 @@ MiniFramework 快速入门学习文档：[http://www.miniframework.com/docv1/gui
 
 博客：[http://www.sunbloger.com](http://www.sunbloger.com)
 
+微博：[https://weibo.com/jasonweicn](https://weibo.com/jasonweicn)
+
 开源协议
 ====================
 
