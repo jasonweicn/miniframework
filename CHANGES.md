@@ -1,5 +1,14 @@
 # CHANGES #
 
+## Version 1.3.0 released. ( 2018-08-29 ) ##
+
+* 新增Debug类，用于程序代码的调试。
+* 新增Session类的commit方法，用于提交将当前$_SESSION变量存放的数据。
+* 新增Session类的status方法，用于获取当前会话状态。（PHP >= 5.4.0）
+* 新增Upload类的setSaveNameLen方法，用于设置上传文件保存时生成的随机文件名长度。
+* 新增Upload类的saveOne方法，专门用于上传保存单个文件。
+* 改进Upload类的save方法，支持多个文件同时上传保存的新特性。
+
 ## Version 1.2.0 released. ( 2018-07-04 ) ##
 
 * 新增Upload类，用于上传文件。
