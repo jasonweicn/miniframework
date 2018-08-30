@@ -186,7 +186,7 @@ class Request
     /**
      * 解析请求参数
      *
-     * @throws Exceptions
+     * @throws Exception
      * @return array
      */
     public function parseRequestParams($routeType)
@@ -201,7 +201,7 @@ class Request
                         $curParam = explode('=', $_SERVER['argv'][$i]);
                         $requestParams[$curParam[0]] = $curParam[1];
                     } else {
-                        throw new Exceptions('Request params invalid.');
+                        throw new Exception('Request params invalid.');
                     }
                 }
             }

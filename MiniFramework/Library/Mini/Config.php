@@ -69,7 +69,7 @@ class Config
             if (file_exists($confFile)) {
                 include ($confFile);
             } else {
-                throw new Exceptions('Config "' . $confName . '" not found.');
+                throw new Exception('Config "' . $confName . '" not found.');
             }
             
             if (isset(${$confName})) {

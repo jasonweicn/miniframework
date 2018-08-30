@@ -89,7 +89,7 @@ class Upload
         
         if (isset($params['maxSize'])) {
             if (! preg_match('/^\d+$/', $params['maxSize'])) {
-                throw new Exceptions('Set upload max size error.');
+                throw new Exception('Set upload max size error.');
             }
             $this->maxSize = $params['maxSize'];
         } else {
@@ -158,7 +158,7 @@ class Upload
         $path = $this->rootPath;
         foreach ($savePathArray as $dir) {
             if (! is_writable($path)) {
-                throw new Exceptions('Upload fail: Permission denied.(' . $path . ')', $fileKey);
+                throw new Exception('Upload fail: Permission denied.(' . $path . ')', $fileKey);
             }
             $path .= DS . $dir;
             if (! file_exists($path) && ! is_dir($path)) {

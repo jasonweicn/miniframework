@@ -107,7 +107,7 @@ abstract class Model
     /**
      * 查询
      * 
-     * @throws Exceptions
+     * @throws Exception
      * @return array
      */
     public function select()
@@ -118,7 +118,7 @@ abstract class Model
             $res = $this->_curDb->query($sql, 'All');
             return $res;
         } else {
-            throw new Exceptions('Database is not found.');
+            throw new Exception('Database is not found.');
         }
     }
     

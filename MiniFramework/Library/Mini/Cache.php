@@ -36,7 +36,7 @@ class Cache
     public static function factory($adapter = 'Memcache', $params = array())
     {
         if (! is_string($adapter) || empty($adapter)) {
-            throw new Exceptions('Adapter name must be specified in a string.');
+            throw new Exception('Adapter name must be specified in a string.');
         }
         
         if (in_array($adapter, array(
@@ -46,30 +46,30 @@ class Cache
         ))) {
             
             if (! class_exists($adapter)) {
-                throw new Exceptions('Adapter ' . $adapter . ' not found');
+                throw new Exception('Adapter ' . $adapter . ' not found');
             }
             
             if (! is_array($params)) {
-                throw new Exceptions('Adapter params invalid.');
+                throw new Exception('Adapter params invalid.');
             }
             
             if (! isset($params['host'])) {
-                throw new Exceptions('Cache(' . $adapter . ') host is not defined.');
+                throw new Exception('Cache(' . $adapter . ') host is not defined.');
             } elseif (! isset($params['port'])) {
-                throw new Exceptions('Cache(' . $adapter . ') port is not defined.');
+                throw new Exception('Cache(' . $adapter . ') port is not defined.');
             }
         }
         
         $adapterName = '\\Mini\\Cache\\Cache_' . ucwords($adapter);
         
         if (! class_exists($adapterName)) {
-            throw new Exceptions('Adapter "' . $adapterName . '" not found.');
+            throw new Exception('Adapter "' . $adapterName . '" not found.');
         }
         
         $cacheAdapter = new $adapterName($params);
         
         if (! $cacheAdapter instanceof \Mini\Cache\Cache_Abstract) {
-            throw new Exceptions('Adapter class "' . $adapterName . '" does not extend Cache_Abstract.');
+            throw new Exception('Adapter class "' . $adapterName . '" does not extend Cache_Abstract.');
         }
         
         return $cacheAdapter;

@@ -40,14 +40,14 @@ class Cache_Memcached extends Cache_Abstract
         try {
             $this->_cache_server = new Memcached();
             $this->_cache_server->addServer($this->_params['host'], $this->_params['port']);
-        } catch (Exceptions $e) {
-            throw new Exceptions($e);
+        } catch (Exception $e) {
+            throw new Exception($e);
         }
         
         $memStats = $this->_cache_server->getStats();
         $available = (bool) $memStats[$this->_params['host'] . ':' . $this->_params['port']];
         if (! $available) {
-            throw new Exceptions('Memcache connection failed.');
+            throw new Exception('Memcache connection failed.');
         }
     }
 
@@ -95,8 +95,8 @@ class Cache_Memcached extends Cache_Abstract
         try {
             $this->_cache_server->quit();
             $this->_cache_server = null;
-        } catch (Exceptions $e) {
-            throw new Exceptions($e);
+        } catch (Exception $e) {
+            throw new Exception($e);
         }
     }
 }

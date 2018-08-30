@@ -88,7 +88,7 @@ class Router
                     $controller = isset($m[1]) ? $m[1] : 'index';
                     $action = isset($m[2]) ? $m[2] : 'index';
                 } else {
-                    throw new Exceptions('Request params invalid.');
+                    throw new Exception('Request params invalid.');
                 }
             } else {
                 $controller = $action = 'index';
@@ -119,13 +119,13 @@ class Router
         if ($this->checkRoute($controller)) {
             $this->_request->setControllerName($controller);
         } else {
-            throw new Exceptions('Controller name invalid.', 404);
+            throw new Exception('Controller name invalid.', 404);
         }
         
         if ($this->checkRoute($action)) {
             $this->_request->setActionName(strtolower($action));
         } else {
-            throw new Exceptions('Action name invalid.', 404);
+            throw new Exception('Action name invalid.', 404);
         }
     }
 

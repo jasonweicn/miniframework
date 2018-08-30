@@ -72,4 +72,16 @@ class Example extends Action
         
         $this->view->display();
     }
+    
+    /**
+     * Example 4: Log
+     */
+    function logAction()
+    {
+        $message = 'This is a log test.';
+
+        // 如果 LOG_ON 为 true 时，下面的内容会在程序运行结束时最终写入日志文件
+        \Mini\Log::record($message, 'INFO', array('file'=>__FILE__, 'line'=>__LINE__));
+        
+    }
 }

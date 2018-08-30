@@ -49,7 +49,7 @@ class Db_Mysql extends Db_Abstract
         if (isset($this->_params['dbname']) && is_string($this->_params['dbname'])) {
             $dsn['dbname'] = $this->_params['dbname'];
         } else {
-            throw new Exceptions('"dbname" must be in the params of Db.');
+            throw new Exception('"dbname" must be in the params of Db.');
         }
         
         foreach ($dsn as $key => $val) {
@@ -68,7 +68,7 @@ class Db_Mysql extends Db_Abstract
             return;
         
         if (! class_exists('PDO')) {
-            throw new Exceptions('Not support PDO.');
+            throw new Exception('Not support PDO.');
         }
         
         $dsn = $this->_dsn();
@@ -91,8 +91,8 @@ class Db_Mysql extends Db_Abstract
         
         try {
             $this->_dbh = new PDO($dsn, $this->_params['username'], $this->_params['passwd'], $this->_params['options']);
-        } catch (Exceptions $e) {
-            throw new Exceptions('Database connection failed.');
+        } catch (Exception $e) {
+            throw new Exception('Database connection failed.');
         }
         
         if (version_compare(PHP_VERSION, '5.3.6', '<') && ! defined('PDO::MYSQL_ATTR_INIT_COMMAND')) {
@@ -119,7 +119,7 @@ class Db_Mysql extends Db_Abstract
             }
             return $affected;
         } catch (PDOException $e) {
-            throw new Exceptions($e);
+            throw new Exception($e);
         }
     }
 
@@ -155,7 +155,7 @@ class Db_Mysql extends Db_Abstract
             
             return $result;
         } catch (PDOException $e) {
-            throw new Exceptions($e);
+            throw new Exception($e);
         }
     }
 
@@ -350,7 +350,7 @@ class Db_Mysql extends Db_Abstract
             return true;
         } catch (PDOException $e) {
             $this->_rollBack();
-            throw new Exceptions($e);
+            throw new Exception($e);
         }
     }
 
@@ -371,7 +371,7 @@ class Db_Mysql extends Db_Abstract
         $this->_connect();
         if ($this->_dbh->errorCode() != '00000') {
             $errorInfo = $this->_dbh->errorInfo();
-            throw new Exceptions($errorInfo[2]);
+            throw new Exception($errorInfo[2]);
         }
     }
 

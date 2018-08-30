@@ -118,7 +118,7 @@ class View
         $view .= strtolower($this->_controller) . DS . $this->_action . '.php';
         
         if (! file_exists($view)) {
-            throw new Exceptions('View "' . $this->_action . '" does not exist.', 404);
+            throw new Exception('View "' . $this->_action . '" does not exist.', 404);
         }
         
         $content = $this->render($view);
@@ -148,7 +148,7 @@ class View
     {
         if ($check === true) {
             if (! file_exists($script)) {
-                throw new Exceptions('File "' . $script . '" does not exist.', 404);
+                throw new Exception('File "' . $script . '" does not exist.', 404);
             }
         }
         

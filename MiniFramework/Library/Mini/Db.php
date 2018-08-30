@@ -36,41 +36,41 @@ class Db
     public static function factory($adapter = 'Mysql', $params = array())
     {
         if (! is_string($adapter) || empty($adapter)) {
-            throw new Exceptions('Adapter name must be specified in a string.');
+            throw new Exception('Adapter name must be specified in a string.');
         }
         
         if (! in_array($adapter, array(
             'Mysql'
         ))) {
-            throw new Exceptions('Adapter "' . $adapter . '" does not exist.');
+            throw new Exception('Adapter "' . $adapter . '" does not exist.');
         }
         
         if (! is_array($params)) {
-            throw new Exceptions('Adapter params must be in an array.');
+            throw new Exception('Adapter params must be in an array.');
         }
         
         if (! isset($params['host'])) {
-            throw new Exceptions('Database(' . $adapter . ') host is not defined.');
+            throw new Exception('Database(' . $adapter . ') host is not defined.');
         } elseif (! isset($params['port'])) {
-            throw new Exceptions('Database(' . $adapter . ') port is not defined.');
+            throw new Exception('Database(' . $adapter . ') port is not defined.');
         } elseif (! isset($params['username'])) {
-            throw new Exceptions('Database(' . $adapter . ') username is not defined.');
+            throw new Exception('Database(' . $adapter . ') username is not defined.');
         } elseif (! isset($params['passwd'])) {
-            throw new Exceptions('Database(' . $adapter . ') passwd is not defined.');
+            throw new Exception('Database(' . $adapter . ') passwd is not defined.');
         } elseif (! isset($params['dbname'])) {
-            throw new Exceptions('Database(' . $adapter . ') dbname is not defined.');
+            throw new Exception('Database(' . $adapter . ') dbname is not defined.');
         }
         
         $adapterName = '\\Mini\\Db\\Db_' . ucwords($adapter);
         
         if (! class_exists($adapterName)) {
-            throw new Exceptions('Adapter "' . $adapterName . '" not found.');
+            throw new Exception('Adapter "' . $adapterName . '" not found.');
         }
         
         $dbAdapter = new $adapterName($params);
         
         if (! $dbAdapter instanceof \Mini\Db\Db_Abstract) {
-            throw new Exceptions('Adapter class "' . $adapterName . '" does not extend Db_Abstract.');
+            throw new Exception('Adapter class "' . $adapterName . '" does not extend Db_Abstract.');
         }
         
         return $dbAdapter;

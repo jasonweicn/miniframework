@@ -141,7 +141,7 @@ abstract class Db_Abstract
     public function __construct($params)
     {
         if (! is_array($params)) {
-            throw new Exceptions('Adapter params must be in an array.');
+            throw new Exception('Adapter params must be in an array.');
         }
         
         if (! isset($params['charset'])) {

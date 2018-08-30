@@ -47,7 +47,7 @@ class Session
         
         if ($flag === true) {
             if (! is_array($params)) {
-                throw new Exceptions('The session params must be an array.');
+                throw new Exception('The session params must be an array.');
             }
             foreach ($params as $paramName => $paramValue) {
                 ini_set('session.' . $paramName, $paramValue);
@@ -80,7 +80,7 @@ class Session
     public static function get($name)
     {
         if (! is_string($name)) {
-            throw new Exceptions('The session name must be a string.');
+            throw new Exception('The session name must be a string.');
         }
         
         if (isset($_SESSION[$name])) {
@@ -95,13 +95,13 @@ class Session
      *
      * @param string $name
      * @param mixed $value
-     * @throws Exceptions
+     * @throws Exception
      * @return boolean
      */
     public static function set($name, $value)
     {
         if (! is_string($name)) {
-            throw new Exceptions('The session name must be a string.');
+            throw new Exception('The session name must be a string.');
         }
         
         if ($value == null) {
@@ -117,13 +117,13 @@ class Session
      * 检查会话数据是否存在
      *
      * @param string $name
-     * @throws Exceptions
+     * @throws Exception
      * @return boolean
      */
     public static function is_set($name)
     {
         if (! is_string($name)) {
-            throw new Exceptions('The session name must be a string.');
+            throw new Exception('The session name must be a string.');
         }
         
         return isset($_SESSION[$name]);
@@ -162,7 +162,7 @@ class Session
     public static function status()
     {
         if (version_compare(PHP_VERSION, '5.4.0', '<')) {
-            throw new Exceptions('Not support session_status().');
+            throw new Exception('Not support session_status().');
         }
         
         return session_status();

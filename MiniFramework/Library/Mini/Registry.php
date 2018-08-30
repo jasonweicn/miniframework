@@ -68,7 +68,7 @@ class Registry extends \ArrayObject
         $instance = self::getInstance();
         
         if (! $instance->offsetExists($index)) {
-            throw new Exceptions('"' . $index . '" not registered.');
+            throw new Exception('"' . $index . '" not registered.');
         }
         
         return $instance->offsetGet($index);
@@ -77,7 +77,7 @@ class Registry extends \ArrayObject
     /**
      * 删除
      * @param string $index
-     * @throws Exceptions
+     * @throws Exception
      * @return bool
      */
     public static function del($index)
@@ -85,7 +85,7 @@ class Registry extends \ArrayObject
         $instance = self::getInstance();
         
         if (! $instance->offsetExists($index)) {
-            throw new Exceptions('"' . $index . '" not registered.');
+            throw new Exception('"' . $index . '" not registered.');
         }
         
         $instance->offsetUnset($index);

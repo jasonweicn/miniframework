@@ -75,7 +75,7 @@ class Loader
      * 载入类
      * 
      * @param string $class            
-     * @throws Exceptions
+     * @throws Exception
      */
     public static function loadClass($class)
     {
@@ -105,7 +105,7 @@ class Loader
         if (file_exists($classfile)) {
             include_once ($classfile);
         } else {
-            throw new Exceptions('Library "' . $className . '" not found.');
+            throw new Exception('Library "' . $className . '" not found.');
         }
         
         return true;

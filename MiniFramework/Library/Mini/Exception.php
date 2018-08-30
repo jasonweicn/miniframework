@@ -24,7 +24,7 @@
 // +---------------------------------------------------------------------------
 namespace Mini;
 
-class Exceptions extends \Exception
+class Exception extends \Exception
 {
 
     /**
@@ -35,8 +35,9 @@ class Exceptions extends \Exception
      * @param int $code
      *            错误代码
      */
-    public function __construct($message, $code = 0)
+    public function __construct($message, $code = 0, $level = Log::ERROR, $position = null)
     {
+        Log::record($message, $level, $position);
         parent::__construct($message, $code);
     }
 
@@ -57,7 +58,7 @@ class Exceptions extends \Exception
      *
      * @param int $code            
      */
-    private function showErrorPage($code)
+    public static function showErrorPage($code)
     {
         $http = Http::getInstance();
         $status = $http->isStatus($code);

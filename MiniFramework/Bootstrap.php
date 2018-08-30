@@ -72,6 +72,12 @@ defined('DB_AUTO_CONNECT') or define('DB_AUTO_CONNECT', false);
 // REST接口功能开关（提示：开启后，原有使用Api命名的Controller将会失效）
 defined('REST_ON') or define('REST_ON', false);
 
+// 是否开启日志
+defined('LOG_ON') or define('LOG_ON', true);
+
+// 日志记录等级
+defined('LOG_LEVEL') or define('LOG_LEVEL', 'EMERG,ALERT,CRIT,ERROR,WARNING,NOTICE,INFO,DEBUG,SQL');
+
 if (SHOW_ERROR === true) {
     ini_set('display_errors', 'On');
 } else {

@@ -38,14 +38,14 @@ class Cache_Redis extends Cache_Abstract
         try {
             $this->_cache_server = new Redis();
             $this->_cache_server->connect($this->_params['host'], $this->_params['port']);
-        } catch (Exceptions $e) {
-            throw new Exceptions($e);
+        } catch (Exception $e) {
+            throw new Exception($e);
         }
         
         if (isset($this->_params['passwd'])) {
             $authStatus = $redis->auth($this->_params['passwd']);
             if ($authStatus === false) {
-                throw new Exceptions('Redis connection failed.');
+                throw new Exception('Redis connection failed.');
             }
         }
     }
@@ -93,8 +93,8 @@ class Cache_Redis extends Cache_Abstract
         try {
             $this->_cache_server->close();
             $this->_cache_server = null;
-        } catch (Exceptions $e) {
-            throw new Exceptions($e);
+        } catch (Exception $e) {
+            throw new Exception($e);
         }
     }
 }
