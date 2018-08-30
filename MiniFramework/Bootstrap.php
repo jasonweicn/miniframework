@@ -73,7 +73,7 @@ defined('DB_AUTO_CONNECT') or define('DB_AUTO_CONNECT', false);
 defined('REST_ON') or define('REST_ON', false);
 
 // 是否开启日志
-defined('LOG_ON') or define('LOG_ON', true);
+defined('LOG_ON') or define('LOG_ON', false);
 
 // 日志记录等级
 defined('LOG_LEVEL') or define('LOG_LEVEL', 'EMERG,ALERT,CRIT,ERROR,WARNING,NOTICE,INFO,DEBUG,SQL');

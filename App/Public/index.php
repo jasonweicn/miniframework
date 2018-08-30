@@ -12,6 +12,9 @@ define('APP_PATH',      dirname(dirname(__FILE__)));
 //是否显示错误信息
 define('SHOW_ERROR',    true);
 
+// 是否开启日志（生产环境建议关闭）
+define('LOG_ON',        false);
+
 //是否启用布局功能
 define('LAYOUT_ON',     true);
 
