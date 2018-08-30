@@ -93,7 +93,7 @@ class Log
         foreach (self::$_logs as $log) {
             file_put_contents(
                 $logFile,
-                $log['time'] . ' - [' . $log['level'] . ': ' . $log['body'] . '] - [F: ' . $log['file']. '][L: ' . $log['line'] . ']' . "\r\n",
+                "{$log['time']} - [{$log['level']}: {$log['body']}] - [F: {$log['file']}][L: {$log['line']}]\r\n",
                 FILE_APPEND | LOCK_EX
             );
         }
