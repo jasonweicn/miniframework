@@ -73,6 +73,12 @@ class Upload
      */
     private $_errorMsg;
     
+    /**
+     * 构造
+     * 
+     * @param array $params
+     * @throws Exception
+     */
     public function __construct($params = null)
     {
         if (isset($params['rootPath'])) {
@@ -103,6 +109,12 @@ class Upload
         }
     }
     
+    /**
+     * 保存文件
+     * 
+     * @param array $files
+     * @return array
+     */
     public function save($files)
     {
         if (isset($files['tmp_name'])) {
@@ -126,6 +138,14 @@ class Upload
         return $info;
     }
     
+    /**
+     * 保存单个文件
+     * 
+     * @param array $file
+     * @param string $fileKey
+     * @throws Exception
+     * @return boolean | array
+     */
     public function saveOne($file, $fileKey = null)
     {
         if (! isset($file['tmp_name'])) {

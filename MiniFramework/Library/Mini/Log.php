@@ -35,7 +35,6 @@ class Log
     const NOTICE    = 'NOTICE';
     const INFO      = 'INFO';
     const DEBUG     = 'DEBUG';
-    const SQL       = 'SQL';
     
     /**
      * Log Instance
@@ -83,6 +82,11 @@ class Log
         }
     }
     
+    /**
+     * 写入日志
+     * 
+     * @throws Exception
+     */
     public function write()
     {
         $c = count(self::$_logs);
@@ -106,6 +110,12 @@ class Log
         }
     }
     
+    /**
+     * 检查日志级别
+     * 
+     * @param string $level
+     * @return boolean
+     */
     public static function checkLevel($level)
     {
         return in_array($level, explode(',', LOG_LEVEL));
