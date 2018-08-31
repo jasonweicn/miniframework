@@ -88,14 +88,21 @@ class Log
         $c = count(self::$_logs);
         $t = isset(self::$_logs[$c - 1]['time']) ? strtotime(self::$_logs[$c - 1]['time']) : time();
         
-        $logFile = APP_PATH . DS . 'Log' . DS . date('Y-m-d', $t) . '.log';
+        $logPath = APP_PATH . DS . 'Log';
+        if (! file_exists($logPath) && ! is_dir($logPath)) {
+            @mkdir($logPath, 0700);
+        }
+        $logFile = $logPath . DS . date('Y-m-d', $t) . '.log';
         
         foreach (self::$_logs as $log) {
-            file_put_contents(
+            $result = file_put_contents(
                 $logFile,
                 "{$log['time']} - [{$log['level']}: {$log['body']}] - [F: {$log['file']}][L: {$log['line']}]\r\n",
                 FILE_APPEND | LOCK_EX
-            );
+                );
+            if ($result === false) {
+                throw new Exception('Log write fail.');
+            }
         }
     }
     
