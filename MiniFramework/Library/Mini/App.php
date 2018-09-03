@@ -308,6 +308,7 @@ class App
     
     /**
      * 输出错误
+     * 
      * @param array $error
      * @param bool $fatal
      */
@@ -315,7 +316,12 @@ class App
     {
         if (SHOW_ERROR === true) {
             if (! empty($error) && is_array($error)) {
-                $body = "<p><b>{$error['level']}</b>: {$error['message']} in <b>{$error['file']}</b> on line <b>{$error['line']}</b></p>\n";
+                if ($this->_router->isCli()) {
+                    $body = "{$error['level']}: {$error['message']} in {$error['file']} on line {$error['line']}\n";
+                } else {
+                    $body = "<p><b>{$error['level']}</b>: {$error['message']} in <b>{$error['file']}</b> on line <b>{$error['line']}</b></p>\n";
+                }
+                
                 echo $body;
             }
         } else {

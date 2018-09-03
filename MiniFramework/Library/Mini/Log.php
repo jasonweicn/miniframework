@@ -27,6 +27,11 @@ namespace Mini;
 class Log
 {
 
+    /**
+     * 错误等级
+     * 
+     * @var string
+     */
     const EMERG     = 'EMERG';
     const ALERT     = 'ALERT';
     const CRIT      = 'CRIT';
