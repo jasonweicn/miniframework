@@ -4,6 +4,8 @@ namespace App\Controller;
 use Mini\Action;
 use Mini\Captcha;
 use Mini\Session;
+use Mini\Log;
+use Mini\Debug;
 
 /**
  * Example
@@ -81,7 +83,36 @@ class Example extends Action
         $message = 'This is a log test.';
 
         // 如果 LOG_ON 为 true 时，下面的内容会在程序运行结束时最终写入日志文件
-        \Mini\Log::record($message, 'INFO', array('file'=>__FILE__, 'line'=>__LINE__));
+        Log::record($message, 'INFO', array('file'=>__FILE__, 'line'=>__LINE__));
         
+    }
+    
+    /**
+     * Example 5: Debug(timer)
+     */
+    function debugtimerAction()
+    {
+        // 计时开始
+        Debug::timerStart();
+        
+        sleep(1);
+        
+        // 纪录中间计时点
+        Debug::timerPoint();
+        
+        sleep(1);
+        
+        // 再次纪录中间计时点
+        Debug::timerPoint();
+        
+        sleep(1);
+        
+        // 计时结束
+        Debug::timerEnd();
+        
+        // 直接 dump 计时结果的数组
+        Debug::getTimerRecords(true);
+        
+        die();
     }
 }
