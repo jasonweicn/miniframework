@@ -106,7 +106,7 @@ class Log
         foreach (self::$_logs as $log) {
             $result = file_put_contents(
                 $logFile,
-                "{$log['time']} - [{$log['level']}: {$log['body']}] - [F: {$log['file']}][L: {$log['line']}]\r\n",
+                "{$log['time']} - [{$log['level']}: {$log['body']}] - [F: {$log['file']}][L: {$log['line']}]" . PHP_EOL,
                 FILE_APPEND | LOCK_EX
                 );
             if ($result === false) {
