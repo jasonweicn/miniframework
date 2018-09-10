@@ -71,6 +71,8 @@ class Debug
             return false;
         }
         
+        $records = array();
+        
         $records['time'] = number_format((self::$timer['end'] - self::$timer['start']) * 1000, 4) . 'ms';
         if (isset(self::$timer['point'])) {
             foreach (self::$timer['point'] as $pt) {
@@ -83,5 +85,26 @@ class Debug
         }
         
         return $records;
+    }
+    
+    /**
+     * 判断变量类型
+     * 
+     * @param mixed $var
+     * @return string
+     */
+    public static function varType($var)
+    {
+        if (is_object($var)) return "object";
+        if (is_resource($var)) return "resource";
+        if (is_array($var)) return "array";
+        if (is_bool($var)) return "boolean";
+        if (is_int($var)) return "integer";
+        if (is_float($var)) return "float";
+        if (is_null($var)) return "NULL";
+        if (is_numeric($var)) return "numeric";
+        if (is_string($var)) return "string";
+        
+        return "unknown";
     }
 }
