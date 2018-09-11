@@ -78,6 +78,9 @@ defined('LOG_ON') or define('LOG_ON', false);
 // 日志记录等级
 defined('LOG_LEVEL') or define('LOG_LEVEL', 'EMERG,ALERT,CRIT,ERROR,WARNING,NOTICE,INFO,DEBUG,SQL');
 
+// 日志存储路径
+defined('LOG_PATH') or define('LOG_PATH', APP_PATH . DS . 'Log');
+
 if (SHOW_ERROR === true) {
     ini_set('display_errors', 'On');
 } else {
