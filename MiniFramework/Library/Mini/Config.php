@@ -77,8 +77,6 @@ class Config
             } else {
                 return null;
             }
-        } else {
-            $configData = $this->_confData[$confName];
         }
         
         if (isset($confKey) && isset($this->_confData[$confName][$confKey])) {
