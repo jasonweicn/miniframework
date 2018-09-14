@@ -15,7 +15,7 @@ class Index extends Action
     {
         $this->view->title = 'MiniFramework';
         
-        //使用布局，需在入口文件 Public/index.php 中定义常量 LAYOUT_ON 的值为 true
+        // 使用布局，需在入口文件 Public/index.php 中定义常量 LAYOUT_ON 的值为 true
         $this->view->_layout->setLayout('default');
         $this->view->_layout->header = $this->view->render(LAYOUT_PATH . '/header.php');
     }
@@ -25,16 +25,16 @@ class Index extends Action
      */
     function indexAction()
     {
-        //实例化一个模型
+        // 实例化一个模型
         $info = new \App\Model\Info();
         
-        //调用模型中的方法
+        // 调用模型中的方法
         $infoText = $info->getInfo();
         
-        //向View传值
+        // 向View传值
         $this->view->assign('info', $infoText);
         
-        //渲染并显示View
+        // 渲染并显示View
         $this->view->display();
     }
 }
