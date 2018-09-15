@@ -106,7 +106,7 @@ class Params
     /**
      * 获得一个整型变量
      * 
-     * @param unknown $number            
+     * @param mixed $number            
      * @return int
      */
     private function getInt($number)
@@ -117,7 +117,7 @@ class Params
     /**
      * 获得一个字符型变量
      * 
-     * @param unknown $string            
+     * @param mixed $string            
      * @return string
      */
     private function getStr($string)
@@ -168,6 +168,9 @@ class Params
      */
     public function setParams(array $params)
     {
+        if (! is_array($params) || empty($params)) {
+            return false;
+        }
         $this->_params = $this->_params + (array) $params;
         
         foreach ($params as $key => $value) {
@@ -175,7 +178,8 @@ class Params
                 unset($this->_params[$key]);
             }
         }
-        return;
+        
+        return true;
     }
 
     /**
@@ -192,10 +196,13 @@ class Params
      * 存入一个参数
      * 
      * @param string $key            
-     * @param unknown $value            
+     * @param boolean $value            
      */
     public function setParam($key, $value)
     {
+        if ($key === null || $key == "") {
+            return false;
+        }
         $key = (string) $key;
         
         if (($value === null) && isset($this->_params[$key])) {
@@ -203,7 +210,8 @@ class Params
         } elseif ($value !== null) {
             $this->_params[$key] = $value;
         }
-        return;
+        
+        return true;
     }
 
     /**
