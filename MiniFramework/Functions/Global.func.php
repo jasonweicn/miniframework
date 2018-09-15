@@ -27,7 +27,7 @@
 /**
  * 获取客户端IP地址
  *
- * @return NULL|string|unknown
+ * @return NULL | string
  */
 function getClientIp()
 {
@@ -236,7 +236,6 @@ function dump($var, $label = null, $echo = true)
 function pushXml($data, $push = true, $indent = false, $root = 'data', $attr = array(), $item = 'item', $id = 'id', $encoding = 'utf-8')
 {
     $eol = ($indent === true) ? PHP_EOL : '';
-    $space = ($indent === true) ? '  ' : '';
     
     $_attr = '';
     foreach ($attr as $key => $val) {

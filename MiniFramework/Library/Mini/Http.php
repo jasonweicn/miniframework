@@ -98,7 +98,7 @@ class Http
     /**
      * 获取实例
      *
-     * @return obj
+     * @return object
      */
     public static function getInstance()
     {
