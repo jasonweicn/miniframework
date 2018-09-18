@@ -42,13 +42,6 @@ class App
     public $action;
 
     /**
-     * 函数库清单数组
-     *
-     * @var array
-     */
-    private static $_funcs = array();
-
-    /**
      * Router实例
      *
      * @var Router
@@ -167,7 +160,8 @@ class App
             $this->_params->setParams($requestParams);
         }
         
-        $this->loadFunc('Global');
+        // include global function file.
+        include (MINI_PATH . DS . 'Function' . DS . 'Global.func.php');
         
         if (DB_AUTO_CONNECT === true) {
             $this->initDbPool();
@@ -247,31 +241,7 @@ class App
         }
         return $this->_router;
     }
-
-    /**
-     * 加载函数库
-     *
-     * @param string $func            
-     * @throws Exception
-     * @return boolean
-     */
-    private function loadFunc($func)
-    {
-        $file = MINI_PATH . DS . 'Functions' . DS . ucfirst($func) . '.func.php';
-        
-        $key = md5($file);
-        if (! isset(self::$_funcs[$key])) {
-            if (file_exists($file)) {
-                include ($file);
-                self::$_funcs[$key] = true;
-            } else {
-                throw new Exception('Function "' . $func . '" not found.');
-            }
-        }
-        
-        return true;
-    }
-
+    
     /**
      * 初始化数据库对象池
      *
