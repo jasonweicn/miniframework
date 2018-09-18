@@ -33,6 +33,13 @@ class Loader
      * @var Loader
      */
     protected static $_instance;
+    
+    /**
+     * 函数库清单数组
+     *
+     * @var array
+     */
+    private static $_funcs = array();
 
     /**
      * 获取实例
@@ -106,6 +113,30 @@ class Loader
             include_once ($classfile);
         } else {
             throw new Exception('Library "' . $className . '" not found.');
+        }
+        
+        return true;
+    }
+    
+    /**
+     * 加载函数库
+     *
+     * @param string $func
+     * @throws Exception
+     * @return boolean
+     */
+    public static function loadFunc($func)
+    {
+        $file = APP_PATH . DS . 'Function' . DS . ucfirst($func) . '.func.php';
+        
+        $key = md5($file);
+        if (! isset(self::$_funcs[$key])) {
+            if (file_exists($file)) {
+                include ($file);
+                self::$_funcs[$key] = true;
+            } else {
+                throw new Exception('Function "' . $func . '" not found.');
+            }
         }
         
         return true;
