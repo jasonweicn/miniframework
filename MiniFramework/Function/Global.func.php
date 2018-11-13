@@ -152,6 +152,7 @@ function pushJson($data, $push = true)
     }
     
     if ($push === true) {
+        header("Content-Type: application/json; charset=utf-8");
         echo $json;
         die();
     }

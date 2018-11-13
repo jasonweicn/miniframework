@@ -122,6 +122,7 @@ class View
         }
         
         $content = $this->render($view);
+        header("Content-Type: text/html; charset=utf-8");
         header('Cache-Control: ' . HTTP_CACHE_CONTROL);
         header('X-Powered-By: MiniFramework');
         
