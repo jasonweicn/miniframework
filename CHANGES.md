@@ -2,7 +2,7 @@
 
 ## Version 1.5.1 released. ( 2018-11-16 ) ##
 
-* 修正App类showError方法中一处的bug，感谢Zeng Xi反馈此bug。
+* 修正App类showError方法中的一处bug，感谢Zeng Xi反馈此bug。
 
 ## Version 1.5.0 released. ( 2018-11-14 ) ##
 
