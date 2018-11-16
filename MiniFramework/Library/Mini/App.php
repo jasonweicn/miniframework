@@ -79,7 +79,7 @@ class App
     /**
      * 获取实例
      *
-     * @return obj
+     * @return object
      */
     public static function getInstance()
     {
@@ -232,7 +232,7 @@ class App
     /**
      * 获取路由器对象
      *
-     * @return obj
+     * @return object
      */
     public function getRouter()
     {
@@ -286,7 +286,8 @@ class App
     {
         if (SHOW_ERROR === true) {
             if (! empty($error) && is_array($error)) {
-                if ($this->_router->isCli()) {
+                $isCli = preg_match("/cli/i", PHP_SAPI) ? true : false;
+                if ($isCli) {
                     $body = "{$error['level']}: {$error['message']} in {$error['file']} on line {$error['line']}\n";
                 } else {
                     $body = "<p><b>{$error['level']}</b>: {$error['message']} in <b>{$error['file']}</b> on line <b>{$error['line']}</b></p>\n";
