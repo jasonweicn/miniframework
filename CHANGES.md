@@ -1,5 +1,9 @@
 # CHANGES #
 
+## Version 1.5.1 released. ( 2018-11-16 ) ##
+
+* 修正App类showError方法中一处的bug，感谢Zeng Xi反馈此bug。
+
 ## Version 1.5.0 released. ( 2018-11-14 ) ##
 
 * 新增Loader类的loadFunc方法，用于加载开发者自定义的扩展函数。
