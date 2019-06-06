@@ -389,3 +389,21 @@ function getHash($s, $len = 4)
     
     return intval(fmod($h, $len));
 }
+
+/**
+ * 转换特殊字符为HTML实体字符
+ * 
+ * @param string $string
+ * @param boolean $doubleEncode
+ * @return string
+ */
+function htmlEncode($string, $doubleEncode = true)
+{
+    if (version_compare(PHP_VERSION, '5.4.0', '>=')) {
+        $reVal = htmlspecialchars($string, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', $doubleEncode);
+    } else {
+        $reVal = htmlspecialchars($string, ENT_QUOTES, 'UTF-8', $doubleEncode);
+    }
+    
+    return $reVal; 
+}
