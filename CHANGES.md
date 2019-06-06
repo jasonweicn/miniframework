@@ -1,5 +1,10 @@
 # CHANGES #
 
+## Version 1.5.2 released. ( 2019-06-06 ) ##
+
+* 新增全局函数htmlEncode()，用于转换特殊字符为HTML实体字符，便于防范XSS攻击。
+* 更新composer.json中定义的包名，从命名上与Github的仓库名称保持一致。
+
 ## Version 1.5.1 released. ( 2018-11-16 ) ##
 
 * 修正App类showError方法中的一处bug，感谢Zeng Xi反馈此bug。
