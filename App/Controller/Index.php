@@ -1,7 +1,7 @@
 <?php
 namespace App\Controller;
 
-use Mini\Action;
+use Mini\Base\Action;
 
 /**
  * 这是一个控制器的案例

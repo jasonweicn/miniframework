@@ -24,6 +24,8 @@
 // +---------------------------------------------------------------------------
 namespace Mini\Db;
 
+use Mini\Base\Exception;
+
 abstract class Db_Abstract
 {
 
@@ -127,14 +129,14 @@ abstract class Db_Abstract
      *
      * @param array $params
      *            => array (
-     *            host => (string) 主机，默认值为localhost
-     *            dbname => (string) 数据库名
-     *            username => (string) 用户名
-     *            passwd => (string) 密码
+     *            host          => (string) 主机，默认值为localhost
+     *            dbname        => (string) 数据库名
+     *            username      => (string) 用户名
+     *            passwd        => (string) 密码
      *            
-     *            port => (string) 端口
-     *            charset => (string) 字符集编码，默认值为utf8
-     *            persistent => (boolean) 是否启用持久连接，默认值为false
+     *            port          => (string) 端口
+     *            charset       => (string) 字符集编码，默认值为utf8
+     *            persistent    => (boolean) 是否启用持久连接，默认值为false
      *            )
      * @return Db_Abstract
      */
@@ -142,6 +144,20 @@ abstract class Db_Abstract
     {
         if (! is_array($params)) {
             throw new Exception('Adapter params must be in an array.');
+        }
+        
+        $adapterClassName = get_class($this);
+        
+        if (! isset($params['host'])) {
+            throw new Exception('Database(' . $adapterClassName . ') host is not defined.');
+        } elseif (! isset($params['port'])) {
+            throw new Exception('Database(' . $adapterClassName . ') port is not defined.');
+        } elseif (! isset($params['username'])) {
+            throw new Exception('Database(' . $adapterClassName . ') username is not defined.');
+        } elseif (! isset($params['passwd'])) {
+            throw new Exception('Database(' . $adapterClassName . ') passwd is not defined.');
+        } elseif (! isset($params['dbname'])) {
+            throw new Exception('Database(' . $adapterClassName . ') dbname is not defined.');
         }
         
         if (! isset($params['charset'])) {

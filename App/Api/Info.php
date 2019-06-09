@@ -1,7 +1,7 @@
 <?php
 namespace App\Api;
 
-use Mini\Rest;
+use Mini\Base\Rest;
 
 /**
  * 这是一个演示API版本控制的demo

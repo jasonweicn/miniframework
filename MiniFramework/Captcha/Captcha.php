@@ -22,7 +22,9 @@
 // +---------------------------------------------------------------------------
 // | Website: http://www.sunbloger.com/miniframework
 // +---------------------------------------------------------------------------
-namespace Mini;
+namespace Mini\Captcha;
+
+use Mini\Base\Session;
 
 class Captcha
 {
@@ -57,7 +59,7 @@ class Captcha
     
     public function __construct()
     {
-        $this->_font = APP_PATH . '/Public/font/aleo-bold-webfont.ttf';
+        $this->_font = __DIR__ . DS . 'aleo-bold-webfont.ttf';
         
         $this->_sessionKey = 'Mini_' . APP_NAMESPACE . '_Captcha_Code';
     }

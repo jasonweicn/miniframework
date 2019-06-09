@@ -1,7 +1,7 @@
 <?php
 namespace App\Api;
 
-use Mini\Rest;
+use Mini\Base\Rest;
 
 /**
  * 这是一个应用REST模式的API接口案例

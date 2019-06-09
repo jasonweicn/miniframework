@@ -22,57 +22,58 @@
 // +---------------------------------------------------------------------------
 // | Website: http://www.sunbloger.com/miniframework
 // +---------------------------------------------------------------------------
-namespace Mini;
+namespace Mini\Cache;
 
-class Db
+use Mini\Base\Exception;
+
+class Cache
 {
 
     /**
-     * 工厂模式获取数据库实例
+     * 工厂模式获取缓存实例
      *
      * @param string $adapter            
      * @param array $params            
      */
-    public static function factory($adapter = 'Mysql', $params = array())
+    public static function factory($adapter = 'Memcache', $params = array())
     {
         if (! is_string($adapter) || empty($adapter)) {
             throw new Exception('Adapter name must be specified in a string.');
         }
         
-        if (! in_array($adapter, array(
-            'Mysql'
+        if (in_array($adapter, array(
+            'Memcache',
+            'Memcached',
+            'Redis'
         ))) {
-            throw new Exception('Adapter "' . $adapter . '" does not exist.');
+            
+            if (! class_exists($adapter)) {
+                throw new Exception('Adapter ' . $adapter . ' not found');
+            }
+            
+            if (! is_array($params)) {
+                throw new Exception('Adapter params invalid.');
+            }
+            
+            if (! isset($params['host'])) {
+                throw new Exception('Cache(' . $adapter . ') host is not defined.');
+            } elseif (! isset($params['port'])) {
+                throw new Exception('Cache(' . $adapter . ') port is not defined.');
+            }
         }
         
-        if (! is_array($params)) {
-            throw new Exception('Adapter params must be in an array.');
-        }
-        
-        if (! isset($params['host'])) {
-            throw new Exception('Database(' . $adapter . ') host is not defined.');
-        } elseif (! isset($params['port'])) {
-            throw new Exception('Database(' . $adapter . ') port is not defined.');
-        } elseif (! isset($params['username'])) {
-            throw new Exception('Database(' . $adapter . ') username is not defined.');
-        } elseif (! isset($params['passwd'])) {
-            throw new Exception('Database(' . $adapter . ') passwd is not defined.');
-        } elseif (! isset($params['dbname'])) {
-            throw new Exception('Database(' . $adapter . ') dbname is not defined.');
-        }
-        
-        $adapterName = '\\Mini\\Db\\Db_' . ucwords($adapter);
+        $adapterName = '\\Mini\\Cache\\Cache_' . ucwords($adapter);
         
         if (! class_exists($adapterName)) {
             throw new Exception('Adapter "' . $adapterName . '" not found.');
         }
         
-        $dbAdapter = new $adapterName($params);
+        $cacheAdapter = new $adapterName($params);
         
-        if (! $dbAdapter instanceof \Mini\Db\Db_Abstract) {
-            throw new Exception('Adapter class "' . $adapterName . '" does not extend Db_Abstract.');
+        if (! $cacheAdapter instanceof \Mini\Cache\Cache_Abstract) {
+            throw new Exception('Adapter class "' . $adapterName . '" does not extend Cache_Abstract.');
         }
         
-        return $dbAdapter;
+        return $cacheAdapter;
     }
 }

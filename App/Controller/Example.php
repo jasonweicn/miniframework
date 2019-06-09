@@ -1,11 +1,12 @@
 <?php
 namespace App\Controller;
 
-use Mini\Action;
-use Mini\Captcha;
-use Mini\Session;
-use Mini\Log;
-use Mini\Debug;
+use Mini\Base\Action;
+use Mini\Captcha\Captcha;
+use Mini\Base\Session;
+use Mini\Base\Upload;
+use Mini\Base\Log;
+use Mini\Base\Debug;
 
 /**
  * Example
@@ -61,7 +62,7 @@ class Example extends Action
     function uploadAction()
     {
         if (! empty($_FILES)) {
-            $upload = new \Mini\Upload();
+            $upload = new Upload();
             $res = $upload->save($_FILES); // or $_FILES['f1']
             
             echo "<br />ErrorMsg:";

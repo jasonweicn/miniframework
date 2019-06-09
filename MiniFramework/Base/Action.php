@@ -22,67 +22,76 @@
 // +---------------------------------------------------------------------------
 // | Website: http://www.sunbloger.com/miniframework
 // +---------------------------------------------------------------------------
-namespace Mini;
+namespace Mini\Base;
 
-class Config
+class Action
 {
 
     /**
-     * Config Instance
+     * View实例
      *
-     * @var Config
+     * @var View
      */
-    protected static $_instance;
-
-    private $_confData = array();
+    protected $view;
 
     /**
-     * 获取实例
+     * Params实例
+     *
+     * @var Params
      */
-    public static function getInstance()
+    protected $params;
+
+    /**
+     * Request实例
+     *
+     * @var Request
+     */
+    protected $_request;
+
+    /**
+     * 构造
+     *
+     * @param string $controller            
+     * @param string $action            
+     * @return Action
+     */
+    function __construct()
     {
-        if (self::$_instance === null) {
-            self::$_instance = new self();
+        $this->view = new View();
+        $this->params = Params::getInstance();
+        $this->_request = Request::getInstance();
+        
+        if (method_exists($this, '_init')) {
+            $this->_init();
         }
-        return self::$_instance;
     }
 
     /**
-     * 读取配置
+     * 向View传入变量
      *
-     * @param string $config            
+     * @param mixed $variable            
+     * @param mixed $value            
      */
-    public function load($config)
+    final protected function assign($variable, $value)
     {
-        $lastPos = strpos($config, ':');
-        if ($lastPos !== false) {
-            $confName = strstr($config, ':', true);
-            $confKey = substr($config, $lastPos + 1);
-        } else {
-            $confName = $config;
+        $this->view->assign($variable, $value);
+    }
+
+    /**
+     * 转至给定的控制器和动作
+     *
+     * @param string $action            
+     * @param string $controller            
+     * @param array $params            
+     */
+    final protected function _forward($action, $controller = null, array $params = NULL)
+    {
+        if ($controller !== null) {
+            $this->_request->setControllerName($controller);
         }
         
-        if (! isset($this->_confData[$confName])) {
-            
-            $confFile = CONFIG_PATH . DS . $confName . '.php';
-            
-            if (file_exists($confFile)) {
-                include ($confFile);
-            } else {
-                throw new Exception('Config "' . $confName . '" not found.');
-            }
-            
-            if (isset(${$confName})) {
-                $this->_confData[$confName] = ${$confName};
-            } else {
-                return null;
-            }
-        }
+        $this->_request->setActionName($action);
         
-        if (isset($confKey) && isset($this->_confData[$confName][$confKey])) {
-            return $this->_confData[$confName][$confKey];
-        }
-        
-        return $this->_confData[$confName];
+        App::getInstance()->dispatch();
     }
 }

@@ -22,76 +22,57 @@
 // +---------------------------------------------------------------------------
 // | Website: http://www.sunbloger.com/miniframework
 // +---------------------------------------------------------------------------
-namespace Mini;
+namespace Mini\Base;
 
-class Action
+class Exception extends \Exception
 {
-
-    /**
-     * View实例
-     *
-     * @var View
-     */
-    protected $view;
-
-    /**
-     * Params实例
-     *
-     * @var Params
-     */
-    protected $params;
-
-    /**
-     * Request实例
-     *
-     * @var Request
-     */
-    protected $_request;
 
     /**
      * 构造
      *
-     * @param string $controller            
-     * @param string $action            
-     * @return Action
+     * @param string $message
+     *            错误信息
+     * @param int $code
+     *            错误代码
      */
-    function __construct()
+    public function __construct($message, $code = 0, $level = Log::ERROR, $position = null)
     {
-        $this->view = new View();
-        $this->params = Params::getInstance();
-        $this->_request = Request::getInstance();
-        
-        if (method_exists($this, '_init')) {
-            $this->_init();
+        Log::record($message, $level, $position);
+        parent::__construct($message, $code);
+    }
+
+    /**
+     * 重构 toString
+     */
+    public function __toString()
+    {
+        if (SHOW_ERROR === true) {
+            return parent::__toString();
+        } else {
+            self::showErrorPage($this->code);
         }
     }
 
     /**
-     * 向View传入变量
+     * 显示自定义的报错内容
      *
-     * @param mixed $variable            
-     * @param mixed $value            
+     * @param int $code            
      */
-    final protected function assign($variable, $value)
+    public static function showErrorPage($code)
     {
-        $this->view->assign($variable, $value);
-    }
-
-    /**
-     * 转至给定的控制器和动作
-     *
-     * @param string $action            
-     * @param string $controller            
-     * @param array $params            
-     */
-    final protected function _forward($action, $controller = null, array $params = NULL)
-    {
-        if ($controller !== null) {
-            $this->_request->setControllerName($controller);
+        $http = Http::getInstance();
+        $status = $http->isStatus($code);
+        
+        if ($status === false) {
+            $code = 500;
+            $status = $http->isStatus($code);
         }
         
-        $this->_request->setActionName($action);
+        $info = '<html><head><title>Error</title></head><body><h1>An error occurred</h1>';
+        $info .= '<h2>' . $code . ' ' . $status . '</h2></body></html>';
         
-        App::getInstance()->dispatch();
+        $http->header('Content-Type', 'text/html; charset=utf-8')->response($code, $info);
+        
+        die();
     }
 }

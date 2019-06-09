@@ -22,7 +22,7 @@
 // +---------------------------------------------------------------------------
 // | Website: http://www.sunbloger.com/miniframework
 // +---------------------------------------------------------------------------
-namespace Mini;
+namespace Mini\Base;
 
 class Request
 {
@@ -86,7 +86,7 @@ class Request
     /**
      * 获取实例
      *
-     * @return obj
+     * @return object
      */
     public static function getInstance()
     {

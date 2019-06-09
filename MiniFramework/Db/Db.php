@@ -22,74 +22,43 @@
 // +---------------------------------------------------------------------------
 // | Website: http://www.sunbloger.com/miniframework
 // +---------------------------------------------------------------------------
-namespace Mini;
+namespace Mini\Db;
 
-class Registry extends \ArrayObject
+use Mini\Base\Exception;
+
+class Db
 {
 
     /**
-     * Registry Instance
+     * 工厂模式获取数据库实例
      *
-     * @var Registry
+     * @param string $adapter            
+     * @param array $params            
      */
-    protected static $_instance;
-
-    /**
-     * 获取实例
-     */
-    public static function getInstance()
+    public static function factory($adapter = 'Mysql', $params = array())
     {
-        if (self::$_instance === null) {
-            self::$_instance = new self();
-        }
-        return self::$_instance;
-    }
-
-    /**
-     * 存入
-     *
-     * @param string $index            
-     * @param mixed $value            
-     */
-    public static function set($index, $value)
-    {
-        $instance = self::getInstance();
-        $instance->offsetSet($index, $value);
-    }
-
-    /**
-     * 读出
-     *
-     * @param string $index            
-     * @return mixed
-     */
-    public static function get($index)
-    {
-        $instance = self::getInstance();
-        
-        if (! $instance->offsetExists($index)) {
-            throw new Exception('"' . $index . '" not registered.');
+        if (! is_string($adapter) || empty($adapter)) {
+            throw new Exception('Adapter name must be specified in a string.');
         }
         
-        return $instance->offsetGet($index);
-    }
-    
-    /**
-     * 删除
-     * @param string $index
-     * @throws Exception
-     * @return bool
-     */
-    public static function del($index)
-    {
-        $instance = self::getInstance();
-        
-        if (! $instance->offsetExists($index)) {
-            throw new Exception('"' . $index . '" not registered.');
+        if (! in_array($adapter, array(
+            'Mysql'
+        ))) {
+            throw new Exception('Adapter "' . $adapter . '" does not exist.');
         }
         
-        $instance->offsetUnset($index);
+        $adapterName = '\\Mini\\Db\\' . ucwords($adapter);
         
-        return true;
+        if (! class_exists($adapterName)) {
+            throw new Exception('Adapter "' . $adapterName . '" not found.');
+        }
+        
+        $dbAdapter = new $adapterName($params);
+        
+        if (! $dbAdapter instanceof \Mini\Db\Db_Abstract) {
+            throw new Exception('Adapter class "' . $adapterName . '" does not extend Db_Abstract.');
+        }
+        
+        return $dbAdapter;
     }
 }

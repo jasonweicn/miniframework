@@ -22,57 +22,67 @@
 // +---------------------------------------------------------------------------
 // | Website: http://www.sunbloger.com/miniframework
 // +---------------------------------------------------------------------------
-namespace Mini;
+namespace Mini\Base;
 
-class Exception extends \Exception
+class Config
 {
 
     /**
-     * 构造
+     * Config Instance
      *
-     * @param string $message
-     *            错误信息
-     * @param int $code
-     *            错误代码
+     * @var Config
      */
-    public function __construct($message, $code = 0, $level = Log::ERROR, $position = null)
+    protected static $_instance;
+
+    private $_confData = array();
+
+    /**
+     * 获取实例
+     */
+    public static function getInstance()
     {
-        Log::record($message, $level, $position);
-        parent::__construct($message, $code);
+        if (self::$_instance === null) {
+            self::$_instance = new self();
+        }
+        return self::$_instance;
     }
 
     /**
-     * 重构 toString
+     * 读取配置
+     *
+     * @param string $config            
      */
-    public function __toString()
+    public function load($config)
     {
-        if (SHOW_ERROR === true) {
-            return parent::__toString();
+        $lastPos = strpos($config, ':');
+        if ($lastPos !== false) {
+            $confName = strstr($config, ':', true);
+            $confKey = substr($config, $lastPos + 1);
         } else {
-            self::showErrorPage($this->code);
-        }
-    }
-
-    /**
-     * 显示自定义的报错内容
-     *
-     * @param int $code            
-     */
-    public static function showErrorPage($code)
-    {
-        $http = Http::getInstance();
-        $status = $http->isStatus($code);
-        
-        if ($status === false) {
-            $code = 500;
-            $status = $http->isStatus($code);
+            $confName = $config;
         }
         
-        $info = '<html><head><title>Error</title></head><body><h1>An error occurred</h1>';
-        $info .= '<h2>' . $code . ' ' . $status . '</h2></body></html>';
+        if (! isset($this->_confData[$confName])) {
+            
+            $confFile = CONFIG_PATH . DS . $confName . '.php';
+            
+            if (file_exists($confFile)) {
+                include ($confFile);
+            } else {
+                throw new Exception('Config "' . $confName . '" not found.');
+            }
+            
+            if (isset(${$confName})) {
+                $this->_confData[$confName] = ${$confName};
+            } else {
+                return null;
+            }
+        }
         
-        $http->header('Content-Type', 'text/html; charset=utf-8')->response($code, $info);
+        if (isset($confKey) && isset($this->_confData[$confName][$confKey])) {
+            return $this->_confData[$confName][$confKey];
+        }
         
-        die();
+        return $this->_confData[$confName];
     }
 }

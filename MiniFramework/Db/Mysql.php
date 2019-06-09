@@ -24,9 +24,10 @@
 // +---------------------------------------------------------------------------
 namespace Mini\Db;
 
+use Mini\Base\Exception;
 use \PDO;
 
-class Db_Mysql extends Db_Abstract
+class Mysql extends Db_Abstract
 {
 
     /**
@@ -118,7 +119,7 @@ class Db_Mysql extends Db_Abstract
                 $this->_getPdoError();
             }
             return $affected;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             throw new Exception($e);
         }
     }
@@ -154,7 +155,7 @@ class Db_Mysql extends Db_Abstract
             }
             
             return $result;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             throw new Exception($e);
         }
     }
@@ -191,6 +192,7 @@ class Db_Mysql extends Db_Abstract
     {
         $sql = "INSERT INTO `$table` (`" . implode('`,`', array_keys($dataArray[0])) . "`) VALUES ";
         
+        $valSqls = array();
         foreach ($dataArray as $data) {
             $valSqls[] = "('" . implode("','", $data) . "')";
         }
@@ -348,7 +350,7 @@ class Db_Mysql extends Db_Abstract
             $this->_commit();
             $this->_dbh->setAttribute(PDO::ATTR_AUTOCOMMIT, 1);
             return true;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             $this->_rollBack();
             throw new Exception($e);
         }

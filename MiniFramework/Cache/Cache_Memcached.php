@@ -24,6 +24,7 @@
 // +---------------------------------------------------------------------------
 namespace Mini\Cache;
 
+use Mini\Base\Exception;
 use \Memcached;
 
 class Cache_Memcached extends Cache_Abstract

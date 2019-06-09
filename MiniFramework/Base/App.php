@@ -22,7 +22,7 @@
 // +---------------------------------------------------------------------------
 // | Website: http://www.sunbloger.com/miniframework
 // +---------------------------------------------------------------------------
-namespace Mini;
+namespace Mini\Base;
 
 class App
 {
@@ -94,7 +94,7 @@ class App
      */
     protected function __construct()
     {
-        set_error_handler('Mini\App::customError');
+        set_error_handler('Mini\Base\App::customError');
         
         if (LOG_ON === true) {
             Log::getInstance();
@@ -253,7 +253,7 @@ class App
         $dbConfig = Config::getInstance()->load('database');
         if (is_array($dbConfig)) {
             foreach ($dbConfig as $dbKey => $dbParams) {
-                $this->_dbPool[$dbKey] = Db::factory('Mysql', $dbParams);
+                $this->_dbPool[$dbKey] = \Mini\Db\Db::factory('Mysql', $dbParams);
             }
         } else {
             throw new Exception('Config "database" invalid.');

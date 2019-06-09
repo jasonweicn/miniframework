@@ -22,7 +22,9 @@
 // +---------------------------------------------------------------------------
 // | Website: http://www.sunbloger.com/miniframework
 // +---------------------------------------------------------------------------
-namespace Mini;
+namespace Mini\Base;
+
+use Mini\Db;
 
 abstract class Model
 {
@@ -126,7 +128,7 @@ abstract class Model
      * 设置查询字段
      * 
      * @param string $field
-     * @return \Mini\Model
+     * @return \Mini\Base\Model
      */
     public function field($field = null)
     {
@@ -141,7 +143,7 @@ abstract class Model
      * 设置数据表
      * 
      * @param string $table
-     * @return \Mini\Model
+     * @return \Mini\Base\Model
      */
     public function table($table = null)
     {
@@ -156,7 +158,7 @@ abstract class Model
      * 设置查询条件
      * 
      * @param string $where
-     * @return \Mini\Model
+     * @return \Mini\Base\Model
      */
     public function where($where = null)
     {
@@ -170,8 +172,8 @@ abstract class Model
     /**
      * 设置分组
      * 
-     * @param unknown $group
-     * @return \Mini\Model
+     * @param string $group
+     * @return \Mini\Base\Model
      */
     public function group($group = null)
     {
@@ -186,7 +188,7 @@ abstract class Model
      * 设置排序
      * 
      * @param string $order
-     * @return \Mini\Model
+     * @return \Mini\Base\Model
      */
     public function order($order = null)
     {
@@ -201,7 +203,7 @@ abstract class Model
      * 设置LIMIT
      * 
      * @param string $limit
-     * @return \Mini\Model
+     * @return \Mini\Base\Model
      */
     public function limit($limit = null)
     {

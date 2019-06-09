@@ -22,7 +22,7 @@
 // +---------------------------------------------------------------------------
 // | Website: http://www.sunbloger.com/miniframework
 // +---------------------------------------------------------------------------
-namespace Mini;
+namespace Mini\Base;
 
 class Loader
 {
@@ -59,7 +59,7 @@ class Loader
     {
         spl_autoload_register(array(
             __CLASS__,
-            'Mini\Loader::autoload'
+            'Mini\Base\Loader::autoload'
         ));
     }
 
@@ -99,7 +99,7 @@ class Loader
             if ($name == APP_NAMESPACE) {
                 $classPath = APP_PATH . ltrim($classPath, APP_NAMESPACE);
             } else {
-                $classPath = LIB_PATH . DS . $classPath;
+                $classPath = MINI_PATH . DS . str_replace($name . '\\', '', $namespace);;
             }
             
             $className = substr($className, $lastPos + 1);

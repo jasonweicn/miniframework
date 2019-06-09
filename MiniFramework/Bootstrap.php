@@ -31,10 +31,7 @@
 defined('DS') or define('DS', DIRECTORY_SEPARATOR);
 
 // MiniFramework 核心文件路径
-defined('MINI_PATH') or define('MINI_PATH', dirname(__FILE__));
-
-// 类库路径
-defined('LIB_PATH') or define('LIB_PATH', MINI_PATH . DS . 'Library');
+defined('MINI_PATH') or define('MINI_PATH', __DIR__);
 
 // 应用路径
 defined('APP_PATH') or define('APP_PATH', dirname(dirname($_SERVER['SCRIPT_FILENAME'])));
@@ -87,8 +84,8 @@ if (SHOW_ERROR === true) {
     ini_set('display_errors', 'Off');
 }
 
-require (LIB_PATH . DS . 'Mini' . DS . 'Loader.php');
-Mini\Loader::getInstance();
+require (MINI_PATH . DS . 'Base' . DS . 'Loader.php');
+Mini\Base\Loader::getInstance();
 
 // 一切由此开始
-Mini\App::getInstance()->run();
+Mini\Base\App::getInstance()->run();

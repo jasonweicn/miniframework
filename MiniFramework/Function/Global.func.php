@@ -68,6 +68,7 @@ function getClientIp()
             $ip = getenv('REMOTE_ADDR');
         }
     }
+    $matches = array();
     preg_match("/[\d\.]{7,15}/", $ip, $matches);
     $ip = ! empty($matches[0]) ? $matches[0] : '0.0.0.0';
     
@@ -348,7 +349,7 @@ function getStringLen($string)
  * 
  * @param string $file 文件路径
  * @param string $customName 自定义文件名
- * @return output | bool
+ * @return string | bool
  */
 function browserDownload($file, $customName = null)
 {

@@ -24,6 +24,8 @@
 // +---------------------------------------------------------------------------
 namespace Mini\Cache;
 
+use Mini\Base\Exception;
+
 abstract class Cache_Abstract
 {
 
