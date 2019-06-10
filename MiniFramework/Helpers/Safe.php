@@ -29,6 +29,11 @@ use Mini\Base\Request;
 
 class Safe
 {
+    /**
+     * 获取当前存储于Server端的CSRF-Token
+     * 
+     * @return string
+     */
     public static function getCsrfToken()
     {
         $request = Request::getInstance();

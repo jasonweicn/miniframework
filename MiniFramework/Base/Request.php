@@ -314,7 +314,7 @@ class Request
     }
     
     /**
-     * 获取CSRF令牌存储
+     * 获取CSRF令牌存储键名
      * 
      * @return string
      */
