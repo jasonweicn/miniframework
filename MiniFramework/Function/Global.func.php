@@ -3,7 +3,7 @@
 // +---------------------------------------------------------------------------
 // | Mini Framework
 // +---------------------------------------------------------------------------
-// | Copyright (c) 2015-2018 http://www.sunbloger.com
+// | Copyright (c) 2015-2019 http://www.sunbloger.com
 // +---------------------------------------------------------------------------
 // | Licensed under the Apache License, Version 2.0 (the "License");
 // | you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 // | See the License for the specific language governing permissions and
 // | limitations under the License.
 // +---------------------------------------------------------------------------
-// | Source: https://github.com/jasonweicn/MiniFramework
+// | Source: https://github.com/jasonweicn/miniframework
 // +---------------------------------------------------------------------------
 // | Author: Jason Wei <jasonwei06@hotmail.com>
 // +---------------------------------------------------------------------------
