@@ -82,6 +82,15 @@ class Request
      * @var string
      */
     private $_requestUri;
+    
+    /**
+     * CSRF令牌存储参数名
+     * 
+     * @var string
+     */
+    private $_csrfParamName = '_mini-csrf-token';
+    
+    private $_csrfHeaderParamName = 'X-Mini-Csrf-Token';
 
     /**
      * 获取实例
@@ -302,5 +311,112 @@ class Request
         }
         
         return $this->_requestUri;
+    }
+    
+    /**
+     * 获取CSRF令牌存储
+     * 
+     * @return string
+     */
+    public function getCsrfParamName()
+    {
+        return $this->_csrfParamName;
+    }
+    
+    /**
+     * 创建CSRF令牌
+     * 
+     * @param string $type
+     * @return string
+     */
+    public function createCsrfToken()
+    {
+        $token = getRandomString(64);
+        
+        Session::start();
+        Session::set($this->_csrfParamName, $token);
+        Session::commit();
+        
+        setcookie($this->_csrfParamName, $token, 0);
+        
+        return $token;
+    }
+    
+    /**
+     * 读取CSRF令牌
+     * 
+     * @param string $type (cookie | session | header | get | post)
+     * @return string
+     */
+    public function loadCsrfToken($type = 'cookie')
+    {
+        $token = '';
+        
+        if ($type == 'cookie') {
+            if (isset($_COOKIE[$this->_csrfParamName])) {
+                $token = $_COOKIE[$this->_csrfParamName];
+            }
+        } elseif ($type == 'session') {
+            Session::start();
+            $token = Session::get($this->_csrfParamName);
+        } elseif ($type == 'header') {
+            $token = $this->getHeaders($this->_csrfHeaderParamName);
+            if (! is_string($token)) {
+                $token = '';
+            }
+        } elseif ($type == 'get') {
+            if (isset($_GET[$this->_csrfParamName])) {
+                $token = $_GET[$this->_csrfParamName];
+            }
+        } elseif ($type == 'post') {
+            if (isset($_POST[$this->_csrfParamName])) {
+                $token = $_POST[$this->_csrfParamName];
+            }
+        }
+        
+        return $token;
+    }
+    
+    /**
+     * 校验客户端传入的CSRF令牌
+     * 
+     * @throws Exception
+     * @return boolean
+     */
+    public function checkCsrfToken()
+    {
+        $clientCsrfToken = $this->loadCsrfToken('cookie');
+        
+        if (! $clientCsrfToken) {
+            $clientCsrfToken = $this->loadCsrfToken('cookie');
+        }
+        
+        if (! $clientCsrfToken) {
+            $clientCsrfToken = $this->loadCsrfToken('header');
+        }
+        
+        if (! $clientCsrfToken) {
+            $clientCsrfToken = $this->loadCsrfToken('get');
+        }
+        
+        if (! $clientCsrfToken) {
+            $clientCsrfToken = $this->loadCsrfToken('post');
+        }
+        
+        if (! $clientCsrfToken) {
+            throw new Exception('Client CSRF-Token invalid.');
+        }
+        
+        $serverCsrfToken = $this->loadCsrfToken('session');
+        
+        if (! $serverCsrfToken) {
+            throw new Exception('Server CSRF-Token does not exist.');
+        }
+        
+        if ($clientCsrfToken === $serverCsrfToken) {
+            return true;
+        }
+        
+        return false;
     }
 }

@@ -78,6 +78,9 @@ defined('LOG_LEVEL') or define('LOG_LEVEL', 'EMERG,ALERT,CRIT,ERROR,WARNING,NOTI
 // 日志存储路径
 defined('LOG_PATH') or define('LOG_PATH', APP_PATH . DS . 'Log');
 
+// CSRF令牌功能开关
+defined('CSRF_TOKEN_ON') or define('CSRF_TOKEN_ON', true);
+
 if (SHOW_ERROR === true) {
     ini_set('display_errors', 'On');
 } else {

@@ -155,6 +155,7 @@ class App
     public function run()
     {
         $requestParams = $this->_request->parseRequestParams($this->_router->getRouteType());
+        $isCli = $this->_router->isCli();
         unset($this->_router);
         if (! empty($requestParams)) {
             $this->_params->setParams($requestParams);
@@ -162,6 +163,22 @@ class App
         
         // include global function file.
         include (MINI_PATH . DS . 'Function' . DS . 'Global.func.php');
+        
+        // Check CSRF-Token
+        if (CSRF_TOKEN_ON === true) {
+            if ($isCli === false) {
+                $serverCsrfToken = $this->_request->loadCsrfToken('session');
+                if (! $serverCsrfToken) {
+                    $this->_request->createCsrfToken();
+                } else {
+                    if ($this->_request->checkCsrfToken() === true) {
+                        $this->_request->createCsrfToken();
+                    } else {
+                        throw new Exception('Client CSRF-Token invalid.');
+                    }
+                }
+            }
+        }
         
         if (DB_AUTO_CONNECT === true) {
             $this->initDbPool();
