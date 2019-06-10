@@ -1,5 +1,26 @@
 # CHANGES #
 
+## Version 2.0.0 released. ( 2019-06-11 ) ##
+
+* 重构框架核心架构，按功能模块划分目录和命名空间。
+* 新增命名空间Mini\Base，用于框架基础类库。
+* 新增命名空间Mini\Cache，用于缓存类库。
+* 新增命名空间Mini\Captcha，用于验证码等人机识别校验类库。
+* 新增命名空间Mini\Db，用于数据库操作类库。
+* 新增命名空间Mini\Helpers，用于全静态助手类库。
+* 新增常量CSRF_TOKEN_ON，默认值为TRUE，用于控制防御CSRF跨站请求伪造攻击功能的开启和关闭。
+* 新增方法Mini\Base\Request::checkCsrfToken()，用于校验客户端传入CSRF-Token。
+* 新增方法Mini\Base\Request::createCsrfToken()，用于生成一个新的CSRF-Token。
+* 新增方法Mini\Base\Request::getCsrfParamName()，用于获取CSRF-Token存储键名。
+* 新增方法Mini\Base\Request::loadCsrfToken()，用于读取CSRF-Token。
+* 新增方法Mini\Helpers\Safe::getCsrfToken()，用于随时获取当前存储于Server端的CSRF-Token。
+* 改进Mini\Db类库，支持原有工厂模式调用和直接调用MySQL类Mini\Db\Mysql两种模式并存。
+* 改进Mini\Cache类库，支持原有工厂模式和直接调用File、Memcache、Memcached和Redis类两种模式并存。
+* 创建框架核心代码仓库https://github.com/jasonweicn/miniframework-core，用于正式版本发布。
+* 完善用于演示的应用示例App。
+* 完善Composer配置，更好的支持在项目中通过Composer引入框架进行编码。
+* 完善代码注释。
+
 ## Version 1.5.2 released. ( 2019-06-06 ) ##
 
 * 新增全局函数htmlEncode()，用于转换特殊字符为HTML实体字符，便于防范XSS攻击。
