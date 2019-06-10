@@ -2,7 +2,7 @@
 // +---------------------------------------------------------------------------
 // | Mini Framework
 // +---------------------------------------------------------------------------
-// | Copyright (c) 2015-2018 http://www.sunbloger.com
+// | Copyright (c) 2015-2019 http://www.sunbloger.com
 // +---------------------------------------------------------------------------
 // | Licensed under the Apache License, Version 2.0 (the "License");
 // | you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 // | See the License for the specific language governing permissions and
 // | limitations under the License.
 // +---------------------------------------------------------------------------
-// | Source: https://github.com/jasonweicn/MiniFramework
+// | Source: https://github.com/jasonweicn/miniframework
 // +---------------------------------------------------------------------------
 // | Author: Jason Wei <jasonwei06@hotmail.com>
 // +---------------------------------------------------------------------------
@@ -25,9 +25,8 @@
 namespace Mini\Cache;
 
 use Mini\Base\Exception;
-use \Redis;
 
-class Cache_Redis extends Cache_Abstract
+class Memcache extends Cache_Abstract
 {
 
     /**
@@ -39,30 +38,27 @@ class Cache_Redis extends Cache_Abstract
             return;
         
         try {
-            $this->_cache_server = new Redis();
+            $this->_cache_server = new \Memcache();
             $this->_cache_server->connect($this->_params['host'], $this->_params['port']);
         } catch (Exception $e) {
             throw new Exception($e);
         }
         
-        if (isset($this->_params['passwd'])) {
-            $authStatus = $this->cache_server->auth($this->_params['passwd']);
-            if ($authStatus === false) {
-                throw new Exception('Redis connection failed.');
-            }
+        $memStats = $this->_cache_server->getExtendedStats();
+        $available = (bool) $memStats[$this->_params['host'] . ':' . $this->_params['port']];
+        if (! $available) {
+            throw new Exception('Memcache connection failed.');
         }
     }
 
     public function set($name, $value, $expire = null)
     {
-        $this->_connect();
         if (! isset($expire) || empty($expire)) {
-            $result = $this->_cache_server->set($name, $value);
-        } else {
-            $result = $this->_cache_server->setex($name, $expire, $value);
+            $expire = 0;
         }
-        
-        return $result;
+        $compress_flag = $this->_compress_flag ? MEMCACHE_COMPRESSED : 0;
+        $this->_connect();
+        return $this->_cache_server->set($name, $value, $compress_flag, $expire);
     }
 
     public function get($name)
@@ -74,15 +70,15 @@ class Cache_Redis extends Cache_Abstract
     public function del($name)
     {
         $this->_connect();
-        return $this->_cache_server->del($name);
+        return $this->_cache_server->delete($name);
     }
 
     /**
-     * 获取Redis实例化对象，便于使用其他未封装的方法
+     * 获取Memcache实例化对象，便于使用其他未封装的方法
      *
-     * @return obj
+     * @return object
      */
-    public function getRedisObj()
+    public function getMemcacheObj()
     {
         $this->_connect();
         return $this->_cache_server;

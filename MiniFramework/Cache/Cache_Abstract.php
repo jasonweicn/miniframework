@@ -2,7 +2,7 @@
 // +---------------------------------------------------------------------------
 // | Mini Framework
 // +---------------------------------------------------------------------------
-// | Copyright (c) 2015-2018 http://www.sunbloger.com
+// | Copyright (c) 2015-2019 http://www.sunbloger.com
 // +---------------------------------------------------------------------------
 // | Licensed under the Apache License, Version 2.0 (the "License");
 // | you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 // | See the License for the specific language governing permissions and
 // | limitations under the License.
 // +---------------------------------------------------------------------------
-// | Source: https://github.com/jasonweicn/MiniFramework
+// | Source: https://github.com/jasonweicn/miniframework
 // +---------------------------------------------------------------------------
 // | Author: Jason Wei <jasonwei06@hotmail.com>
 // +---------------------------------------------------------------------------
@@ -96,6 +96,20 @@ abstract class Cache_Abstract
     {
         if (! is_array($params)) {
             throw new Exception('Adapter params must be in an array.');
+        }
+        
+        $adapterClassName = get_class($this);
+        
+        if (in_array($adapterClassName, array(
+            'Mini\\Cache\\Memcache',
+            'Mini\\Cache\\Memcached',
+            'Mini\\Cache\\Redis'
+        ))) {
+            if (! isset($params['host'])) {
+                throw new Exception('Cache(' . $adapterClassName . ') host is not defined.');
+            } elseif (! isset($params['port'])) {
+                throw new Exception('Cache(' . $adapterClassName . ') port is not defined.');
+            }
         }
         
         $this->_params = $params;

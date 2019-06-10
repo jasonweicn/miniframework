@@ -2,7 +2,7 @@
 // +---------------------------------------------------------------------------
 // | Mini Framework
 // +---------------------------------------------------------------------------
-// | Copyright (c) 2015-2018 http://www.sunbloger.com
+// | Copyright (c) 2015-2019 http://www.sunbloger.com
 // +---------------------------------------------------------------------------
 // | Licensed under the Apache License, Version 2.0 (the "License");
 // | you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 // | See the License for the specific language governing permissions and
 // | limitations under the License.
 // +---------------------------------------------------------------------------
-// | Source: https://github.com/jasonweicn/MiniFramework
+// | Source: https://github.com/jasonweicn/miniframework
 // +---------------------------------------------------------------------------
 // | Author: Jason Wei <jasonwei06@hotmail.com>
 // +---------------------------------------------------------------------------
@@ -25,9 +25,8 @@
 namespace Mini\Cache;
 
 use Mini\Base\Exception;
-use \Memcache;
 
-class Cache_Memcache extends Cache_Abstract
+class Cache_Memcached extends Cache_Abstract
 {
 
     /**
@@ -39,13 +38,13 @@ class Cache_Memcache extends Cache_Abstract
             return;
         
         try {
-            $this->_cache_server = new Memcache();
-            $this->_cache_server->connect($this->_params['host'], $this->_params['port']);
+            $this->_cache_server = new \Memcached();
+            $this->_cache_server->addServer($this->_params['host'], $this->_params['port']);
         } catch (Exception $e) {
             throw new Exception($e);
         }
         
-        $memStats = $this->_cache_server->getExtendedStats();
+        $memStats = $this->_cache_server->getStats();
         $available = (bool) $memStats[$this->_params['host'] . ':' . $this->_params['port']];
         if (! $available) {
             throw new Exception('Memcache connection failed.');
@@ -57,9 +56,12 @@ class Cache_Memcache extends Cache_Abstract
         if (! isset($expire) || empty($expire)) {
             $expire = 0;
         }
-        $compress_flag = $this->_compress_flag ? MEMCACHE_COMPRESSED : 0;
         $this->_connect();
-        return $this->_cache_server->set($name, $value, $compress_flag, $expire);
+        if ($this->_compress_flag === true) {
+            $this->_cache_server->setOption(\Memcached::OPT_COMPRESSION, true);
+        }
+        
+        return $this->_cache_server->set($name, $value, $expire);
     }
 
     public function get($name)
@@ -75,11 +77,11 @@ class Cache_Memcache extends Cache_Abstract
     }
 
     /**
-     * 获取Memcache实例化对象，便于使用其他未封装的方法
+     * 获取Memcached实例化对象，便于使用其他未封装的方法
      *
-     * @return obj
+     * @return object
      */
-    public function getMemcacheObj()
+    public function getMemcachedObj()
     {
         $this->_connect();
         return $this->_cache_server;
@@ -91,7 +93,7 @@ class Cache_Memcache extends Cache_Abstract
     public function close()
     {
         try {
-            $this->_cache_server->close();
+            $this->_cache_server->quit();
             $this->_cache_server = null;
         } catch (Exception $e) {
             throw new Exception($e);
