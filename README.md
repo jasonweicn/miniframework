@@ -7,7 +7,7 @@ MiniFramework 能够帮助开发者用最小的学习成本快速构建 Web 应�
 快速入门
 ====================
 
-MiniFramework 快速入门学习文档：[http://www.miniframework.com/docv1/guide/](http://www.miniframework.com/docv1/guide/)
+MiniFramework 快速入门学习文档：[http://www.miniframework.com/docv2/guide/](http://www.miniframework.com/docv2/guide/)
 
 参与开发
 ====================
@@ -17,7 +17,7 @@ MiniFramework 快速入门学习文档：[http://www.miniframework.com/docv1/gui
 参与开发的流程：
 
 * 首先，开发者应具有一个 GitHub 账号，在 GitHub 登录账号；
-* 进入 MiniFramework 项目页面 [https://github.com/jasonweicn/MiniFramework](https://github.com/jasonweicn/MiniFramework)；
+* 进入 MiniFramework 项目页面 [https://github.com/jasonweicn/miniframework](https://github.com/jasonweicn/miniframework)；
 * 将 MiniFramework 项目源码 Fork 到开发者自己的账号下，然后 Clone 到本地计算机硬盘中；
 * 完成代码编写并 Commit 到开发者账号下的 MiniFramework 副本中；
 * 开发者通过 Pull request 提交代码（提交时请详细填写改动细节），等待审核通过。
