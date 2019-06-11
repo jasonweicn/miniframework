@@ -16,7 +16,7 @@
 * 新增方法Mini\Helpers\Safe::getCsrfToken()，用于随时获取当前存储于Server端的CSRF-Token。
 * 改进Mini\Db类库，支持原有工厂模式调用和直接调用MySQL类Mini\Db\Mysql两种模式并存。
 * 改进Mini\Cache类库，支持原有工厂模式和直接调用File、Memcache、Memcached和Redis类两种模式并存。
-* 创建框架核心代码仓库https://github.com/jasonweicn/miniframework-core，用于正式版本发布。
+* 创建框架核心代码仓库 https://github.com/jasonweicn/miniframework-core 用于正式版本发布。
 * 完善用于演示的应用示例App。
 * 完善Composer配置，更好的支持在项目中通过Composer引入框架进行编码。
 * 完善代码注释。
