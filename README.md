@@ -9,6 +9,15 @@ MiniFramework 能够帮助开发者用最小的学习成本快速构建 Web 应�
 
 MiniFramework 快速入门学习文档：[http://www.miniframework.com/docv2/guide/](http://www.miniframework.com/docv2/guide/)
 
+安装部署
+====================
+
+通过 Composer 可以快速安装部署一个基于 MiniFramework 的基础应用模板，开发者可以通过这个模板快速开始构建自己的 Web 应用。
+
+```
+php composer.phar create-project --prefer-dist --stability=dev jasonweicn/miniframework-app-basic
+```
+
 参与开发
 ====================
 
