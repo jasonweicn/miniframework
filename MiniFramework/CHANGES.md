@@ -1,5 +1,9 @@
 # CHANGES #
 
+## Version 2.0.1 released. ( 2019-06-13 ) ##
+
+* 修复创建CSRF-Token的cookie时，路径参数path不固定，导致后续校验失败的Bug。
+
 ## Version 2.0.0 released. ( 2019-06-11 ) ##
 
 * 重构框架核心架构，按功能模块划分目录和命名空间。
