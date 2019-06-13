@@ -337,7 +337,7 @@ class Request
         Session::set($this->_csrfParamName, $token);
         Session::commit();
         
-        setcookie($this->_csrfParamName, $token, 0, null, null, null, true);
+        setcookie($this->_csrfParamName, $token, 0, '/', null, null, true);
         
         return $token;
     }
