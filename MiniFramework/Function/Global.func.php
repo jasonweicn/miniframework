@@ -408,3 +408,23 @@ function htmlEncode($string, $doubleEncode = true)
     
     return $reVal; 
 }
+
+/**
+ * 判断一个数组是否为索引数组
+ * 
+ * @param array $array
+ * @return boolean
+ */
+function isIndexArray($array)
+{
+    $i = 0;
+    $keys = array_keys($array);
+    foreach ($keys as $key) {
+        if (! is_int($key) || $i != $key) {
+            return false;
+        }
+        $i ++;
+    }
+    
+    return true;
+}
