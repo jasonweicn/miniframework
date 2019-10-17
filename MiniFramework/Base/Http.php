@@ -113,7 +113,7 @@ class Http
      * 
      * @param string $name            
      * @param string $value            
-     * @return \Mini\Http
+     * @return \Mini\Base\Http
      */
     public function header($name, $value = null)
     {
