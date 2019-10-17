@@ -1,5 +1,11 @@
 # CHANGES #
 
+## Version 2.1.0 released. ( 2019-10-17 ) ##
+
+* 新增全局函数 isIndexArray()，用于判断一个数组是否为索引数组。
+* 改进 Mini\Base\Model 类，为在模型中的数据库连贯操作增加若干新特性。
+* 完善代码注释。
+
 ## Version 2.0.1 released. ( 2019-06-13 ) ##
 
 * 修复创建CSRF-Token的cookie时，路径参数path不固定，导致后续校验失败的Bug。
