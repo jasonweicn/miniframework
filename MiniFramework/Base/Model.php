@@ -132,9 +132,6 @@ abstract class Model
      */
     public function add()
     {
-        if (! isset($this->_options['table']) || $this->_options['table'] == '') {
-            throw new Exception('Table invalid.');
-        }
         if (! isset($this->_options['data']) || empty($this->_options['data'])) {
             throw new Exception('Data invalid.');
         }
@@ -144,9 +141,9 @@ abstract class Model
         
         if ($this->_curDb) {
             if (isIndexArray($this->_options['data'])) {
-                $res = $this->_curDb->insertAll($this->_options['table'], $this->_options['data']);
+                $res = $this->_curDb->insertAll($this->getTable(), $this->_options['data']);
             } else {
-                $res = $this->_curDb->insert($this->_options['table'], $this->_options['data']);
+                $res = $this->_curDb->insert($this->getTable(), $this->_options['data']);
             }
         } else {
             throw new Exception('Database is not found.');
@@ -164,9 +161,6 @@ abstract class Model
      */
     public function save()
     {
-        if (! isset($this->_options['table']) || $this->_options['table'] == '') {
-            throw new Exception('Table invalid.');
-        }
         if (! isset($this->_options['data']) || empty($this->_options['data'])) {
             throw new Exception('Data invalid.');
         }
@@ -180,7 +174,25 @@ abstract class Model
         }
         
         if ($this->_curDb) {
-            $res = $this->_curDb->update($this->_options['table'], $this->_options['data'], $where);
+            $res = $this->_curDb->update($this->getTable(), $this->_options['data'], $where);
+        } else {
+            throw new Exception('Database is not found.');
+        }
+        $this->reset();
+        
+        return $res;
+    }
+    
+    public function delete()
+    {
+        if (! isset($this->_options['where']) || $this->_options['where'] == '') {
+            $where = '';
+        } else {
+            $where = $this->_options['where'];
+        }
+        
+        if ($this->_curDb) {
+            $res = $this->_curDb->delete($this->getTable(), $where);
         } else {
             throw new Exception('Database is not found.');
         }
@@ -198,7 +210,7 @@ abstract class Model
      */
     public function select($type = 'All')
     {
-        $type = ($type == 'All' || $type == 'Row') ? $type : 'All';
+        $type = ($type == 'Row') ? 'Row' : 'All';
         $this->_method = 'SELECT';
         $sql = $this->createSql();
         $res = array();
@@ -260,13 +272,21 @@ abstract class Model
     /**
      * 设置分组
      * 
-     * @param string $group
+     * @param mixed $group
      * @return \Mini\Base\Model
      */
     public function group($group = null)
     {
-        if ($group != null) {
-            $this->_options['group'] = trim($group);
+        if (isset($group)) {
+            if (is_array($group)) {
+                $group_text = '';
+                foreach ($group as $val) {
+                    $group_text .= '`' . $val . '`, ';
+                }
+                $this->_options['group'] = substr($group_text, 0, strlen($group_text) - 2);
+            } else {
+                $this->_options['group'] = trim($group);
+            }
         }
         
         return $this;
@@ -275,7 +295,7 @@ abstract class Model
     /**
      * 设置排序
      * 
-     * @param string $order
+     * @param mixed $order string|array
      * @return \Mini\Base\Model
      */
     public function order($order = null)
@@ -284,11 +304,10 @@ abstract class Model
             if (is_array($order)) {
                 $order_text = '';
                 foreach ($order as $key => $val) {
-                    $val = strtoupper($val);
-                    if (! is_int($key) && ($val == 'ASC' || $val == 'DESC')) {
-                        $order_text .= '`' . $key . '` ' . $val . ', ';
+                    if (! is_int($key) && (strtoupper($val) == 'ASC' || strtoupper($val) == 'DESC')) {
+                        $order_text .= '`' . $key . '` ' . strtoupper($val) . ', ';
                     } else {
-                        $order_text .= '`' . $val . '` ' . ', ';
+                        $order_text .= '`' . $val . '`, ';
                     }
                 }
                 $this->_options['order'] = substr($order_text, 0, strlen($order_text) - 2);
@@ -355,7 +374,6 @@ abstract class Model
         }
         
         if ($this->_method == 'SELECT') {
-            
             if (! isset($this->_options['field']) || $this->_options['field'] == '') {
                 $sql .= ' * ';
             } else {
@@ -376,10 +394,24 @@ abstract class Model
                     $sql .= ' LIMIT ' . $this->_options['limit']['rows'];
                 }
             }
-            
         }
         
         return $sql;
+    }
+    
+    /**
+     * 获取当前操作的表
+     * 
+     * @throws Exception
+     * @return string
+     */
+    private function getTable()
+    {
+        if (! isset($this->_options['table']) || $this->_options['table'] == '') {
+            throw new Exception('Table invalid.');
+        }
+        
+        return $this->_options['table'];
     }
     
     private function reset()
