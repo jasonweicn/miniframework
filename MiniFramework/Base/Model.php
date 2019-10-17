@@ -107,21 +107,109 @@ abstract class Model
     }
     
     /**
-     * 查询
+     * 传入用于更新或插入的数据
+     * 
+     * @param array $data
+     * @throws Exception
+     * @return \Mini\Base\Model
+     */
+    public function data($data = null)
+    {
+        if ($data != null && is_array($data)) {
+            $this->_options['data'] = $data;
+        } else {
+            throw new Exception('Data invalid.');
+        }
+        
+        return $this;
+    }
+    
+    /**
+     * 添加数据
      * 
      * @throws Exception
-     * @return array
+     * @return int
      */
-    public function select()
+    public function add()
     {
-        $this->_method = 'SELECT';
-        $sql = $this->createSql();
+        if (! isset($this->_options['table']) || $this->_options['table'] == '') {
+            throw new Exception('Table invalid.');
+        }
+        if (! isset($this->_options['data']) || empty($this->_options['data'])) {
+            throw new Exception('Data invalid.');
+        }
+        if (! is_array($this->_options['data'])) {
+            throw new Exception('Data is not array.');
+        }
+        
         if ($this->_curDb) {
-            $res = $this->_curDb->query($sql, 'All');
-            return $res;
+            if (isIndexArray($this->_options['data'])) {
+                $res = $this->_curDb->insertAll($this->_options['table'], $this->_options['data']);
+            } else {
+                $res = $this->_curDb->insert($this->_options['table'], $this->_options['data']);
+            }
         } else {
             throw new Exception('Database is not found.');
         }
+        $this->reset();
+        
+        return $res;
+    }
+    
+    /**
+     * 保存数据
+     * 
+     * @throws Exception
+     * @return int
+     */
+    public function save()
+    {
+        if (! isset($this->_options['table']) || $this->_options['table'] == '') {
+            throw new Exception('Table invalid.');
+        }
+        if (! isset($this->_options['data']) || empty($this->_options['data'])) {
+            throw new Exception('Data invalid.');
+        }
+        if (! is_array($this->_options['data'])) {
+            throw new Exception('Data is not array.');
+        }
+        if (! isset($this->_options['where']) || $this->_options['where'] == '') {
+            $where = '';
+        } else {
+            $where = $this->_options['where'];
+        }
+        
+        if ($this->_curDb) {
+            $res = $this->_curDb->update($this->_options['table'], $this->_options['data'], $where);
+        } else {
+            throw new Exception('Database is not found.');
+        }
+        $this->reset();
+        
+        return $res;
+    }
+    
+    /**
+     * 查询
+     * 
+     * @param string $type
+     * @throws Exception
+     * @return array
+     */
+    public function select($type = 'All')
+    {
+        $type = ($type == 'All' || $type == 'Row') ? $type : 'All';
+        $this->_method = 'SELECT';
+        $sql = $this->createSql();
+        $res = array();
+        if ($this->_curDb) {
+            $res = $this->_curDb->query($sql, $type);
+        } else {
+            throw new Exception('Database is not found.');
+        }
+        $this->reset();
+        
+        return $res;
     }
     
     /**
@@ -192,23 +280,56 @@ abstract class Model
      */
     public function order($order = null)
     {
-        if ($order != null) {
-            $this->_options['order'] = trim($order);
+        if (isset($order)) {
+            if (is_array($order)) {
+                $order_text = '';
+                foreach ($order as $key => $val) {
+                    $val = strtoupper($val);
+                    if (! is_int($key) && ($val == 'ASC' || $val == 'DESC')) {
+                        $order_text .= '`' . $key . '` ' . $val . ', ';
+                    } else {
+                        $order_text .= '`' . $val . '` ' . ', ';
+                    }
+                }
+                $this->_options['order'] = substr($order_text, 0, strlen($order_text) - 2);
+            } else {
+                $this->_options['order'] = trim($order);
+            }
         }
         
         return $this;
     }
-    
+
     /**
-     * 设置LIMIT
+     * LIMIT
      * 
-     * @param string $limit
+     * @param int $param1
+     * @param int $param2
+     * @throws Exception
      * @return \Mini\Base\Model
      */
-    public function limit($limit = null)
+    public function limit($param1 = 1, $param2 = null)
     {
-        if ($limit != null) {
-            $this->_options['limit'] = trim($limit);
+        if (isset($param2)) {
+            
+            list($param1, $param2) = array($param2, $param1);
+            
+            // param2 = offset
+            if (is_int($param2)) {
+                $this->_options['limit']['offset'] = $param2;
+            } else {
+                throw new Exception('Offset of limit invalid.');
+            }
+        }
+        
+        // param1 = rows
+        if (! isset($param1) || empty($param1) || ! is_int($param1)) {
+            throw new Exception('Rows of limit invalid.');
+        }
+        if ($param1 > 0) {
+            $this->_options['limit']['rows'] = $param1;
+        } else {
+            throw new Exception('Rows of limit invalid.');
         }
         
         return $this;
@@ -240,23 +361,32 @@ abstract class Model
             } else {
                 $sql .= ' ' . $this->_options['field'] . ' ';
             }
-            $sql .= 'FROM ' . $this->_options['table'] . $where;
+            $sql .= 'FROM `' . $this->_options['table'] . '`' . $where;
             if (isset($this->_options['group']) && $this->_options['group'] != '') {
                 $sql .= ' GROUP BY ' . $this->_options['group'];
             }
             if (isset($this->_options['order']) && $this->_options['order'] != '') {
                 $sql .= ' ORDER BY ' . $this->_options['order'];
             }
-            if (isset($this->_options['limit']) && $this->_options['limit'] != '') {
-                $sql .= ' LIMIT ' . $this->_options['limit'];
+            if (isset($this->_options['limit']['rows'])) {
+                if (isset($this->_options['limit']['offset'])) {
+                    $sql .= ' LIMIT ' . $this->_options['limit']['offset']
+                    . ', ' . $this->_options['limit']['rows'];
+                } else {
+                    $sql .= ' LIMIT ' . $this->_options['limit']['rows'];
+                }
             }
             
         }
         
+        return $sql;
+    }
+    
+    private function reset()
+    {
         $this->_options = array();
-        
         $this->_method = '';
         
-        return $sql;
+        return true;
     }
 }
