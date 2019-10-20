@@ -137,11 +137,16 @@ class Session
     public static function destroy()
     {
         if (isset($_SESSION)) {
-            unset($_SESSION);
-            session_destroy();
+            $_SESSION = array();
+            if (ini_get('session.use_cookies')) {
+                $p = session_get_cookie_params();
+                setcookie(session_name(), '', time() - 86400,
+                    $p['path'], $p['domain'], $p['secure'], $p['httponly']
+                    );
+            }
         }
         
-        return true;
+        return session_destroy();
     }
     
     /**
