@@ -61,6 +61,20 @@ class View
      * @var Layout
      */
     public $_layout;
+    
+    /**
+     * 代码块数组
+     * 
+     * @var array
+     */
+    private $_blockData = array();
+    
+    /**
+     * 代码块开启状态
+     * 
+     * @var int
+     */
+    private $_blockStatus = 0;
 
     /**
      * 构造
@@ -160,5 +174,62 @@ class View
         ob_start();
         
         return $content;
+    }
+    
+    /**
+     * 开启一个代码块
+     * 
+     * @param string $blockName
+     * @return boolean
+     */
+    public function beginBlock($blockName)
+    {
+        if ($this->_blockStatus == 1) {
+            return false;
+        }
+        $this->_blockStatus = 1;
+        $this->_blockData[$blockName] = '';
+        ob_start();
+        ob_implicit_flush(false);
+        
+        return true;
+    }
+    
+    /**
+     * 结束当前的代码块
+     * 
+     * @return boolean
+     */
+    public function endBlock()
+    {
+        if ($this->_blockStatus == 0) {
+            return false;
+        }
+        $block = ob_get_clean();
+        end($this->_blockData);
+        $lastKey = key($this->_blockData);
+        if ($lastKey == null) {
+            return false;
+        }
+        $this->_blockData[$lastKey] = $block;
+        $this->_blockStatus = 0;
+        
+        return true;
+    }
+    
+    /**
+     * 插入代码块
+     * 
+     * @param string $blockName
+     * @return boolean
+     */
+    public function insertBlock($blockName)
+    {
+        if (! isset($this->_blockData[$blockName])) {
+            return false;
+        }
+        echo $this->_blockData[$blockName];
+        
+        return true;
     }
 }
