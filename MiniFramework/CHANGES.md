@@ -1,5 +1,12 @@
 # CHANGES #
 
+## Version 2.2.0 released. ( 2019-10-30 ) ##
+
+* 新增Block（代码块）机制，用于在视图中的任意位置定义或输出Block数据
+* 新增在视图中通过$this->setJsFile()方法设置JS文件资源在body标签前加载的特性
+* 改进模型中数据库的连贯操作特性，允许field()方法传入数组形式来指定字段名
+* 修正Session::destroy()方法在某些环境中无法正常销毁会话数据的Bug
+
 ## Version 2.1.0 released. ( 2019-10-17 ) ##
 
 * 新增全局函数 isIndexArray()，用于判断一个数组是否为索引数组。
