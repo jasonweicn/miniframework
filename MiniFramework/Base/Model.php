@@ -227,13 +227,21 @@ abstract class Model
     /**
      * 设置查询字段
      * 
-     * @param string $field
+     * @param mixed $field string|array
      * @return \Mini\Base\Model
      */
     public function field($field = null)
     {
-        if ($field != null) {
-            $this->_options['field'] = trim($field);
+        if (isset($field)) {
+            if (is_array($field)) {
+                $field_text = '';
+                foreach ($field as $val) {
+                    $field_text .= '`' . $val . '`, ';
+                }
+                $this->_options['field'] = substr($field_text, 0, strlen($field_text) - 2);
+            } else {
+                $this->_options['field'] = trim($field);
+            }
         }
         
         return $this;
