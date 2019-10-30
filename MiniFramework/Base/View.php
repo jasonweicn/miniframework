@@ -75,6 +75,13 @@ class View
      * @var int
      */
     private $_blockStatus = 0;
+    
+    /**
+     * JS文件数组
+     * 
+     * @var array
+     */
+    private $_jsFile = array();
 
     /**
      * 构造
@@ -143,7 +150,14 @@ class View
         if (LAYOUT_ON === true && $this->_layout->getLayout()) {
             $this->_layout->content = $content;
             $layoutScript = $this->_layout->getLayoutScript();
-            include ($layoutScript);
+            $finalViewPage = $this->render($layoutScript);
+            if (! empty($this->_jsFile)) {
+                foreach ($this->_jsFile as $url) {
+                    $js = '<script src="' . $url . '"></script>';
+                    $finalViewPage = str_replace('</body>', $js . "\n</body>", $finalViewPage);
+                }
+            }
+            echo $finalViewPage;
         } else {
             echo $content;
         }
@@ -229,6 +243,22 @@ class View
             return false;
         }
         echo $this->_blockData[$blockName];
+        
+        return true;
+    }
+    
+    /**
+     * 设置JS文件资源的引入
+     * 
+     * @param string $jsFileUrl
+     * @return boolean
+     */
+    public function setJsFile($jsFileUrl)
+    {
+        if (!isset($jsFileUrl) || empty($jsFileUrl)) {
+            return false;
+        }
+        $this->_jsFile[] = $jsFileUrl;
         
         return true;
     }
