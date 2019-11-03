@@ -14,7 +14,6 @@ MiniFramework 快速入门学习文档：[http://www.miniframework.com/docv2/gui
 
 [![Latest Stable Version](https://img.shields.io/packagist/v/jasonweicn/miniframework.svg)](https://packagist.org/packages/jasonweicn/miniframework)
 [![Total Downloads](https://img.shields.io/packagist/dt/jasonweicn/miniframework.svg)](https://packagist.org/packages/jasonweicn/miniframework)
-[![Build Status](https://travis-ci.org/jasonweicn/miniframework.svg?branch=master)](https://travis-ci.org/jasonweicn/miniframework)
 
 通过 Composer 可以快速安装部署一个基于 MiniFramework 的基础应用模板，开发者可以通过这个模板快速开始构建自己的 Web 应用。
 
