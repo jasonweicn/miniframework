@@ -35,18 +35,18 @@ class Cache
      * @param string $adapter
      * @param array $params
      */
-    public static function factory($adapter = 'Memcache', $params = array())
+    public static function factory($adapter = 'Memcache', $params = [])
     {
         if (! is_string($adapter) || empty($adapter)) {
             throw new Exception('Adapter name must be specified in a string.');
         }
 
-        if (! in_array($adapter, array(
+        if (! in_array($adapter, [
             'File',
             'Memcache',
             'Memcached',
             'Redis'
-        ))) {
+        ])) {
             throw new Exception('Adapter "' . $adapter . '" does not exist.');
         }
 

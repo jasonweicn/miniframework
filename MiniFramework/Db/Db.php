@@ -35,15 +35,15 @@ class Db
      * @param string $adapter            
      * @param array $params            
      */
-    public static function factory($adapter = 'Mysql', $params = array())
+    public static function factory($adapter = 'Mysql', $params = [])
     {
         if (! is_string($adapter) || empty($adapter)) {
             throw new Exception('Adapter name must be specified in a string.');
         }
         
-        if (! in_array($adapter, array(
+        if (! in_array($adapter, [
             'Mysql'
-        ))) {
+        ])) {
             throw new Exception('Adapter "' . $adapter . '" does not exist.');
         }
         

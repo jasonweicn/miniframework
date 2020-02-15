@@ -25,7 +25,7 @@
 namespace Mini\Db;
 
 use Mini\Base\Exception;
-use \PDO;
+use PDO;
 
 class Mysql extends Db_Abstract
 {
@@ -35,28 +35,28 @@ class Mysql extends Db_Abstract
      */
     private function _dsn()
     {
-        $dsn = array();
-        
+        $dsn = [];
+
         if (isset($this->_params['host']) && is_string($this->_params['host'])) {
             $dsn['host'] = $this->_params['host'];
         } else {
             $dsn['host'] = 'localhost';
         }
-        
+
         if (isset($this->_params['port'])) {
             $dsn['port'] = $this->_params['port'];
         }
-        
+
         if (isset($this->_params['dbname']) && is_string($this->_params['dbname'])) {
             $dsn['dbname'] = $this->_params['dbname'];
         } else {
             throw new Exception('"dbname" must be in the params of Db.');
         }
-        
+
         foreach ($dsn as $key => $val) {
             $dsn[$key] = "$key=$val";
         }
-        
+
         return 'mysql:' . implode(';', $dsn);
     }
 
@@ -67,15 +67,15 @@ class Mysql extends Db_Abstract
     {
         if ($this->_dbh)
             return;
-        
+
         if (! class_exists('PDO')) {
             throw new Exception('Not support PDO.');
         }
-        
+
         $dsn = $this->_dsn();
-        
+
         $this->_params['options'][PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
-        
+
         if (version_compare(PHP_VERSION, '5.3.6', '>=')) {
             $dsn .= ';charset=' . $this->_params['charset'];
         } else {
@@ -83,19 +83,19 @@ class Mysql extends Db_Abstract
                 $this->_params['options'][PDO::MYSQL_ATTR_INIT_COMMAND] = 'SET NAMES ' . $this->_params['charset'];
             }
         }
-        
+
         if (isset($this->_params['persistent']) && ($this->_params['persistent'] == true)) {
             $this->_params['options'][PDO::ATTR_PERSISTENT] = true;
         } else {
             $this->_params['options'][PDO::ATTR_PERSISTENT] = false;
         }
-        
+
         try {
             $this->_dbh = new PDO($dsn, $this->_params['username'], $this->_params['passwd'], $this->_params['options']);
         } catch (Exception $e) {
             throw new Exception('Database connection failed.');
         }
-        
+
         if (version_compare(PHP_VERSION, '5.3.6', '<') && ! defined('PDO::MYSQL_ATTR_INIT_COMMAND')) {
             $this->_dbh->exec('SET NAMES ' . $this->_params['charset']);
         }
@@ -104,7 +104,7 @@ class Mysql extends Db_Abstract
     /**
      * 执行SQL语句
      *
-     * @param string $sql            
+     * @param string $sql
      * @return int
      */
     public function execSql($sql = null)
@@ -127,10 +127,8 @@ class Mysql extends Db_Abstract
     /**
      * 查询SQL语句
      *
-     * @param string $sql
-     *            SQL语句
-     * @param string $queryMode
-     *            查询方式(All or Row)
+     * @param string $sql SQL语句
+     * @param string $queryMode 查询方式(All or Row)
      * @return array
      */
     public function query($sql = null, $queryMode = 'All')
@@ -145,7 +143,7 @@ class Mysql extends Db_Abstract
                 $this->_getPdoError();
             }
             $recordset->setFetchMode(PDO::FETCH_ASSOC);
-            
+
             if ($queryMode == 'All') {
                 $result = $recordset->fetchAll();
             } elseif ($queryMode == 'Row') {
@@ -153,7 +151,7 @@ class Mysql extends Db_Abstract
             } else {
                 $result = null;
             }
-            
+
             return $result;
         } catch (\PDOException $e) {
             throw new Exception($e);
@@ -163,54 +161,48 @@ class Mysql extends Db_Abstract
     /**
      * 插入记录
      *
-     * @param string $table
-     *            表名
-     * @param array $data
-     *            数据 array(col => value)
+     * @param string $table 表名
+     * @param array $data 数据 array(col => value)
      * @return int
      */
     public function insert($table, array $data)
     {
         $sql = "INSERT INTO `$table` (`" . implode('`,`', array_keys($data)) . "`) VALUES ('" . implode("','", $data) . "')";
-        
+
         return $this->execSql($sql);
     }
 
     /**
      * 批量插入记录
-     * 
-     * @param string $table            
-     * @param array $dataArray
-     *            = array(
-     *            0 => array(col1 => value1, col2 => value2),
-     *            1 => array(col1 => value1, col2 => value2),
-     *            ...
-     *            )
+     *
+     * @param string $table
+     * @param array $dataArray = array(
+     *        0 => array(col1 => value1, col2 => value2),
+     *        1 => array(col1 => value1, col2 => value2),
+     *        ...
+     *        )
      * @return int
      */
     public function insertAll($table, array $dataArray)
     {
         $sql = "INSERT INTO `$table` (`" . implode('`,`', array_keys($dataArray[0])) . "`) VALUES ";
-        
-        $valSqls = array();
+
+        $valSqls = [];
         foreach ($dataArray as $data) {
             $valSqls[] = "('" . implode("','", $data) . "')";
         }
-        
+
         $sql .= implode(', ', $valSqls);
-        
+
         return $this->execSql($sql);
     }
 
     /**
      * 更新记录
      *
-     * @param string $table
-     *            表名
-     * @param array $data
-     *            数据 array(col => value)
-     * @param string $where
-     *            条件
+     * @param string $table 表名
+     * @param array $data 数据 array(col => value)
+     * @param string $where 条件
      * @return int
      */
     public function update($table, array $data, $where = '')
@@ -223,33 +215,29 @@ class Mysql extends Db_Abstract
         }
         $sql = substr($sql, 1);
         $sql = "UPDATE `$table` SET $sql" . (($where) ? " WHERE $where" : '');
-        
+
         return $this->execSql($sql);
     }
 
     /**
      * 替换记录
      *
-     * @param string $table
-     *            表名
-     * @param array $data
-     *            数据 array(col => value)
+     * @param string $table 表名
+     * @param array $data 数据 array(col => value)
      * @return int
      */
     public function replace($table, array $data)
     {
         $sql = "REPLACE INTO `$table`(`" . implode('`,`', array_keys($data)) . "`) VALUES ('" . implode("','", $data) . "')";
-        
+
         return $this->execSql($sql);
     }
 
     /**
      * 删除记录
      *
-     * @param string $table
-     *            表名
-     * @param string $where
-     *            条件
+     * @param string $table 表名
+     * @param string $where 条件
      * @return int
      */
     public function delete($table, $where = '')
@@ -261,9 +249,9 @@ class Mysql extends Db_Abstract
     /**
      * 按指定条件查询行数
      *
-     * @param string $table            
-     * @param string $col            
-     * @param string $where            
+     * @param string $table
+     * @param string $col
+     * @param string $where
      * @return int
      */
     public function countRow($table, $col = '*', $where = '')
@@ -276,12 +264,9 @@ class Mysql extends Db_Abstract
     /**
      * 获取字段最大值
      *
-     * @param string $table
-     *            表名
-     * @param string $col
-     *            字段名
-     * @param string $where
-     *            条件
+     * @param string $table 表名
+     * @param string $col 字段名
+     * @param string $where 条件
      */
     public function getMaxValue($table, $col, $where = '')
     {
@@ -297,8 +282,7 @@ class Mysql extends Db_Abstract
     /**
      * 获取表引擎
      *
-     * @param string $table
-     *            表名
+     * @param string $table 表名
      * @return string
      */
     public function getTableEngine($table)
@@ -335,7 +319,7 @@ class Mysql extends Db_Abstract
     /**
      * 通过事务处理多条SQL语句
      *
-     * @param array $arraySql            
+     * @param array $arraySql
      * @return boolean
      */
     public function execTrans(array $arraySql)

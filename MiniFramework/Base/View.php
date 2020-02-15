@@ -67,7 +67,7 @@ class View
      * 
      * @var array
      */
-    private $_blockData = array();
+    private $_blockData = [];
     
     /**
      * 代码块开启状态
@@ -81,7 +81,7 @@ class View
      * 
      * @var array
      */
-    private $_jsFile = array();
+    private $_jsFile = [];
 
     /**
      * 构造

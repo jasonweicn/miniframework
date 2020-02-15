@@ -27,7 +27,7 @@ namespace Mini\Base;
 class Http
 {
 
-    protected static $status = array(
+    protected static $status = [
         // Informational 1xx
         100 => 'Continue',
         101 => 'Switching Protocols',
@@ -79,7 +79,7 @@ class Http
         504 => 'Gateway Timeout',
         505 => 'HTTP Version Not Supported',
         509 => 'Bandwidth Limit Exceeded'
-    );
+    ];
 
     /**
      * Http实例
@@ -93,7 +93,7 @@ class Http
      *
      * @var array
      */
-    protected $_headers = array();
+    protected $_headers = [];
 
     /**
      * 获取实例

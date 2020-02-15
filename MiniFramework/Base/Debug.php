@@ -39,7 +39,7 @@ class Debug
      */
     public static function timerStart()
     {
-        self::$timer = array();
+        self::$timer = [];
         self::$timer['start'] = microtime(true);
     }
     

@@ -41,7 +41,7 @@ abstract class Cache_Abstract
      *
      * @var array
      */
-    protected $_params = array();
+    protected $_params = [];
 
     /**
      * 是否压缩缓存数据
@@ -100,11 +100,11 @@ abstract class Cache_Abstract
         
         $adapterClassName = get_class($this);
         
-        if (in_array($adapterClassName, array(
+        if (in_array($adapterClassName, [
             'Mini\\Cache\\Memcache',
             'Mini\\Cache\\Memcached',
             'Mini\\Cache\\Redis'
-        ))) {
+        ])) {
             if (! isset($params['host'])) {
                 throw new Exception('Cache(' . $adapterClassName . ') host is not defined.');
             } elseif (! isset($params['port'])) {

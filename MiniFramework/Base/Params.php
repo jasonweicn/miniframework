@@ -39,21 +39,21 @@ class Params
      *
      * @var array
      */
-    public $_params = array();
+    public $_params = [];
 
     /**
      * POST数组
      *
      * @var array
      */
-    public $_post = array();
+    public $_post = [];
 
     /**
      * GET数组
      *
      * @var array
      */
-    public $_get = array();
+    public $_get = [];
 
     /**
      * 获取实例

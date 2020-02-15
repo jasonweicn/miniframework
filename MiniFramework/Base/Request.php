@@ -67,14 +67,14 @@ class Request
      *
      * @var array
      */
-    protected $_requestParams = array();
+    protected $_requestParams = [];
 
     /**
      * 存放请求的Header信息数组
      *
      * @var array
      */
-    private $_headers = array();
+    private $_headers = [];
 
     /**
      * 预处理过的REQUEST_URI
@@ -185,7 +185,7 @@ class Request
             return $this->_queryStringArray;
         }
         
-        $queryStringArray = array();
+        $queryStringArray = [];
         parse_str($_SERVER['QUERY_STRING'], $queryStringArray);
         $this->_queryStringArray = $queryStringArray;
         
@@ -200,7 +200,7 @@ class Request
      */
     public function parseRequestParams($routeType)
     {
-        $requestParams = array();
+        $requestParams = [];
         
         if ($routeType == 'cli') {
             

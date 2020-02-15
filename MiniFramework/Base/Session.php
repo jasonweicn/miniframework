@@ -32,7 +32,7 @@ class Session
      *
      * @param array $params
      */
-    public static function start($params = array())
+    public static function start($params = [])
     {
         $flag = false;
         if (version_compare(PHP_VERSION, '5.4.0', '>=')) {
@@ -137,7 +137,7 @@ class Session
     public static function destroy()
     {
         if (isset($_SESSION)) {
-            $_SESSION = array();
+            $_SESSION = [];
             if (ini_get('session.use_cookies')) {
                 $p = session_get_cookie_params();
                 setcookie(session_name(), '', time() - 86400,

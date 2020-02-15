@@ -34,7 +34,7 @@ class Config
      */
     protected static $_instance;
 
-    private $_confData = array();
+    private $_confData = [];
 
     /**
      * 获取实例

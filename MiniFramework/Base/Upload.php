@@ -122,7 +122,7 @@ class Upload
         }
         
         $fileArray = $this->convertFileArray($files);
-        $info = array();
+        $info = [];
         foreach ($fileArray as $key => $file) {
             if (isset($file['tmp_name'])) {
                 $info[$key] = $this->saveOne($file, $key);
@@ -218,7 +218,7 @@ class Upload
      */
     private function convertFileArray($files)
     {
-        $fileArray = array();
+        $fileArray = [];
         foreach ($files as $key => $file) {
             if (is_array($file['tmp_name'])) {
                 $keys  = array_keys($file);

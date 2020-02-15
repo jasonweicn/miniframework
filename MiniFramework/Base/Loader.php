@@ -39,7 +39,7 @@ class Loader
      *
      * @var array
      */
-    private static $_funcs = array();
+    private static $_funcs = [];
 
     /**
      * 获取实例
@@ -57,10 +57,10 @@ class Loader
      */
     protected function __construct()
     {
-        spl_autoload_register(array(
+        spl_autoload_register([
             __CLASS__,
             'Mini\Base\Loader::autoload'
-        ));
+        ]);
     }
 
     /**

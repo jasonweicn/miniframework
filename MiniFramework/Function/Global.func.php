@@ -67,7 +67,7 @@ function getClientIp()
             $ip = getenv('REMOTE_ADDR');
         }
     }
-    $matches = array();
+    $matches = [];
     preg_match("/[\d\.]{7,15}/", $ip, $matches);
     $ip = ! empty($matches[0]) ? $matches[0] : '0.0.0.0';
     
@@ -83,7 +83,7 @@ function getClientIp()
  */
 function chgArrayKey($array, $field)
 {
-    $tmp = array();
+    $tmp = [];
     if (is_array($array)) {
         foreach ($array as $value) {
             $tmp[$value[$field]] = $value;
@@ -169,7 +169,7 @@ function pushJson($data, $push = true)
  *            需要检验的格式数组
  * @return boolean
  */
-function isDate($date, $formats = array('Y-m-d', 'Y/m/d'))
+function isDate($date, $formats = ['Y-m-d', 'Y/m/d'])
 {
     $timestamp = strtotime($date);
     if (! $timestamp) {
@@ -234,7 +234,7 @@ function dump($var, $label = null, $echo = true)
  *            编码
  * @return string
  */
-function pushXml($data, $push = true, $indent = false, $root = 'data', $attr = array(), $item = 'item', $id = 'id', $encoding = 'utf-8')
+function pushXml($data, $push = true, $indent = false, $root = 'data', $attr = [], $item = 'item', $id = 'id', $encoding = 'utf-8')
 {
     $eol = ($indent === true) ? PHP_EOL : '';
     

@@ -213,7 +213,7 @@ abstract class Model
         $type = ($type == 'Row') ? 'Row' : 'All';
         $this->_method = 'SELECT';
         $sql = $this->createSql();
-        $res = array();
+        $res = [];
         if ($this->_curDb) {
             $res = $this->_curDb->query($sql, $type);
         } else {
@@ -424,7 +424,7 @@ abstract class Model
     
     private function reset()
     {
-        $this->_options = array();
+        $this->_options = [];
         $this->_method = '';
         
         return true;

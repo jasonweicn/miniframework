@@ -67,7 +67,7 @@ class Router
      *
      * @var array
      */
-    protected $_cliParamsArray = array();
+    protected $_cliParamsArray = [];
 
     /**
      * 构造

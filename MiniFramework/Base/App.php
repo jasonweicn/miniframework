@@ -116,11 +116,11 @@ class App
      */
     public static function customError($level, $message, $file, $line)
     {
-        $error = array(
+        $error = [
             'message' => $message,
             'file' => $file,
             'line' => $line
-        );
+        ];
         
         switch ($level) {
             
@@ -129,20 +129,20 @@ class App
             case E_CORE_ERROR:
             case E_COMPILE_ERROR:
             case E_USER_ERROR:
-                Log::record($message, Log::ERROR, array('file' => $file, 'line' => $line));
+                Log::record($message, Log::ERROR, ['file' => $file, 'line' => $line]);
                 $error['level'] = Log::ERROR;
                 self::showError($error, true);
                 die();
                 break;
                 
             case E_WARNING:
-                Log::record($message, Log::WARNING, array('file' => $file, 'line' => $line));
+                Log::record($message, Log::WARNING, ['file' => $file, 'line' => $line]);
                 $error['level'] = Log::WARNING;
                 self::showError($error);
                 break;
                 
             default:
-                Log::record($message, Log::NOTICE, array('file' => $file, 'line' => $line));
+                Log::record($message, Log::NOTICE, ['file' => $file, 'line' => $line]);
                 $error['level'] = Log::NOTICE;
                 self::showError($error);
                 break;

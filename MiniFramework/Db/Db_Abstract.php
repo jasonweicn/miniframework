@@ -41,7 +41,7 @@ abstract class Db_Abstract
      *
      * @var array
      */
-    protected $_params = array();
+    protected $_params = [];
 
     /**
      * 最后一次执行的SQL语句

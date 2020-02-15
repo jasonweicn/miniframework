@@ -53,7 +53,7 @@ class Log
      * 
      * @var array
      */
-    protected static $_logs = array();
+    protected static $_logs = [];
 
     /**
      * 获取实例
@@ -62,7 +62,7 @@ class Log
     {
         if (self::$_instance === null) {
             self::$_instance = new self();
-            register_shutdown_function(array(Log::getInstance(), 'write'));
+            register_shutdown_function([Log::getInstance(), 'write']);
         }
         return self::$_instance;
     }
@@ -72,18 +72,18 @@ class Log
      * 
      * @param string $message
      * @param string $level
-     * @param array $position array('file'=>__FILE__,'line'=>__LINE__)
+     * @param array $position ['file' => __FILE__, 'line' => __LINE__]
      */
     public static function record($message, $level = self::ERROR, $position = null)
     {
         if (self::checkLevel($level) === true) {
-            self::$_logs[] = array(
+            self::$_logs[] = [
                 'time' => date('Y-m-d H:i:s'),
                 'level' => $level,
                 'body' => $message,
                 'file' => isset($position['file']) ? $position['file'] : null,
                 'line' => isset($position['line']) ? $position['line'] : null
-            );
+            ];
         }
     }
     

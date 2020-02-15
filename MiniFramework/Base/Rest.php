@@ -130,16 +130,16 @@ class Rest
      * @param string $data
      *            返回的数据
      */
-    public function responseXml($code = 200, $msg = '', $data = array())
+    public function responseXml($code = 200, $msg = '', $data = [])
     {
         if ($msg == '') {
             $msg = Http::isStatus($code) === false ? '' : Http::isStatus($code);
         }
         
-        $xml = pushXml($data, false, false, 'data', array(
+        $xml = pushXml($data, false, false, 'data', [
             'code' => $code,
             'msg' => $msg
-        ));
+        ]);
         
         $headers = $this->_request->getHeaders();
         if (isset($headers['Ver']) && preg_match("/^\d+$/", $headers['Ver'])) {
