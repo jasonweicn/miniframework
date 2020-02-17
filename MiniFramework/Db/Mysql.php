@@ -173,6 +173,35 @@ class Mysql extends Db_Abstract
     }
 
     /**
+     * 预处理方式插入记录
+     *
+     * @param string $table 表名
+     * @param array $data 数据 array(col => value)
+     * @return int
+     */
+    public function prepareInsert($table, array $data)
+    {
+        $this->_connect();
+        if (empty($data)) {
+            return false;
+        }
+        $prepareParams = [];
+        foreach ($data as $k => $v) {
+            $prepareParams[':' . $k] = $v;
+        }
+        try {
+            $sql = "INSERT INTO `$table` (`" . implode('`, `', array_keys($data)) . "`) VALUES (" . implode(', ', array_keys($prepareParams)) . ")";
+            $stmt = $this->_dbh->prepare($sql);
+            $res = $stmt->execute($prepareParams);
+            return $res;
+        } catch (\PDOException $e) {
+            throw new Exception($e);
+        }
+
+        return false;
+    }
+
+    /**
      * 批量插入记录
      *
      * @param string $table
@@ -195,6 +224,52 @@ class Mysql extends Db_Abstract
         $sql .= implode(', ', $valSqls);
 
         return $this->execSql($sql);
+    }
+    
+    /**
+     * 预处理方式批量插入记录
+     *
+     * @param string $table
+     * @param array $dataArray = array(
+     *        0 => array(col1 => value1, col2 => value2),
+     *        1 => array(col1 => value1, col2 => value2),
+     *        ...
+     *        )
+     * @return int
+     */
+    public function prepareInsertAll($table, array $dataArray)
+    {
+        $this->_connect();
+        if (empty($dataArray)) {
+            return false;
+        }
+        $prepareParamsArray = [];
+        foreach ($dataArray as $key => $data) {
+            if (empty($data)) {
+                return false;
+            }
+            foreach ($data as $k => $v) {
+                $prepareParamsArray[$key][':' . $k] = $v;
+            }
+        }
+        $i = 0;
+        try {
+            $sql = "INSERT INTO `$table` (`" . implode('`, `', array_keys($dataArray[0])) . "`) VALUES (" . implode(', ', array_keys($prepareParamsArray[0])) . ")";
+            echo $sql;
+            $stmt = $this->_dbh->prepare($sql);
+            foreach ($prepareParamsArray as $prepareParams) {
+                $res = $stmt->execute($prepareParams);
+                if ($res) {
+                    $i ++;
+                }
+            }
+            
+            return $i;
+        } catch (\PDOException $e) {
+            throw new Exception($e);
+        }
+
+        return false;
     }
 
     /**
