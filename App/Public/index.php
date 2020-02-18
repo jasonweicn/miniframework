@@ -6,20 +6,17 @@
 // 应用命名空间（请与应用所在目录名保持一致）
 const APP_NAMESPACE = 'App';
 
-// 应用路径（通常不需要设置，框架可以识别路径）
-//define('APP_PATH',      dirname(dirname(__FILE__)));
-
-// 是否显示错误信息
+// 是否显示错误信息（默认值：false）
 const SHOW_ERROR = true;
 
-// 是否开启日志（生产环境建议关闭）
+// 是否开启日志（生产环境建议关闭，默认值：false）
 const LOG_ON = false;
 
-// 是否启用布局功能
+// 是否启用布局功能（默认值：false）
 const LAYOUT_ON = true;
 
 // 是否开启REST模式的API接口功能（默认值：false）
-//const REST_ON = false;
+const REST_ON = true;
 
 // 引入 MiniFramework 就是这么简单
-require __DIR__ . '/../../miniframework/Bootstrap.php';
+require dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'miniframework/Bootstrap.php';
