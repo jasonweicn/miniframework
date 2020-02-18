@@ -1,5 +1,14 @@
 # CHANGES #
 
+## Version 2.3.0 released. ( 2020-02-19 ) ##
+
+* 新增方法Mini\Db\Mysql::prepareInsert()，用于按预处理方式向MySQL插入记录
+* 新增方法Mini\Db\Mysql::prepareInsertAll()，用于按预处理方式向MySQL批量插入记录
+* 在示例应用入口index.php中，改用const声明常量，优化框架性能
+* 在部分文件中，启用PHP7支持的批量引入命名空间的代码写法
+* 全面启用方括号方式定义数组
+* 更新composer.json定义，放弃对于PHP5的兼容性支持，提升PHP最低版本要求至7.2.0
+
 ## Version 2.2.0 released. ( 2019-10-30 ) ##
 
 * 新增Block（代码块）机制，用于在视图中的任意位置定义或输出Block数据
