@@ -22,5 +22,4 @@ const LAYOUT_ON = true;
 //const REST_ON = false;
 
 // 引入 MiniFramework 就是这么简单
-//require dirname(APP_PATH) . DIRECTORY_SEPARATOR . 'MiniFramework' . DIRECTORY_SEPARATOR . 'Bootstrap.php';
 require __DIR__ . '/../../miniframework/Bootstrap.php';
