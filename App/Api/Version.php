@@ -33,9 +33,9 @@ class Version extends Rest
         } elseif ($type == 'xml') {
             
             // 输出XML
-            $this->responseXml(200, 'success', array(
+            $this->responseXml(200, 'success', [
                 'version' => $version
-            ));
+            ]);
         }
     }
 
