@@ -1,12 +1,8 @@
 <?php
 namespace App\Controller;
 
-use Mini\Base\Action;
+use Mini\Base\{Action, Session, Upload, Log, Debug};
 use Mini\Captcha\Captcha;
-use Mini\Base\Session;
-use Mini\Base\Upload;
-use Mini\Base\Log;
-use Mini\Base\Debug;
 
 /**
  * Example
@@ -84,7 +80,7 @@ class Example extends Action
         $message = 'This is a log test.';
 
         // 如果 LOG_ON 为 true 时，下面的内容会在程序运行结束时最终写入日志文件
-        Log::record($message, 'INFO', array('file'=>__FILE__, 'line'=>__LINE__));
+        Log::record($message, 'INFO', ['file'=>__FILE__, 'line'=>__LINE__]);
         
     }
     
