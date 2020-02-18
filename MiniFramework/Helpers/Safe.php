@@ -24,8 +24,7 @@
 // +---------------------------------------------------------------------------
 namespace Mini\Helpers;
 
-use Mini\Base\Session;
-use Mini\Base\Request;
+use Mini\Base\{Session, Request};
 
 class Safe
 {
