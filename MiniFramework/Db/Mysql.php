@@ -177,7 +177,7 @@ class Mysql extends Db_Abstract
      *
      * @param string $table 表名
      * @param array $data 数据 array(col => value)
-     * @return int
+     * @return bool
      */
     public function prepareInsert($table, array $data)
     {
@@ -187,6 +187,10 @@ class Mysql extends Db_Abstract
         }
         $prepareParams = [];
         foreach ($data as $k => $v) {
+            if (is_array($v)) {
+                throw new Exception('Value cannot be an array.');
+                return false;
+            }
             $prepareParams[':' . $k] = $v;
         }
         try {
@@ -235,7 +239,7 @@ class Mysql extends Db_Abstract
      *        1 => array(col1 => value1, col2 => value2),
      *        ...
      *        )
-     * @return int
+     * @return bool
      */
     public function prepareInsertAll($table, array $dataArray)
     {
@@ -243,28 +247,31 @@ class Mysql extends Db_Abstract
         if (empty($dataArray)) {
             return false;
         }
-        $prepareParamsArray = [];
+        $prepareParams = [];
+        $prepareData = [];
         foreach ($dataArray as $key => $data) {
             if (empty($data)) {
                 return false;
             }
             foreach ($data as $k => $v) {
-                $prepareParamsArray[$key][':' . $k] = $v;
+                if (is_array($v)) {
+                    throw new Exception('Value cannot be an array.');
+                    return false;
+                }
+                $prepareParams[$key][] = ':' . $k . $key;
+                $prepareData[':' . $k . $key] = $v;
             }
         }
-        $i = 0;
         try {
-            $sql = "INSERT INTO `$table` (`" . implode('`, `', array_keys($dataArray[0])) . "`) VALUES (" . implode(', ', array_keys($prepareParamsArray[0])) . ")";
-            echo $sql;
+            $sql = "INSERT INTO `$table` (`" . implode('`, `', array_keys($dataArray[0])) . "`) VALUES ";
+            $valSqls = [];
+            foreach ($prepareParams as $curParams) {
+                $valSqls[] = "(" . implode(', ', $curParams) . ")";
+            }            
+            $sql .= implode(', ', $valSqls);
             $stmt = $this->_dbh->prepare($sql);
-            foreach ($prepareParamsArray as $prepareParams) {
-                $res = $stmt->execute($prepareParams);
-                if ($res) {
-                    $i ++;
-                }
-            }
-            
-            return $i;
+            $res = $stmt->execute($prepareData);
+            return $res;
         } catch (\PDOException $e) {
             throw new Exception($e);
         }
