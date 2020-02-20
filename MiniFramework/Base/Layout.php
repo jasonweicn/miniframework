@@ -76,20 +76,19 @@ class Layout
         if (isset($this->_container[$key])) {
             return $this->_container[$key];
         }
-        
+
         return null;
     }
 
     /**
      * 设置布局文件所在路径
      *
-     * @param string $path
-     *            布局文件存放路径
+     * @param string $path 布局文件存放路径
      */
     public function setLayoutPath($path)
     {
         $this->_layoutPath = (string) $path;
-        
+
         return $this;
     }
 
@@ -104,24 +103,23 @@ class Layout
     /**
      * 设置布局
      *
-     * @param string $name
-     *            布局名称
+     * @param string $name 布局名称
      */
     public function setLayout($name)
     {
         if (! preg_match('/^[a-zA-Z][a-zA-Z0-9_]*$/', $name)) {
             throw new Exception('Layout "' . $name . '"  invalid.');
         }
-        
+
         $this->_layout = (string) $name;
-        
+
         return $this;
     }
 
     /**
      * 获取布局
      *
-     * @param string $name            
+     * @param string $name
      */
     public function getLayout()
     {
@@ -131,7 +129,7 @@ class Layout
     /**
      * 获取布局脚本
      *
-     * @param string $layoutScript            
+     * @param string $layoutScript
      */
     public function getLayoutScript()
     {
@@ -139,7 +137,7 @@ class Layout
         if (! file_exists($layoutScript)) {
             throw new Exception('Layout "' . $this->getLayout() . '" does not exist.');
         }
-        
+
         return $layoutScript;
     }
 }

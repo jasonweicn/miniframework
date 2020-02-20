@@ -64,9 +64,9 @@ class Rest
         $this->params = Params::getInstance();
         $this->_request = Request::getInstance();
         $this->http = Http::getInstance();
-        
+
         $requestMethod = $this->_request->method();
-        
+
         if ($requestMethod == 'POST') {
             $this->params->setParams($this->params->_post);
         } elseif ($requestMethod == 'PUT') {
@@ -75,13 +75,13 @@ class Rest
                 $this->params->setParams($arguments);
             }
         }
-        
+
         if (method_exists($this, '_init')) {
             $this->_init();
         }
-        
+
         $requestMethod = strtolower($requestMethod);
-        
+
         if (method_exists($this, $requestMethod)) {
             $this->$requestMethod();
         } else {
@@ -92,60 +92,54 @@ class Rest
     /**
      * 发送JSON
      *
-     * @param int $code
-     *            HTTP状态码
-     * @param string $msg
-     *            服务器返回给客户端的消息
-     * @param string $data
-     *            返回的数据
+     * @param int $code HTTP状态码
+     * @param string $msg 服务器返回给客户端的消息
+     * @param string $data 返回的数据
      */
     public function responseJson($code = 200, $msg = '', $data = null)
     {
         if ($msg == '') {
             $msg = Http::isStatus($code) === false ? '' : Http::isStatus($code);
         }
-        
+
         $content = array(
             'code' => $code,
             'msg' => $msg,
             'data' => $data
         );
         $json = pushJson($content, false);
-        
+
         $headers = $this->_request->getHeaders();
         if (isset($headers['Ver']) && preg_match("/^\d+$/", $headers['Ver'])) {
             $this->http->header('X-Api-Ver', $headers['Ver']);
         }
-        
+
         $this->http->header('Content-Type', 'application/json')->response($code, $json);
     }
 
     /**
      * 发送XML
      *
-     * @param int $code
-     *            HTTP状态码
-     * @param string $msg
-     *            服务器返回给客户端的消息
-     * @param string $data
-     *            返回的数据
+     * @param int $code HTTP状态码
+     * @param string $msg 服务器返回给客户端的消息
+     * @param string $data 返回的数据
      */
     public function responseXml($code = 200, $msg = '', $data = [])
     {
         if ($msg == '') {
             $msg = Http::isStatus($code) === false ? '' : Http::isStatus($code);
         }
-        
+
         $xml = pushXml($data, false, false, 'data', [
             'code' => $code,
             'msg' => $msg
         ]);
-        
+
         $headers = $this->_request->getHeaders();
         if (isset($headers['Ver']) && preg_match("/^\d+$/", $headers['Ver'])) {
             $this->http->header('X-Api-Ver', $headers['Ver']);
         }
-        
+
         $this->http->header('Content-Type', 'application/xml')->response($code, $xml);
     }
 

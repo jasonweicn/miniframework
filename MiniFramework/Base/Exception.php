@@ -30,10 +30,8 @@ class Exception extends \Exception
     /**
      * 构造
      *
-     * @param string $message
-     *            错误信息
-     * @param int $code
-     *            错误代码
+     * @param string $message 错误信息
+     * @param int $code 错误代码
      */
     public function __construct($message, $code = 0, $level = Log::ERROR, $position = null)
     {
@@ -56,23 +54,23 @@ class Exception extends \Exception
     /**
      * 显示自定义的报错内容
      *
-     * @param int $code            
+     * @param int $code
      */
     public static function showErrorPage($code)
     {
         $http = Http::getInstance();
         $status = $http->isStatus($code);
-        
+
         if ($status === false) {
             $code = 500;
             $status = $http->isStatus($code);
         }
-        
+
         $info = '<html><head><title>Error</title></head><body><h1>An error occurred</h1>';
         $info .= '<h2>' . $code . ' ' . $status . '</h2></body></html>';
-        
+
         $http->header('Content-Type', 'text/html; charset=utf-8')->response($code, $info);
-        
+
         die();
     }
 }
