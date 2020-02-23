@@ -182,7 +182,10 @@ class Upload
             }
             $path .= DS . $dir;
             if (! file_exists($path) && ! is_dir($path)) {
-                @mkdir($path, 0700);
+                if (! mkdir($path, 0700, true)) {
+                    $this->setErrorMsg('Upload fail: Create dir fail.(' . $path . DS . $this->saveName . ')', $fileKey);
+                    return false;
+                }
             }
         }
         
@@ -195,9 +198,7 @@ class Upload
             }
         }
         
-        $res = @move_uploaded_file($file['tmp_name'], $path . DS . $this->saveName);
-        
-        if (! $res) {
+        if (! move_uploaded_file($file['tmp_name'], $path . DS . $this->saveName)) {
             $this->setErrorMsg('Upload fail: Save fail.(' . $path . DS . $this->saveName . ')', $fileKey);
             return false;
         }
