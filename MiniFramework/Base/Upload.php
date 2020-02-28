@@ -203,7 +203,7 @@ class Upload
                 $this->setErrorMsg('Upload fail: Save fail.(' . $path . DS . $this->saveName . ')', $fileKey);
                 return false;
             }
-        } catch (Exception $e) {
+        } catch (\ErrorException $e) {
             throw new Exception('Upload fail: ' . $e);
         }
         
