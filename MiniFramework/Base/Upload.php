@@ -178,7 +178,7 @@ class Upload
         $path = $this->rootPath;
         foreach ($savePathArray as $dir) {
             if (! is_writable($path)) {
-                throw new Exception('Upload fail: Permission denied.(' . $path . ')', $fileKey);
+                throw new Exception('Upload fail: Permission denied.(' . $path . ')');
             }
             $path .= DS . $dir;
             if (! file_exists($path) && ! is_dir($path)) {
