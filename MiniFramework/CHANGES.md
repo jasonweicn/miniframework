@@ -1,5 +1,11 @@
 # CHANGES #
 
+## Version 2.3.1 released. ( 2020-02-29 ) ##
+
+* 修复Mini\Base\Upload::saveOne()方法中无法正常抛出异常的Bug
+* 完善部分代码中遇到错误的异常提示
+* 完善示例应用兼容多平台目录分隔符
+
 ## Version 2.3.0 released. ( 2020-02-19 ) ##
 
 * 新增方法Mini\Db\Mysql::prepareInsert()，用于按预处理方式向MySQL插入记录
