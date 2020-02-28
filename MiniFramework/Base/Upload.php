@@ -198,10 +198,15 @@ class Upload
             }
         }
         
-        if (! move_uploaded_file($file['tmp_name'], $path . DS . $this->saveName)) {
-            $this->setErrorMsg('Upload fail: Save fail.(' . $path . DS . $this->saveName . ')', $fileKey);
-            return false;
+        try {
+            if (! move_uploaded_file($file['tmp_name'], $path . DS . $this->saveName)) {
+                $this->setErrorMsg('Upload fail: Save fail.(' . $path . DS . $this->saveName . ')', $fileKey);
+                return false;
+            }
+        } catch (Exception $e) {
+            throw new Exception('Upload fail: ' . $e);
         }
+        
         
         $info = array(
             'path' => $path,
