@@ -82,7 +82,7 @@ class Router
             
             $this->_routeType = 'cli';
             
-            if ($_SERVER['argc'] > 1) {
+            if (isset($_SERVER['argc']) && $_SERVER['argc'] > 1) {
                 
                 if (preg_match("/^([a-zA-Z][a-zA-Z0-9]*)\/([a-zA-Z][a-zA-Z0-9]*)$/", $_SERVER['argv'][1], $m)) {
                     $controller = isset($m[1]) ? $m[1] : 'index';

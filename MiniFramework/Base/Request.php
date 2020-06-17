@@ -204,7 +204,7 @@ class Request
         
         if ($routeType == 'cli') {
             
-            if ($_SERVER['argc'] > 2) {
+            if (isset($_SERVER['argc']) && $_SERVER['argc'] > 2) {
                 for ($i = 2; $i < $_SERVER['argc']; $i ++) {
                     if (strpos($_SERVER['argv'][$i], '=') > 0) {
                         $curParam = explode('=', $_SERVER['argv'][$i]);
