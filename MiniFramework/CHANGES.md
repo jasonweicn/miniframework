@@ -1,5 +1,9 @@
 # CHANGES #
 
+## Version 2.3.2 released. ( 2020-06-17 ) ##
+
+* 修复通过PHP内置WEB服务器运行框架时出现NOTICE报错的Bug
+
 ## Version 2.3.1 released. ( 2020-02-29 ) ##
 
 * 修复Mini\Base\Upload::saveOne()方法中无法正常抛出异常的Bug
