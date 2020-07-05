@@ -213,7 +213,7 @@ class App
             
             $apiName = APP_NAMESPACE . '\\Api\\' . $apiName;
             
-            if ('Mini\\Rest' !== get_parent_class($apiName)) {
+            if ('Mini\\Base\\Rest' !== get_parent_class($apiName)) {
                 throw new Exception('Api "' . $apiName . '" not extends "Rest" class.');
             }
             
