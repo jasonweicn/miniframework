@@ -1,8 +1,12 @@
 # CHANGES #
 
+## Version 2.3.3 released. ( 2020-07-05 ) ##
+
+* 修复REST模式运行时的一个Bug，感谢PndOS反馈此Bug。
+
 ## Version 2.3.2 released. ( 2020-06-17 ) ##
 
-* 修复通过PHP内置WEB服务器运行框架时出现NOTICE报错的Bug
+* 修复通过PHP内置WEB服务器运行框架时出现NOTICE报错的Bug，感谢codetyphon反馈此Bug。
 
 ## Version 2.3.1 released. ( 2020-02-29 ) ##
 
