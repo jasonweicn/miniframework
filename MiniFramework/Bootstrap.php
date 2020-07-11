@@ -81,6 +81,9 @@ defined('LOG_PATH') or define('LOG_PATH', APP_PATH . DS . 'Log');
 // CSRF令牌功能开关
 defined('CSRF_TOKEN_ON') or define('CSRF_TOKEN_ON', false);
 
+// CSRF令牌获得方式 cookie | header
+defined('CSRF_TYPE') or define('CSRF_TYPE', 'cookie');
+
 if (SHOW_ERROR === true) {
     ini_set('display_errors', 'On');
 } else {
