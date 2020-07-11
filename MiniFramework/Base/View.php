@@ -143,9 +143,8 @@ class View
         }
         
         $content = $this->render($view);
-        header("Content-Type: text/html; charset=utf-8");
-        header('Cache-Control: ' . HTTP_CACHE_CONTROL);
-        header('X-Powered-By: MiniFramework');
+        
+        $_http = Http::getInstance();
         
         if (LAYOUT_ON === true && $this->_layout->getLayout()) {
             $this->_layout->content = $content;
@@ -157,9 +156,9 @@ class View
                     $finalViewPage = str_replace('</body>', $js . "\n</body>", $finalViewPage);
                 }
             }
-            echo $finalViewPage;
+            $_http->response(200, $finalViewPage);
         } else {
-            echo $content;
+            $_http->response(200, $content);
         }
         
         die();
