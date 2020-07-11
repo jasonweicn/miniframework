@@ -33,6 +33,13 @@ class Request
      * @var Request
      */
     protected static $_instance;
+    
+    /**
+     * Http实例
+     * 
+     * @var Http
+     */
+    protected $_http;
 
     /**
      * 基础地址
@@ -103,6 +110,14 @@ class Request
             self::$_instance = new self();
         }
         return self::$_instance;
+    }
+    
+    /**
+     * 构造
+     */
+    protected function __construct()
+    {
+        $this->_http = Http::getInstance();
     }
 
     private function __clone()
@@ -329,7 +344,7 @@ class Request
      * @param string $type
      * @return string
      */
-    public function createCsrfToken()
+    public function createCsrfToken($type = 'cookie')
     {
         $token = getRandomString(64);
         
@@ -337,7 +352,12 @@ class Request
         Session::set($this->_csrfParamName, $token);
         Session::commit();
         
-        setcookie($this->_csrfParamName, $token, 0, '/', null, null, true);
+        if ($type == 'cookie') {
+            setcookie($this->_csrfParamName, $token, 0, '/', null, null, true);
+        } elseif ($type == 'header') {
+            $this->_http->header($this->_csrfHeaderParamName, $token);
+        }
+        
         
         return $token;
     }
@@ -386,10 +406,6 @@ class Request
     public function checkCsrfToken()
     {
         $clientCsrfToken = $this->loadCsrfToken('cookie');
-        
-        if (! $clientCsrfToken) {
-            $clientCsrfToken = $this->loadCsrfToken('cookie');
-        }
         
         if (! $clientCsrfToken) {
             $clientCsrfToken = $this->loadCsrfToken('header');

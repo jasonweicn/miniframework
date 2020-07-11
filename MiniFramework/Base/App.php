@@ -169,10 +169,10 @@ class App
             if ($isCli === false) {
                 $serverCsrfToken = $this->_request->loadCsrfToken('session');
                 if (! $serverCsrfToken) {
-                    $this->_request->createCsrfToken();
+                    $this->_request->createCsrfToken(CSRF_TYPE);
                 } else {
                     if ($this->_request->checkCsrfToken() === true) {
-                        $this->_request->createCsrfToken();
+                        $this->_request->createCsrfToken(CSRF_TYPE);
                     } else {
                         throw new Exception('Client CSRF-Token invalid.');
                     }
