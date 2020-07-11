@@ -148,11 +148,10 @@ class Http
             }
         }
         
-        if (!isset($this->_headers['Content-Type'])) {
+        if (! isset($this->_headers['Content-Type'])) {
             header("Content-Type: text/html; charset=utf-8");
         }
         header('Cache-Control: ' . HTTP_CACHE_CONTROL);
-        header('X-Powered-By: MiniFramework');
         
         echo $content;
         
