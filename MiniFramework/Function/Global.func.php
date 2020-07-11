@@ -416,3 +416,17 @@ function isIndexArray($array)
 
     return true;
 }
+
+/**
+ * 判断一个字符串是否为UNIX时间戳格式
+ * 
+ * @param string $timestamp
+ * @return boolean
+ */
+function isTimestamp($timestamp) {
+    if (strtotime(date('Y-m-d H:i:s', $timestamp)) === (int)$timestamp) {
+        return true;
+    }
+    
+    return false;
+}
