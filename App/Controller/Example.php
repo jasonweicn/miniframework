@@ -112,4 +112,55 @@ class Example extends Action
         
         die();
     }
+    
+    /**
+     * Example 6: Sign
+     */
+    function signAction()
+    {
+        // 待签名的数据
+        $data = [
+            'info' => 'MiniFramework',
+            
+            // signTime为当前时间戳，且必须随数据一起进行签名
+            'signTime' => time()
+        ];
+        
+        $signObj = new \Mini\Security\Sign();
+        
+        // 获得一个签名
+        $sign = $signObj->sign($data);
+        
+        // 签名随其他数据一起通过GET传递
+        $data['sign'] = $sign;
+        dump($data);
+        
+        // 构造一个GET请求URL
+        $tmp = [];
+        foreach ($data as $key => $val) {
+            $tmp[] = $key . '=' . $val;
+        }
+        $dataStr = implode('&', $tmp);
+        $url = $this->view->baseUrl() . '/example/verifysign?' . $dataStr;
+        echo '<a href="' . $url . '" target="_blank">Click to verify sign</a>';
+        
+        die();
+    }
+    
+    /**
+     * Example 7: Verify Sign
+     */
+    function verifysignAction()
+    {
+        $signObj = new \Mini\Security\Sign();
+        
+        // 设定签名过期时间为30秒（默认为：300秒）
+        $signObj->setExpireTime(30);
+        
+        // 获得签名校验结果，传入参数get代表对GET请求进行签名校验
+        $res = $signObj->verifySign('get');
+        dump($res);
+        
+        die();
+    }
 }
