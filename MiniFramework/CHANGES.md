@@ -1,5 +1,16 @@
 # CHANGES #
 
+## Version 2.4.0 released. ( 2020-07-11 ) ##
+
+* 新增 isTimestamp() 全局函数，用于判断一个字符串是否为 UNIX 时间戳格式。
+* 新增 CSRF_TYPE 常量，默认值为cookie，用于定义客户端获取 CSRF 令牌的方式。
+* 新增 header 方式获取 CSRF 令牌的特性，默认 X-Mini-Csrf-Token 为消息头名称。
+* 新增 Mini\Security\Sign 类，用于对 GET 或 POST 数据进行签名和校验。
+* 在示例 Example 控制器中，增加了通过 Mini\Security\Sign 类进行签名和校验的示例代码。
+* 为提升运行效率将 CSRF 令牌校验改为默认禁用状态，因此变更常量 CSRF_TOKEN_ON 默认为 FALSE。
+* 改进视图渲染和输出方式，统一由 Mini\Base\Http 负责最终输出。
+* 基于安全考虑，从响应头中删除 MiniFramework 文字信息。
+
 ## Version 2.3.3 released. ( 2020-07-05 ) ##
 
 * 修复REST模式运行时的一个Bug，感谢PndOS反馈此Bug。
