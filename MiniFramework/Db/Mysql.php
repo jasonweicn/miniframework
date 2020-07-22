@@ -251,6 +251,11 @@ class Mysql extends Db_Abstract
         $prepareData = [];
         foreach ($dataArray as $key => $data) {
             if (empty($data)) {
+                throw new Exception('Incorrect data format.');
+                return false;
+            }
+            if (! is_array($data)) {
+                throw new Exception('Incorrect data format.');
                 return false;
             }
             foreach ($data as $k => $v) {
