@@ -165,11 +165,15 @@ class Mysql extends Db_Abstract
      * @param array $data 数据 array(col => value)
      * @return int
      */
-    public function insert($table, array $data)
+    public function insert($table, array $data, $prepare = true)
     {
-        $sql = "INSERT INTO `$table` (`" . implode('`,`', array_keys($data)) . "`) VALUES ('" . implode("','", $data) . "')";
-
-        return $this->execSql($sql);
+        if ($prepare === true) {
+            $result = $this->prepareInsert($table, $data);
+        } else {
+            $result = $this->execSql("INSERT INTO `$table` (`" . implode('`,`', array_keys($data)) . "`) VALUES ('" . implode("','", $data) . "')");;
+        }
+        
+        return $result;
     }
 
     /**
