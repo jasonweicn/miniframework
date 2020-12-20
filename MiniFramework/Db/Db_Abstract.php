@@ -86,9 +86,10 @@ abstract class Db_Abstract
      * 插入记录
      *
      * @param string $table            
-     * @param array $data            
+     * @param array $data    
+     * @param bool $prepare        
      */
-    abstract protected function insert($table, array $data);
+    abstract protected function insert($table, array $data, $prepare = true);
 
     /**
      * 更新记录
