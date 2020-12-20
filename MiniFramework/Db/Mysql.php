@@ -163,6 +163,7 @@ class Mysql extends Db_Abstract
      *
      * @param string $table 表名
      * @param array $data 数据 array(col => value)
+     * @param bool $prepare 是否进行预处理
      * @return int
      */
     public function insert($table, array $data, $prepare = true)
@@ -218,20 +219,24 @@ class Mysql extends Db_Abstract
      *        1 => array(col1 => value1, col2 => value2),
      *        ...
      *        )
+     * @param bool $prepare 是否进行预处理
      * @return int
      */
-    public function insertAll($table, array $dataArray)
+    public function insertAll($table, array $dataArray, $prepare = true)
     {
-        $sql = "INSERT INTO `$table` (`" . implode('`,`', array_keys($dataArray[0])) . "`) VALUES ";
-
-        $valSqls = [];
-        foreach ($dataArray as $data) {
-            $valSqls[] = "('" . implode("','", $data) . "')";
+        if ($prepare === true) {
+            $result = $this->prepareInsertAll($table, $dataArray);
+        } else {
+            $sql = "INSERT INTO `$table` (`" . implode('`,`', array_keys($dataArray[0])) . "`) VALUES ";
+            $valSqls = [];
+            foreach ($dataArray as $data) {
+                $valSqls[] = "('" . implode("','", $data) . "')";
+            }
+            $sql .= implode(', ', $valSqls);
+            $result = $this->execSql($sql);
         }
-
-        $sql .= implode(', ', $valSqls);
-
-        return $this->execSql($sql);
+        
+        return $result;
     }
     
     /**
