@@ -3,5 +3,4 @@
 .project
 .settings/
 vendor/
-composer.lock
 *.log
