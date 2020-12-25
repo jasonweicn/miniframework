@@ -41,6 +41,38 @@ abstract class Model
     private $_method;
     
     private $_options;
+    
+    /**
+     * 比较运算符
+     * 
+     * @var array
+     */
+    private $_compareSymbol = [
+        '=',
+        '>',
+        '<',
+        '>=',
+        '>=',
+        '<>',
+        '!=',
+        'IN',
+        'NOT IN',
+        'BETWEEN',
+        'NOT BETWEEN',
+        'LIKE',
+        'IS NULL',
+        'IS NOT NULL'
+    ];
+    
+    /**
+     * 逻辑运算符
+     * 
+     * @var array
+     */
+    private $_logicSymbol = [
+        'AND',
+        'OR'
+    ];
 
     /**
      * 构造
@@ -273,16 +305,97 @@ abstract class Model
     /**
      * 设置查询条件
      * 
-     * @param string $where
+     * @param mixed $defaultParam 通常为查询条件字符串，也可作为要查询的字段名和其他参数组合使用
      * @return \Mini\Base\Model
      */
-    public function where($where = null)
+    public function where($defaultParam = null)
     {
-        if ($where != null) {
-            $this->_options['where'] = trim($where);
+        $paramsNum = func_num_args();
+        $params = func_get_args();
+        
+        if ($paramsNum == 1) {
+            // 只传入一个参数时，默认为兼容旧版本的调用方式
+            if ($defaultParam == null) {
+                throw new Exception('Param invalid.');
+            }
+            $this->_options['where'] = trim($defaultParam);
+        } elseif ($paramsNum == 2) {
+            if ($params[0] == null) {
+                throw new Exception('Param invalid.');
+            }
+            if (! is_array($params[1])) {
+                $this->_options['where'] = $this->getWhereString($params[0], [$params[1]]);
+            } else {
+                $this->_options['where'] = $this->getWhereString($params[0], $params[1], '=', 'AND');
+            }
+        } elseif ($paramsNum == 3) {
+            if ($params[0] == null) {
+                throw new Exception('Param invalid.');
+            }
+            if (! is_array($params[1])) {
+                if (! in_array($params[1], $this->_compareSymbol)) {
+                    throw new Exception('Param invalid.');
+                }
+                if (! is_array($params[2])) {
+                    $this->_options['where'] = $this->getWhereString($params[0], [$params[2]], $params[1]);
+                } else {
+                    $this->_options['where'] = $this->getWhereString($params[0], $params[2], $params[1], 'AND');
+                }
+            } else {
+                if (! in_array($params[2], $this->_logicSymbol)) {
+                    throw new Exception('Param invalid.');
+                }
+                $this->_options['where'] = $this->getWhereString($params[0], $params[1], '=', $params[2]);
+            }
+        } elseif ($paramsNum == 4) {
+            if ($params[3] == null) {
+                throw new Exception('Param invalid.');
+            }
+            $this->_options['where'] = $this->getWhereString($params[0], $params[2], $params[1], $params[3]);
+        } else {
+            throw new Exception('Param invalid.');
         }
         
         return $this;
+    }
+    
+    /**
+     * 构造查询语句字符串
+     * 
+     * @param string $field
+     * @param mixed $values
+     * @param string $compareSymbol
+     * @param string $logicSymbol
+     * @throws Exception
+     * @return string
+     */
+    private function getWhereString($field, $values, $compareSymbol = '=', $logicSymbol = null)
+    {
+        if (! in_array($compareSymbol, $this->_compareSymbol)) {
+            throw new Exception('Compare symbol invalid.');
+        }
+        if ($logicSymbol != null) {
+            if (! in_array($logicSymbol, $this->_logicSymbol)) {
+                throw new Exception('Logic symbol invalid.');
+            }
+        }
+        
+        if ($compareSymbol == 'IN' || $compareSymbol == 'NOT IN') {
+            $valueArray = [];
+            foreach ($values as $value) {
+                $valueArray[] = $value == null ? 'NULL' : "'" . trim($value) . "'";
+            }
+            $whereString = '`' . trim($field) . "` " . $compareSymbol . " (" . implode(', ', $valueArray) . ")";
+        } else {
+            $whereArray = [];
+            foreach ($values as $value) {
+                $value = $value == null ? 'NULL' : trim($value);
+                $whereArray[] = '`' . trim($field) . "` " . $compareSymbol . " '" . $value . "'";
+            }
+            $whereString = implode(' ' . $logicSymbol . ' ', $whereArray);
+        }
+        
+        return $whereString;
     }
     
     /**
