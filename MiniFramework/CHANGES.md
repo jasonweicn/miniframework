@@ -1,5 +1,12 @@
 # CHANGES #
 
+## Version 2.4.1 released. ( 2020-12-26 ) ##
+
+* 修复 Mini\Cache\Memcached 因类名错误导致的无法正常实例化的Bug。
+* 修复 Mini\Cache\Redis 因类名错误导致的无法正常实例化的Bug。
+* 修复 Mini\Cache\Redis::_connect() 方法中无法正常创建连接的Bug。
+* 感谢 freshwind2004 反馈上述Bug。
+
 ## Version 2.4.0 released. ( 2020-07-11 ) ##
 
 * 新增 isTimestamp() 全局函数，用于判断一个字符串是否为 UNIX 时间戳格式。
