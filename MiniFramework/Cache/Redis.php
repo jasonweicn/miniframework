@@ -26,7 +26,7 @@ namespace Mini\Cache;
 
 use Mini\Base\Exception;
 
-class Cache_Redis extends Cache_Abstract
+class Redis extends Cache_Abstract
 {
 
     /**
@@ -45,7 +45,7 @@ class Cache_Redis extends Cache_Abstract
         }
         
         if (isset($this->_params['passwd'])) {
-            $authStatus = $this->cache_server->auth($this->_params['passwd']);
+            $authStatus = $this->_cache_server->auth($this->_params['passwd']);
             if ($authStatus === false) {
                 throw new Exception('Redis connection failed.');
             }
