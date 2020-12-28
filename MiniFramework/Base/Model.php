@@ -529,6 +529,16 @@ abstract class Model
     }
     
     /**
+     * 获取最近一条SQL语句
+     * 
+     * @return string
+     */
+    public function getLastSql()
+    {
+        return $this->_curDb->getLastSql();
+    }
+    
+    /**
      * 获取当前操作的表
      * 
      * @throws Exception
@@ -543,6 +553,11 @@ abstract class Model
         return $this->_options['table'];
     }
     
+    /**
+     * 重置
+     * 
+     * @return boolean
+     */
     private function reset()
     {
         $this->_options = [];
