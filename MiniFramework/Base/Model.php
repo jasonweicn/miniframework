@@ -326,7 +326,7 @@ abstract class Model
             if (! is_array($params[1])) {
                 $this->_options['where'] = $this->getWhereString($params[0], [$params[1]]);
             } else {
-                $this->_options['where'] = $this->getWhereString($params[0], $params[1], '=', 'AND');
+                $this->_options['where'] = $this->getWhereString($params[0], $params[1], '=', 'OR');
             }
         } elseif ($paramsNum == 3) {
             if ($params[0] == null) {
@@ -339,7 +339,7 @@ abstract class Model
                 if (! is_array($params[2])) {
                     $this->_options['where'] = $this->getWhereString($params[0], [$params[2]], $params[1]);
                 } else {
-                    $this->_options['where'] = $this->getWhereString($params[0], $params[2], $params[1], 'AND');
+                    $this->_options['where'] = $this->getWhereString($params[0], $params[2], $params[1], 'OR');
                 }
             } else {
                 if (! in_array($params[2], $this->_logicSymbol)) {
