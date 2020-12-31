@@ -56,6 +56,19 @@ class Sign
 
         return false;
     }
+    
+    /**
+     * 设置一个自定义的 Salt 字符串
+     * 
+     * @param string $salt
+     * @return boolean
+     */
+    public function setSalt(string $salt)
+    {
+        $this->salt = $salt;
+        
+        return true;
+    }
 
     /**
      * 校验签名
