@@ -1,5 +1,19 @@
 # CHANGES #
 
+## Version 2.5.0 released. ( 2021-01-01 ) ##
+
+* 新增全局函数 arrayToUrlParams()，用于将数组转换为请求参数(例如：a=1&b=2&c=3)
+* 新增 Mini\Security\Sign::setSalt() 方法，用于设置一个自定义的 Salt 字符串。
+* 新增 Mini\Base\Model::getLastSql() 方法，用于在模型中获取最近一条被执行的SQL语句，便于开发者进行调试。
+* 改进 Mini\Base\Model::where() 方法，支持全新的查询条件设置方法（原有自定义字符串方式依旧支持）。
+* 改进 Mini\Db\Mysql::insertAll() 方法，增加参数 $prepare，默认值为 TRUE，用于确定是否进行预处理。
+* 改进 Mini\Db\Mysql::insert() 方法，增加参数 $prepare，默认值为 TRUE，用于确定是否进行预处理。
+* 改进 Mini\Base\Model::add() 方法，改为通过预处理方式插入数据。
+* 改进 Mini\Db\Mysql::prepareInsertAll() 方法，完善对于传入数据格式的校验。
+* 改进 browserDownload() 全局函数，读取下载文件后终止脚本运行，避免浏览器下载无用数据。
+* 测试支持 PHP 8.0。
+* 统一代码注释风格。
+
 ## Version 2.4.1 released. ( 2020-12-26 ) ##
 
 * 修复 Mini\Cache\Memcached 因类名错误导致的无法正常实例化的Bug。
