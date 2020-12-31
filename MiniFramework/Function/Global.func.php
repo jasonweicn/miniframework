@@ -427,10 +427,29 @@ function isIndexArray($array)
  * @param string $timestamp
  * @return boolean
  */
-function isTimestamp($timestamp) {
+function isTimestamp($timestamp)
+{
     if (strtotime(date('Y-m-d H:i:s', $timestamp)) === (int)$timestamp) {
         return true;
     }
     
     return false;
+}
+
+/**
+ * 将数组转换为URL GET请求参数(例如：a=1&b=2&c=3)
+ * 
+ * @param array $array
+ * @return string
+ */
+function arrayToUrlParams(array $array)
+{
+    $tmp = [];
+    foreach ($array as $key => $val) {
+        if (is_array($val)) {
+            continue;
+        }
+        $tmp[] = $key . '=' . $val;
+    }
+    return implode('&', $tmp);
 }
