@@ -346,7 +346,11 @@ function browserDownload($file, $customName = null)
         header('Content-length: ' . filesize($file));
         header('Content-Type: application/octet-stream');
         header('Content-Disposition: attachment; filename="' . $filename . '"');
-        @readfile($file);
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        readfile($file);
+        die();
     } else {
         return false;
     }
