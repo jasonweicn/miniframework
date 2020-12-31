@@ -297,7 +297,7 @@ class App
      * 输出错误
      * 
      * @param array $error
-     * @param bool $fatal
+     * @param boolean $fatal
      */
     public static function showError($error = array(), $fatal = false)
     {

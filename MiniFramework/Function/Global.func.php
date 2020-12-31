@@ -140,7 +140,7 @@ function base64EncodeImage($image_file)
  * 输出JSON
  *
  * @param mixed $data
- * @param bool $push (true: echo & die | false: return)
+ * @param boolean $push (true: echo & die | false: return)
  */
 function pushJson($data, $push = true)
 {
@@ -186,7 +186,7 @@ function isDate($date, $formats = ['Y-m-d', 'Y/m/d'])
  *
  * @param mixed $var
  * @param string $label
- * @param bool $echo
+ * @param boolean $echo
  */
 function dump($var, $label = null, $echo = true)
 {
@@ -214,8 +214,8 @@ function dump($var, $label = null, $echo = true)
  * 输出XML
  *
  * @param mixed $data 数据
- * @param bool $push (true: echo & die | false: return) 是否立即显示并终止程序
- * @param bool $indent 是否格式化缩进
+ * @param boolean $push (true: echo & die | false: return) 是否立即显示并终止程序
+ * @param boolean $indent 是否格式化缩进
  * @param string $root 根标签名称
  * @param array $attr 根标签属性数组
  * @param string $item 项目标签名称
@@ -337,7 +337,7 @@ function getStringLen($string)
  *
  * @param string $file 文件路径
  * @param string $customName 自定义文件名
- * @return string | bool
+ * @return string | boolean
  */
 function browserDownload($file, $customName = null)
 {

@@ -166,10 +166,10 @@ class View
 
     /**
      * 渲染器
-     *
-     * @param string $script            
-     * @param bool $check
-     *            (true | false)
+     * 
+     * @param string $script
+     * @param boolean $check
+     * @throws Exception
      * @return string
      */
     final public function render($script, $check = true)

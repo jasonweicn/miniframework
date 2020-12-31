@@ -87,7 +87,7 @@ abstract class Db_Abstract
      *
      * @param string $table            
      * @param array $data    
-     * @param bool $prepare        
+     * @param boolean $prepare        
      */
     abstract protected function insert($table, array $data, $prepare = true);
 

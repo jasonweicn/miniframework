@@ -178,7 +178,7 @@ class Router
     /**
      * 判断PHP是否处于CLI模式下运行
      *
-     * @return bool
+     * @return boolean
      */
     public function isCli()
     {

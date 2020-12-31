@@ -78,7 +78,7 @@ class Registry extends \ArrayObject
      * 删除
      * @param string $index
      * @throws Exception
-     * @return bool
+     * @return boolean
      */
     public static function del($index)
     {

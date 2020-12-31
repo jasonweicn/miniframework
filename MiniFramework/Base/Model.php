@@ -106,7 +106,7 @@ abstract class Model
      * 
      * @param string $key
      * @param array $params
-     * @return bool | \Mini\Model
+     * @return boolean | \Mini\Model
      */
     public function useDb($key, $params = null)
     {
@@ -486,7 +486,7 @@ abstract class Model
     /**
      * 创建SQL语句
      * 
-     * @return bool | string
+     * @return boolean|string
      */
     private function createSql()
     {

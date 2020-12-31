@@ -154,7 +154,7 @@ class Params
      * checkInject 检测传入的字符串是否含有引起SQL注入的字符
      *
      * @param string $string            
-     * @return bool
+     * @return boolean
      */
     public function checkInject($string)
     {

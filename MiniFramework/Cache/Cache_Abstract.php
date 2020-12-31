@@ -46,7 +46,7 @@ abstract class Cache_Abstract
     /**
      * 是否压缩缓存数据
      *
-     * @var bool
+     * @var boolean
      */
     protected $_compress_flag = true;
 

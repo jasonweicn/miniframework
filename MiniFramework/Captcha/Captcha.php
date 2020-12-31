@@ -68,7 +68,7 @@ class Captcha
      * 设置字体
      * 
      * @param string $font
-     * @return bool
+     * @return boolean
      */
     public function setFont($font)
     {
@@ -86,7 +86,7 @@ class Captcha
      * 
      * @param int $x
      * @param int $y
-     * @return bool
+     * @return boolean
      */
     public function setImgSize($x, $y)
     {
@@ -104,7 +104,7 @@ class Captcha
      * 创建验证码图片
      * 
      * @param int $len
-     * @param bool $push
+     * @param boolean $push
      * @return resource
      */
     public function create($len = 4, $push = true)
@@ -192,7 +192,7 @@ class Captcha
      * 校验
      * 
      * @param string $code
-     * @return bool
+     * @return boolean
      */
     public function check($code)
     {

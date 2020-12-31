@@ -163,7 +163,7 @@ class Mysql extends Db_Abstract
      *
      * @param string $table 表名
      * @param array $data 数据 array(col => value)
-     * @param bool $prepare 是否进行预处理
+     * @param boolean $prepare 是否进行预处理
      * @return int
      */
     public function insert($table, array $data, $prepare = true)
@@ -182,7 +182,7 @@ class Mysql extends Db_Abstract
      *
      * @param string $table 表名
      * @param array $data 数据 array(col => value)
-     * @return bool
+     * @return boolean
      */
     public function prepareInsert($table, array $data)
     {
@@ -219,7 +219,7 @@ class Mysql extends Db_Abstract
      *        1 => array(col1 => value1, col2 => value2),
      *        ...
      *        )
-     * @param bool $prepare 是否进行预处理
+     * @param boolean $prepare 是否进行预处理
      * @return int
      */
     public function insertAll($table, array $dataArray, $prepare = true)
@@ -248,7 +248,7 @@ class Mysql extends Db_Abstract
      *        1 => array(col1 => value1, col2 => value2),
      *        ...
      *        )
-     * @return bool
+     * @return boolean
      */
     public function prepareInsertAll($table, array $dataArray)
     {

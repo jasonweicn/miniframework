@@ -63,7 +63,7 @@ class Debug
      * 获取计时信息
      * 
      * @param boolean $dump
-     * @return array
+     * @return boolean|string|array
      */
     public static function getTimerRecords($dump = true)
     {
