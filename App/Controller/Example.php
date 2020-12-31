@@ -136,11 +136,7 @@ class Example extends Action
         dump($data);
         
         // 构造一个GET请求URL
-        $tmp = [];
-        foreach ($data as $key => $val) {
-            $tmp[] = $key . '=' . $val;
-        }
-        $dataStr = implode('&', $tmp);
+        $dataStr = arrayToUrlParams($data);
         $url = $this->view->baseUrl() . '/example/verifysign?' . $dataStr;
         echo '<a href="' . $url . '" target="_blank">Click to verify sign</a>';
         
