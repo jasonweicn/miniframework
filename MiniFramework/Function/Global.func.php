@@ -440,7 +440,7 @@ function isTimestamp($timestamp)
  * 将数组转换为URL GET请求参数(例如：a=1&b=2&c=3)
  * 
  * @param array $array
- * @param int $type 拼接方式，默认1为常规，2和3为伪静态
+ * @param int $type 拼接方式，默认1为常规，2、3和4为伪静态
  * @return string
  */
 function arrayToUrlParams(array $array, $type = 1)
@@ -455,6 +455,9 @@ function arrayToUrlParams(array $array, $type = 1)
             break;
         case 3:
             $joinSymbol = $splitSymbol = '_';
+            break;
+        case 4:
+            $joinSymbol = $splitSymbol = '-';
             break;
     }
     $tmp = [];
