@@ -318,7 +318,7 @@ class Request
                 $pos = strrpos($requestUri, '/');
                 $dir = substr($requestUri, 0, $pos);
                 $file = substr($requestUri, $pos);
-                $file = str_replace('_', '/', $file);
+                $file = str_replace(URL_SPLIT_SYMBOL, '/', $file);
                 $requestUri = $dir . $file;
             }
             
