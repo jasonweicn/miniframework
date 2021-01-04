@@ -440,16 +440,29 @@ function isTimestamp($timestamp)
  * 将数组转换为URL GET请求参数(例如：a=1&b=2&c=3)
  * 
  * @param array $array
+ * @param int $type 拼接方式，默认1为常规，2和3为伪静态
  * @return string
  */
-function arrayToUrlParams(array $array)
+function arrayToUrlParams(array $array, $type = 1)
 {
+    switch ($type) {
+        case 1:
+            $joinSymbol = '=';
+            $splitSymbol = '&';
+            break;
+        case 2:
+            $joinSymbol = $splitSymbol = '/';
+            break;
+        case 3:
+            $joinSymbol = $splitSymbol = '_';
+            break;
+    }
     $tmp = [];
     foreach ($array as $key => $val) {
         if (is_array($val)) {
             continue;
         }
-        $tmp[] = $key . '=' . $val;
+        $tmp[] = $key . $joinSymbol . $val;
     }
-    return implode('&', $tmp);
+    return implode($splitSymbol, $tmp);
 }
