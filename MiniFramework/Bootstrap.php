@@ -39,6 +39,9 @@ defined('APP_PATH') or define('APP_PATH', dirname(dirname($_SERVER['SCRIPT_FILEN
 // 应用命名空间名称
 defined('APP_NAMESPACE') or define('APP_NAMESPACE', 'App');
 
+// URL（伪静态）分割符号
+defined('URL_SPLIT_SYMBOL') or define('URL_SPLIT_SYMBOL', '_');
+
 // 是否显示错误信息
 defined('SHOW_ERROR') or define('SHOW_ERROR', false);
 
