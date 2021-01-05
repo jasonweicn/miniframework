@@ -374,6 +374,29 @@ class Mysql extends Db_Abstract
         }
         return $maxValue;
     }
+    
+    /**
+     * 检查数据表是否存在
+     * 
+     * @param string $table
+     * @param string $dbname
+     * @return boolean
+     */
+    public function checkTableIsExist($table, $dbname = null)
+    {
+        if ($dbname === null) {
+            $dbname = $this->_params['dbname'];
+        }
+        $sql = "SELECT * FROM information_schema.TABLES WHERE TABLE_SCHEMA='" . $dbname . "' AND TABLE_NAME = '" . $table . "'";
+        $result = $this->query($sql, 'Row');
+        if (! empty($result)) {
+            if ($result['TABLE_NAME'] == $table) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
 
     /**
      * 获取表引擎
