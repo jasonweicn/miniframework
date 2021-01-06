@@ -75,11 +75,20 @@ defined('REST_ON') or define('REST_ON', false);
 // 是否开启日志
 defined('LOG_ON') or define('LOG_ON', false);
 
+// 日志存储模式（1为文件，2为数据库）
+defined('LOG_MODE') or define('LOG_MODE', 1);
+
 // 日志记录等级
 defined('LOG_LEVEL') or define('LOG_LEVEL', 'EMERG,ALERT,CRIT,ERROR,WARNING,NOTICE,INFO,DEBUG,SQL');
 
-// 日志存储路径
+// 日志存储路径（LOG_MODE为1时生效）
 defined('LOG_PATH') or define('LOG_PATH', APP_PATH . DS . 'Log');
+
+// 日志存储的数据库配置（LOG_MODE为2时生效）
+defined('LOG_DB_CONFIG') or define('LOG_DB_CONFIG', 'database:default');
+
+// 日志存储的表名（LOG_MODE为2时生效）
+defined('LOG_TABLE_NAME') or define('LOG_TABLE_NAME', 'log');
 
 // CSRF令牌功能开关
 defined('CSRF_TOKEN_ON') or define('CSRF_TOKEN_ON', false);

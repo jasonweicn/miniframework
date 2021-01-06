@@ -89,17 +89,38 @@ class Log
     
     /**
      * 写入日志
-     * 
-     * @throws Exception
      */
     public function write()
     {
+        if (LOG_MODE === 1) {
+            $this->writeToFile();
+        } elseif (LOG_MODE === 2) {
+            $this->writeToDb();
+        }
+    }
+    
+    /**
+     * 检查日志级别
+     * 
+     * @param string $level
+     * @return boolean
+     */
+    public static function checkLevel($level)
+    {
+        return in_array($level, explode(',', LOG_LEVEL));
+    }
+    
+    /**
+     * 写入日志到文件
+     * 
+     * @throws Exception
+     */
+    private function writeToFile()
+    {
         $c = count(self::$_logs);
         $t = isset(self::$_logs[$c - 1]['time']) ? strtotime(self::$_logs[$c - 1]['time']) : time();
-        
         is_dir(LOG_PATH) or @mkdir(LOG_PATH, 0700, true);
         $logFile = LOG_PATH . DS . date('Y-m-d', $t) . '.log';
-        
         foreach (self::$_logs as $log) {
             $result = file_put_contents(
                 $logFile,
@@ -113,13 +134,26 @@ class Log
     }
     
     /**
-     * 检查日志级别
-     * 
-     * @param string $level
-     * @return boolean
+     * 写入日志到数据库
      */
-    public static function checkLevel($level)
+    private function writeToDb()
     {
-        return in_array($level, explode(',', LOG_LEVEL));
+        if (! empty(self::$_logs)) {
+            $dbParams = \Mini\Base\Config::getInstance()->load(LOG_DB_CONFIG);
+            $db = new \Mini\Db\Mysql($dbParams);
+            if ($db->checkTableIsExist(LOG_TABLE_NAME) === false) {
+                $sql = "CREATE TABLE `" . LOG_TABLE_NAME . "` (
+                `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+                `time` datetime DEFAULT NULL,
+                `level` varchar(16) DEFAULT NULL,
+                `body` text DEFAULT NULL,
+                `file` varchar(255) DEFAULT NULL,
+                `line` int(10) unsigned DEFAULT NULL,
+                PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=" . $dbParams['charset'] . ";";
+                $db->execSql($sql);
+            }
+            $db->insertAll(LOG_TABLE_NAME, self::$_logs);
+        }
     }
 }
