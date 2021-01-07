@@ -312,9 +312,10 @@ class Request
                 $requestUri = str_replace('?' . $_SERVER['QUERY_STRING'], '', $_SERVER['REQUEST_URI']);
             }
             
-            // 遇到.html结尾时，转换可能存在的伪静态分隔符
-            if (strtolower((substr($requestUri, - 5))) == '.html') {
-                $requestUri = substr($requestUri, 0, - 5);
+            // 遇到常量定义的伪静态扩展名结尾时，转换可能存在的伪静态分隔符
+            $match = [];
+            if (preg_match('/\.(' . URL_SUFFIX . ')$/', $requestUri, $match)) {
+                $requestUri = substr($requestUri, 0, - (strlen($match[1])+1));
                 $pos = strrpos($requestUri, '/');
                 $dir = substr($requestUri, 0, $pos);
                 $file = substr($requestUri, $pos);
