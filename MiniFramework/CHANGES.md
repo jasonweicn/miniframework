@@ -1,7 +1,7 @@
 # CHANGES #
 
 
-## Version 2.6.0  ##
+## Version 2.6.0 released. ( 2021-01-10 ) ##
 
 ### 版本变化 ###
 * 新特性：新增常量 URL_SUFFIX，默认值为"htm|html|shtml"，用于定义伪静态扩展名。
