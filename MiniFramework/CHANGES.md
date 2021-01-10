@@ -1,7 +1,29 @@
 # CHANGES #
 
+
+## Version 2.6.0  ##
+
+### 版本变化 ###
+* 新特性：新增常量 URL_SUFFIX，默认值为"htm|html|shtml"，用于定义伪静态扩展名。
+* 新特性：新增常量 URL_SPLIT_SYMBOL，默认值为"_"，用于定义伪静态时 URL 参数的分割符号。
+* 新特性：新增常量 LOG_MODE，默认值为1，用于定义日志存储模式（1为文件，2为数据库）。
+* 新特性：新增常量 LOG_DB_CONFIG，默认值为"database:default"，用于定义日志存储的数据库配置（LOG_MODE为2时生效）。
+* 新特性：新增常量 LOG_TABLE_NAME，默认值为"log"，用于定义日志存储的数据表名（LOG_MODE为2时生效）。
+* 新特性：新增 Mini\Db\Mysql::checkTableIsExist() 方法，用于检查数据表是否存在。
+* 新特性：改进 Mini\Base\Log 类，支持日志存入数据库。
+* 新特性：改进 Mini\Base\Request 类，支持识别通过常量 URL_SUFFIX 定义的伪静态扩展名。
+* 新特性：支持按自定义的伪静态 URL 参数分割符号进行访问请求解析的新特性。
+* 新特性：改进 arrayToUrlParams() 全局函数，新增按伪静态模式拼接参数的方式。
+
+### 升级说明 ###
+* 兼容 PHP 最低版本为 7.2.0，PHP 8.0.0 已测试可正常运行。
+* 当前版本向前兼容至 V2.4.0 版本，使用 V2.4.0 及后续版本的开发者可直接升级至 V2.6.0 版本。
+* 文档已同步更新，地址：[http://www.miniframework.com/docv2/guide/](http://www.miniframework.com/docv2/guide/)
+
+
 ## Version 2.5.0 released. ( 2021-01-01 ) ##
 
+### 版本变化 ###
 * 新增全局函数 arrayToUrlParams()，用于将数组转换为请求参数(例如：a=1&b=2&c=3)
 * 新增 Mini\Security\Sign::setSalt() 方法，用于设置一个自定义的 Salt 字符串。
 * 新增 Mini\Base\Model::getLastSql() 方法，用于在模型中获取最近一条被执行的SQL语句，便于开发者进行调试。
@@ -14,6 +36,12 @@
 * 测试支持 PHP 8.0。
 * 统一代码注释风格。
 
+### 升级说明 ###
+* 兼容 PHP 最低版本为 7.2.0，PHP 8.0.0 已测试可正常运行。
+* 当前版本向前兼容至 V2.4.0 版本，使用 V2.4.0 及后续版本的开发者可直接升级至 V2.5.0 版本。
+* 文档已同步更新，地址：[http://www.miniframework.com/docv2/guide/](http://www.miniframework.com/docv2/guide/)
+
+
 ## Version 2.4.1 released. ( 2020-12-26 ) ##
 
 * 修复 Mini\Cache\Memcached 因类名错误导致的无法正常实例化的Bug。
@@ -21,8 +49,10 @@
 * 修复 Mini\Cache\Redis::_connect() 方法中无法正常创建连接的Bug。
 * 感谢 freshwind2004 反馈上述Bug。
 
+
 ## Version 2.4.0 released. ( 2020-07-11 ) ##
 
+**版本变化**
 * 新增 isTimestamp() 全局函数，用于判断一个字符串是否为 UNIX 时间戳格式。
 * 新增 CSRF_TYPE 常量，默认值为cookie，用于定义客户端获取 CSRF 令牌的方式。
 * 新增 header 方式获取 CSRF 令牌的特性，默认 X-Mini-Csrf-Token 为消息头名称。
@@ -32,19 +62,28 @@
 * 改进视图渲染和输出方式，统一由 Mini\Base\Http 负责最终输出。
 * 基于安全考虑，从响应头中删除 MiniFramework 文字信息。
 
+**升级说明**
+* 兼容 PHP 最低版本为 7.2.0。
+* 当前版本常量 CSRF_TOKEN_ON 默认值有变化，向前不兼容，升级前请确认并进行测试。
+* 文档已同步更新，地址：[http://www.miniframework.com/docv2/guide/](http://www.miniframework.com/docv2/guide/)
+
+
 ## Version 2.3.3 released. ( 2020-07-05 ) ##
 
 * 修复REST模式运行时的一个Bug，感谢PndOS反馈此Bug。
 
+
 ## Version 2.3.2 released. ( 2020-06-17 ) ##
 
 * 修复通过PHP内置WEB服务器运行框架时出现NOTICE报错的Bug，感谢codetyphon反馈此Bug。
+
 
 ## Version 2.3.1 released. ( 2020-02-29 ) ##
 
 * 修复Mini\Base\Upload::saveOne()方法中无法正常抛出异常的Bug
 * 完善部分代码中遇到错误的异常提示
 * 完善示例应用兼容多平台目录分隔符
+
 
 ## Version 2.3.0 released. ( 2020-02-19 ) ##
 
@@ -55,6 +94,7 @@
 * 全面启用方括号方式定义数组
 * 更新composer.json定义，放弃对于PHP5的兼容性支持，提升PHP最低版本要求至7.2.0
 
+
 ## Version 2.2.0 released. ( 2019-10-30 ) ##
 
 * 新增Block（代码块）机制，用于在视图中的任意位置定义或输出Block数据
@@ -62,15 +102,18 @@
 * 改进模型中数据库的连贯操作特性，允许field()方法传入数组形式来指定字段名
 * 修正Session::destroy()方法在某些环境中无法正常销毁会话数据的Bug
 
+
 ## Version 2.1.0 released. ( 2019-10-17 ) ##
 
 * 新增全局函数 isIndexArray()，用于判断一个数组是否为索引数组。
 * 改进 Mini\Base\Model 类，为在模型中的数据库连贯操作增加若干新特性。
 * 完善代码注释。
 
+
 ## Version 2.0.1 released. ( 2019-06-13 ) ##
 
 * 修复创建CSRF-Token的cookie时，路径参数path不固定，导致后续校验失败的Bug。
+
 
 ## Version 2.0.0 released. ( 2019-06-11 ) ##
 
@@ -93,14 +136,17 @@
 * 完善Composer配置，更好的支持在项目中通过Composer引入框架进行编码。
 * 完善代码注释。
 
+
 ## Version 1.5.2 released. ( 2019-06-06 ) ##
 
 * 新增全局函数htmlEncode()，用于转换特殊字符为HTML实体字符，便于防范XSS攻击。
 * 更新composer.json中定义的包名，从命名上与Github的仓库名称保持一致。
 
+
 ## Version 1.5.1 released. ( 2018-11-16 ) ##
 
 * 修正App类showError方法中的一处bug，感谢Zeng Xi反馈此bug。
+
 
 ## Version 1.5.0 released. ( 2018-11-14 ) ##
 
@@ -111,6 +157,7 @@
 * 针对输出JSON格式进行安全性更新。
 * 清理废弃代码。
 
+
 ## Version 1.4.0 released. ( 2018-09-12 ) ##
 
 * 新增Log类，用于以日志的形式记录代码运行报错和开发者自定义的调试信息。
@@ -119,6 +166,7 @@
 * 新增常量LOG_PATH，用于定义日志存储路径。
 * 新增Debug类的varType方法，用于判断变量类型。
 * 改进优化异常控制相关功能。
+
 
 ## Version 1.3.0 released. ( 2018-08-29 ) ##
 
@@ -129,6 +177,7 @@
 * 新增Upload类的saveOne方法，专门用于上传保存单个文件。
 * 改进Upload类的save方法，支持多个文件同时上传保存的新特性。
 
+
 ## Version 1.2.0 released. ( 2018-07-04 ) ##
 
 * 新增Upload类，用于上传文件。
@@ -137,9 +186,11 @@
 * 新增常量PUBLIC_PATH，用于定义WEB站点跟目录。
 * 改进Model类，新增支持连贯操作方式查询数据的特性。
 
+
 ## Version 1.1.1 released. ( 2018-06-19 ) ##
 
 * 修正Registry类命名冲突的bug，将其中的方法unset更名为del。
+
 
 ## Version 1.1.0 released. ( 2018-06-10 ) ##
 
@@ -148,6 +199,7 @@
 * 新增全局函数browserDownload()，用于让浏览器下载文件
 * 在App目录中，新增名为Example的控制器，其中包含部分功能的示例代码
 
+
 ## Version 1.0.13 released. ( 2018-04-21 ) ##
 
 * 改进Db_Mysql中的execTrans方法
@@ -155,9 +207,11 @@
 * 新增全局函数isImage()，用于判断文件是否为图像格式
 * 新增全局函数getStringLen()，用于获取字符串长度（支持UTF8编码的汉字）
 
+
 ## Version 1.0.12 released. ( 2017-10-19 ) ##
 
 * 新增Session类，用于读写会话数据
+
 
 ## Version 1.0.11 released. ( 2017-07-16 ) ##
 
@@ -166,19 +220,23 @@
 * 优化部分核心类的属性
 * 优化框架内存占用
 
+
 ## Version 1.0.10 released. ( 2017-07-15 ) ##
 
 * 新增支持使用“_”字符作为伪静态URL中的分隔符
 * 新增支持伪静态时使用“.html”作为URL结尾的机制
 
+
 ## Version 1.0.9 released. ( 2017-07-10 ) ##
 
 * 修正开启Layout功能同时未调用布局文件时，视图渲染输出时报错的Bug
+
 
 ## Version 1.0.8 released. ( 2017-07-06 ) ##
 
 * 新增在REST模式的API接口中，向Header传入Ver（版本号）实现调用不同版本的API接口的功能
 * 新增用于演示API接口版本调用的两个demo文件，分别是Info.php和Info_V2.php
+
 
 ## Version 1.0.7 released. ( 2017-06-29 ) ##
 
@@ -186,6 +244,7 @@
 * 改进Cache缓存类，增加支持写入永久有效缓存数据的特性，不再强制缓存具有有效期
 * 修正Cache缓存类中的验证具体类是否存在的Bug（Close #4）
 * 修正Cache_Redis类中del()方法的Bug
+
 
 ## Version 1.0.6 released. ( 2017-06-25 ) ##
 
