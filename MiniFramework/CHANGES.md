@@ -1,5 +1,9 @@
 # CHANGES #
 
+## Version 2.4.2 released. ( 2021-01-12 ) ##
+
+* 修复 MVC 模式运行时，常量 SHOW_DEBUG 失效的 Bug。
+
 ## Version 2.4.1 released. ( 2020-12-26 ) ##
 
 * 修复 Mini\Cache\Memcached 因类名错误导致的无法正常实例化的Bug。
