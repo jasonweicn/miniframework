@@ -1,5 +1,9 @@
 # CHANGES #
 
+## Version 2.3.4 released. ( 2021-01-12 ) ##
+
+* 修复 MVC 模式运行时，常量 SHOW_DEBUG 失效的 Bug。
+
 ## Version 2.3.3 released. ( 2020-07-05 ) ##
 
 * 修复REST模式运行时的一个Bug，感谢PndOS反馈此Bug。
