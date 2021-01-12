@@ -1,6 +1,6 @@
 # CHANGES #
 
-## Version 2.3.4, 2.4.2, 2.5.1 released. ( 2021-01-12 ) ##
+## Version 2.3.4, 2.4.2, 2.5.1, 2.6.1 released. ( 2021-01-12 ) ##
 
 ### 版本变化 ###
 * 修复：框架在 MVC 模式运行时，常量 SHOW_DEBUG 失效的 Bug。
