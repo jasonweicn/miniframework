@@ -180,6 +180,10 @@ class View
             }
         }
         
+        if (SHOW_DEBUG === false) {
+            ob_end_clean();
+        }
+        
         ob_start();
         include ($script);
         $content = ob_get_contents();
