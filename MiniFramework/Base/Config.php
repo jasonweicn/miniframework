@@ -64,7 +64,11 @@ class Config
         
         if (! isset($this->_confData[$confName])) {
             
-            $confFile = CONFIG_PATH . DS . $confName . '.php';
+            if (APP_ENV == 'prod') {
+                $confFile = CONFIG_PATH . DS . $confName . '.php';
+            } else {
+                $confFile = CONFIG_PATH . DS . $confName . '-' . APP_ENV . '.php';
+            }
             
             if (file_exists($confFile)) {
                 include ($confFile);

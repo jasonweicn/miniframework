@@ -1,6 +1,6 @@
 <?php
 /**
- * 数据库配置-生产环境
+ * 数据库配置-测试环境
  * 
  * 你可以在这里定义多组数据库配置信息，例如：
  * $db['db1'] = [...];
@@ -9,7 +9,7 @@
  * @var array
  */
 $database['default'] = [
-    'host'          => 'localhost', //主机地址
+    'host'          => 'localhost-test', //主机地址
     'port'          => 3306,        //端口
     'dbname'        => 'test',      //库名
     'username'      => 'root',      //用户名
