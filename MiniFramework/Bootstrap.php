@@ -39,6 +39,9 @@ defined('APP_PATH') or define('APP_PATH', dirname(dirname($_SERVER['SCRIPT_FILEN
 // 应用命名空间名称
 defined('APP_NAMESPACE') or define('APP_NAMESPACE', 'App');
 
+// 应用运行环境
+defined('APP_ENV') or define('APP_ENV', 'prod');
+
 // 伪静态扩展名
 defined('URL_SUFFIX') or define('URL_SUFFIX', 'htm|html|shtml'); 
 
