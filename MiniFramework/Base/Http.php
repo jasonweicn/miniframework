@@ -107,6 +107,18 @@ class Http
         }
         return self::$_instance;
     }
+    
+    /**
+     * 构造
+     */
+    final protected function __construct()
+    {}
+    
+    /**
+     * 克隆
+     */
+    private function __clone()
+    {}
 
     /**
      * 写入头信息

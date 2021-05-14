@@ -55,13 +55,19 @@ class Loader
     /**
      * 构造
      */
-    protected function __construct()
+    final protected function __construct()
     {
         spl_autoload_register([
             __CLASS__,
             'Mini\Base\Loader::autoload'
         ]);
     }
+    
+    /**
+     * 克隆
+     */
+    private function __clone()
+    {}
 
     /**
      * 自动载入

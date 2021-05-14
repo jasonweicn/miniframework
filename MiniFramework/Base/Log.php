@@ -68,6 +68,18 @@ class Log
     }
     
     /**
+     * 构造
+     */
+    final protected function __construct()
+    {}
+    
+    /**
+     * 克隆
+     */
+    private function __clone()
+    {}
+    
+    /**
      * 记录日志
      * 
      * @param string $message

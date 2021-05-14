@@ -69,7 +69,7 @@ class Params
     /**
      * 构造
      */
-    protected function __construct()
+    final protected function __construct()
     {
         if (! empty($_GET)) {
             foreach ($_GET as $key => $val) {
@@ -100,6 +100,9 @@ class Params
         }
     }
     
+    /**
+     * 克隆
+     */
     private function __clone()
     {}
 

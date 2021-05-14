@@ -92,7 +92,7 @@ class App
     /**
      * 构造
      */
-    protected function __construct()
+    final protected function __construct()
     {
         set_error_handler('Mini\Base\App::customError');
         
@@ -105,6 +105,12 @@ class App
         
         $this->_request = Request::getInstance();
     }
+    
+    /**
+     * 克隆
+     */
+    private function __clone()
+    {}
     
     /**
      * 自定义错误处理方法

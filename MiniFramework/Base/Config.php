@@ -46,6 +46,18 @@ class Config
         }
         return self::$_instance;
     }
+    
+    /**
+     * 构造
+     */
+    final protected function __construct()
+    {}
+    
+    /**
+     * 克隆
+     */
+    private function __clone()
+    {}
 
     /**
      * 读取配置
