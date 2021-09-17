@@ -28,7 +28,7 @@ class Sign
 {
 
     /**
-     * MD5签名加盐(建议改掉默认值)
+     * MD5签名加盐(建议通过setSalt方法改掉默认值)
      *
      * @var string
      */
