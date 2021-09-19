@@ -42,6 +42,8 @@ abstract class Model
     
     private $_options;
     
+    private $_debugSql = false;
+    
     /**
      * 比较运算符
      * 
@@ -223,6 +225,12 @@ abstract class Model
         return $res;
     }
     
+    /**
+     * 删除
+     * 
+     * @throws Exception
+     * @return mixed
+     */
     public function delete()
     {
         if (! isset($this->_options['where']) || $this->_options['where'] == '') {
@@ -253,8 +261,10 @@ abstract class Model
         $type = ($type == 'Row') ? 'Row' : 'All';
         $this->_method = 'SELECT';
         $sql = $this->createSql();
-        $res = [];
         if ($this->_curDb) {
+            if ($this->_debugSql === true) {
+                $this->_curDb->debug();
+            }
             $res = $this->_curDb->query($sql, $type);
         } else {
             throw new Exception('Database is not found.');
@@ -274,13 +284,17 @@ abstract class Model
     {
         if (isset($field)) {
             if (is_array($field)) {
-                $field_text = '';
-                foreach ($field as $val) {
-                    $field_text .= '`' . $val . '`, ';
+                $fieldString = '';
+                foreach ($field as $key => $val) {
+                    $curFieldString = $val;
+                    if (! is_int($key)) {
+                        $curFieldString = $key . ' AS ' . $val;
+                    }
+                    $fieldString .= $curFieldString . ', ';
                 }
-                $this->_options['field'] = substr($field_text, 0, strlen($field_text) - 2);
+                $this->_options['field'] = substr($fieldString, 0, strlen($fieldString) - 2);
             } else {
-                $this->_options['field'] = trim($field);
+                $this->_options['field'] = trim(str_replace([' as ', ' As ', ' aS '], ' AS ', $field));
             }
         }
         
@@ -295,9 +309,121 @@ abstract class Model
      */
     public function table($table = null)
     {
-        if ($table != null) {
-            $this->_options['table'] = trim($table);
+        if ($table === null) {
+            throw new Exception('Param invalid.');
         }
+        if (is_array($table)) {
+            $tableString = '';
+            foreach ($table as $key => $val) {
+                $curTableString = $val;
+                if (! is_int($key)) {
+                    $curTableString = $key . ' AS ' . $val;
+                }
+                $tableString .= $curTableString . ', ';
+            }
+            $this->_options['table'] = substr($tableString, 0, strlen($tableString) - 2);
+        } else {
+            $this->_options['table'] = trim(str_replace([' as ', ' As ', ' aS '], ' AS ', $table));
+        }
+        
+        return $this;
+    }
+    
+    /**
+     * 设置数据表（为符合使用习惯，封装了table方法）
+     * 
+     * @param string $table
+     * @return \Mini\Base\Model
+     */
+    public function from($table = null)
+    {
+        return $this->table($table);
+    }
+    
+    /**
+     * 联表查询（默认INNER方式）
+     * 
+     * @param string $table
+     * @param string $condition
+     * @param string $type
+     * @throws Exception
+     * @return \Mini\Base\Model
+     */
+    public function join(string $table = null, string $condition = null, string $type = 'INNER')
+    {
+        if ($table == null || $condition == null || $type == null) {
+            throw new Exception('Param invalid.');
+        }
+        $type = strtoupper($type);
+        if ($type != 'LEFT' && $type != 'INNER' && $type != 'RIGHT') {
+            throw new Exception('Param invalid.');
+        }
+        switch (strtoupper($type)) {
+            case 'LEFT':
+                return $this->leftjoin($table, $condition);
+                break;
+            case 'RIGHT':
+                return $this->rightjoin($table, $condition);
+                break;
+            case 'INNER':
+            default:
+                return $this->innerjoin($table, $condition);
+                break;
+        }
+        
+        return $this;
+    }
+    
+    /**
+     * 联表查询（INNER JOIN）
+     * 
+     * @param string $table
+     * @param string $condition
+     * @throws Exception
+     * @return \Mini\Base\Model
+     */
+    public function innerjoin(string $table = null, string $condition = null)
+    {
+        if ($table == null || $condition == null) {
+            throw new Exception('Param invalid.');
+        }
+        $this->_options['join'][] = 'INNER JOIN ' . $table . ' ON ' . $condition;
+        
+        return $this;
+    }
+    
+    /**
+     * 联表查询（LEFT JOIN）
+     * 
+     * @param string $table
+     * @param string $condition
+     * @throws Exception
+     * @return \Mini\Base\Model
+     */
+    public function leftjoin(string $table = null, string $condition = null)
+    {
+        if ($table == null || $condition == null) {
+            throw new Exception('Param invalid.');
+        }
+        $this->_options['join'][] = 'LEFT JOIN ' . $table . ' ON ' . $condition;
+        
+        return $this;
+    }
+    
+    /**
+     * 联表查询（RIGHT JOIN）
+     * 
+     * @param string $table
+     * @param string $condition
+     * @throws Exception
+     * @return \Mini\Base\Model
+     */
+    public function rightjoin(string $table = null, string $condition = null)
+    {
+        if ($table == null || $condition == null) {
+            throw new Exception('Param invalid.');
+        }
+        $this->_options['join'][] = 'RIGHT JOIN ' . $table . ' ON ' . $condition;
         
         return $this;
     }
@@ -408,11 +534,11 @@ abstract class Model
     {
         if (isset($group)) {
             if (is_array($group)) {
-                $group_text = '';
+                $groupString = '';
                 foreach ($group as $val) {
-                    $group_text .= '`' . $val . '`, ';
+                    $groupString .= $val . ', ';
                 }
-                $this->_options['group'] = substr($group_text, 0, strlen($group_text) - 2);
+                $this->_options['group'] = substr($groupString, 0, strlen($groupString) - 2);
             } else {
                 $this->_options['group'] = trim($group);
             }
@@ -431,15 +557,15 @@ abstract class Model
     {
         if (isset($order)) {
             if (is_array($order)) {
-                $order_text = '';
+                $orderString = '';
                 foreach ($order as $key => $val) {
                     if (! is_int($key) && (strtoupper($val) == 'ASC' || strtoupper($val) == 'DESC')) {
-                        $order_text .= '`' . $key . '` ' . strtoupper($val) . ', ';
+                        $orderString .= $key . ' ' . strtoupper($val) . ', ';
                     } else {
-                        $order_text .= '`' . $val . '`, ';
+                        $orderString .= $val . ', ';
                     }
                 }
-                $this->_options['order'] = substr($order_text, 0, strlen($order_text) - 2);
+                $this->_options['order'] = substr($orderString, 0, strlen($orderString) - 2);
             } else {
                 $this->_options['order'] = trim($order);
             }
@@ -508,13 +634,29 @@ abstract class Model
             } else {
                 $sql .= ' ' . $this->_options['field'] . ' ';
             }
-            $sql .= 'FROM `' . $this->_options['table'] . '`' . $where;
+            
+            // FROM
+            $sql .= 'FROM ' . $this->_options['table'];
+            
+            // JOIN
+            if (isset($this->_options['join'])) {
+                $sql .= ' ' . implode(' ', $this->_options['join']);
+            }
+            
+            // WHERE
+            $sql .= $where;
+            
+            // GROUP BY
             if (isset($this->_options['group']) && $this->_options['group'] != '') {
                 $sql .= ' GROUP BY ' . $this->_options['group'];
             }
+            
+            // ORDER BY
             if (isset($this->_options['order']) && $this->_options['order'] != '') {
                 $sql .= ' ORDER BY ' . $this->_options['order'];
             }
+            
+            // LIMIT
             if (isset($this->_options['limit']['rows'])) {
                 if (isset($this->_options['limit']['offset'])) {
                     $sql .= ' LIMIT ' . $this->_options['limit']['offset']
@@ -564,5 +706,17 @@ abstract class Model
         $this->_method = '';
         
         return true;
+    }
+    
+    /**
+     * 设置开启DEBUG模式，输出显示 SQL 语句
+     * 
+     * @return \Mini\Base\Model
+     */
+    public function debug()
+    {
+        $this->_debugSql = true;
+        
+        return $this;
     }
 }
