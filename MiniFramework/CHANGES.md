@@ -1,5 +1,24 @@
 # CHANGES #
 
+## Version 2.7.0 released. ( 2021-09-19 ) ##
+
+### 版本变化 ###
+* 新增常量 APP_ENV，默认值为"prod"，用于定义应用运行环境。
+* 新增应用运行环境支持，可根据常量 APP_ENV 定义的环境加载对应的配置文件。
+* 新增 join、innerjoin、leftjoin 和 rightjoin 连贯操作方法，用于联表查询。
+* 新增 from 连贯操作方法，用于定义查询的数据表名（为符合使用习惯，封装了原 table 方法）。
+* 新增通过 from 或 table 方法传入数组类型参数，对表名和别名进行定义的特性。
+* 新增 debug 连贯操作方法，用于在执行数据库查询命令前输出显示最终拼装的 SQL 语句。
+* 改进部分单例类，将 __clone 改为私有方法，防止由克隆引起的异常。
+* 改进 Mini\Base\Model 类，取消自动追加"`"符号的特性，以增加兼容性。
+* 修复 Mini\Base\Model::field() 方法遇到传入"*"时处理保留字的 Bug。
+
+### 升级说明 ###
+* 兼容 PHP 最低版本为 7.2.0，PHP 8.0.0 已测试可正常运行。
+* 当前版本向前兼容至 V2.4.0 版本，使用 V2.4.0 及后续版本的开发者可直接升级至 V2.7.0 版本。
+* 文档已同步更新，地址：[http://www.miniframework.com/docv2/guide/](http://www.miniframework.com/docv2/guide/)
+
+
 ## Version 2.3.4, 2.4.2, 2.5.1, 2.6.1 released. ( 2021-01-12 ) ##
 
 ### 版本变化 ###
