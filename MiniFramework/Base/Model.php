@@ -258,7 +258,7 @@ abstract class Model
      */
     public function select($type = 'All')
     {
-        $type = ($type == 'Row') ? 'Row' : 'All';
+        $type = ($type == 'One' || $type == 'Row') ? 'Row' : 'All';
         $this->_method = 'SELECT';
         $sql = $this->createSql();
         if ($this->_curDb) {
