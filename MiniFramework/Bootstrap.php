@@ -102,6 +102,9 @@ defined('CSRF_TOKEN_ON') or define('CSRF_TOKEN_ON', false);
 // CSRF令牌获得方式 cookie | header
 defined('CSRF_TYPE') or define('CSRF_TYPE', 'cookie');
 
+// 模板功能开关
+defined('TPL_ON') or define('TPL_ON', false);
+
 // 模板引擎标记符号
 defined('TPL_SEPARATOR_L') or define('TPL_SEPARATOR_L', '{');
 defined('TPL_SEPARATOR_R') or define('TPL_SEPARATOR_R', '}');
