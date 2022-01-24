@@ -187,10 +187,6 @@ class View
         ob_start();
         include ($script);
         $content = ob_get_contents();
-        
-        // 解析模板标记
-        $content = $this->parseTpl($content);
-        
         ob_end_clean();
         ob_start();
         
@@ -268,41 +264,5 @@ class View
         $this->_jsFile[] = $jsFileUrl;
         
         return true;
-    }
-    
-    /**
-     * 解析模板
-     * 
-     * @param string $content
-     * @return string
-     */
-    public function parseTpl($content)
-    {
-        $reg = "/\\" . TPL_SEPARATOR_L . "(.*?)\\" . TPL_SEPARATOR_R . "/";
-        $content = preg_replace_callback($reg, array($this, 'parseGeneralTag'), $content);
-        
-        return $content;
-    }
-    
-    /**
-     * 解析普通标记
-     * 
-     * @param array $tag
-     * @return mixed|string
-     */
-    private function parseGeneralTag($matches)
-    {
-        if (isset($matches[1])) {
-            $tagString = $matches[1];
-        }
-        $str1 = substr($tagString, 0, 1);
-        $variable = substr($tagString, 1);
-        if ($str1 == '$') {
-            if (isset($this->$variable)) {
-                return htmlentities($this->$variable);
-            }
-        }
-        
-        return TPL_SEPARATOR_L . $tagString . TPL_SEPARATOR_R;
     }
 }

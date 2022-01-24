@@ -1,1 +1,1 @@
-<p>{$info}</p>
+<p><?php echo $this->info;?></p>
