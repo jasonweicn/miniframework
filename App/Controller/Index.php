@@ -35,7 +35,7 @@ class Index extends Action
         $this->view->assign('info', $infoText);
         
         // 在</body>标签前加载一个js文件
-        $this->view->setJsFile($this->view->baseUrl() . 'js/demo.js');
+        $this->view->setJsFile($this->view->baseUrl() . '/js/demo.js');
         
         // 渲染并显示View
         $this->view->display();
