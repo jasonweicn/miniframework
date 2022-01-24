@@ -77,6 +77,11 @@ class Layout
      */
     private function __clone()
     {}
+    
+    public function __isset($key)
+    {
+        return isset($this->_container[$key]);
+    }
 
     public function __set($key, $value)
     {
