@@ -93,6 +93,8 @@ class View
         $this->_controller = $app->controller;
         $this->_action = $app->action;
         
+        $this->assign('baseUrl', $this->baseUrl());
+        
         if (LAYOUT_ON === true) {
             $this->_layout = Layout::getInstance();
             $this->_layout->setLayoutPath(LAYOUT_PATH);
@@ -180,18 +182,38 @@ class View
             }
         }
         
+        if (TPL_ON === true) {
+            
+            // 模板缓存key
+            $tplCacheKey = 'tpl_' . md5($script);
+            
+            // 模板缓存文件
+            $tplFile = CACHE_PATH . '/' . $tplCacheKey;
+            
+            // 检查是否需要刷新模板缓存
+            $refreshCache = true;
+            if (file_exists($tplFile)) {
+                $cacheTime = filemtime($tplFile);
+                $scriptTime = filemtime($script);
+                if ($cacheTime >= $scriptTime) {
+                    $refreshCache = false;
+                }
+            }
+            
+            // 刷新模板缓存
+            if ($refreshCache === true) {
+                $tplContent = file_get_contents($script);
+                file_put_contents($tplFile, $this->parseTpl($tplContent));
+            }
+        }
+        
         if (SHOW_DEBUG === false) {
             ob_end_clean();
         }
         
         ob_start();
-        include ($script);
+        include ($tplFile);
         $content = ob_get_contents();
-        
-        if (TPL_ON === true) {
-            // 解析模板标记
-            $content = $this->parseTpl($content);
-        }
         
         ob_end_clean();
         ob_start();
@@ -297,12 +319,24 @@ class View
         if (isset($matches[1])) {
             $tagString = $matches[1];
         }
-        $str1 = substr($tagString, 0, 1);
-        $variable = substr($tagString, 1);
-        if ($str1 == '$') {
+        if ('$' == substr($tagString, 0, 1)) {
+            $variable = substr($tagString, 1);
             if (isset($this->$variable)) {
-                return htmlentities($this->$variable);
+                return '<?php echo $this->' . $variable . '; ?>';
             }
+        } elseif ('layout:' == substr($tagString, 0, 7)) {
+            $layoutName = substr($tagString, 7);
+            if (isset($this->_layout->$layoutName)) {
+                return '<?php echo $this->_layout->' . $layoutName . '; ?>';
+            }
+        } elseif ('beginBlock:' == substr($tagString, 0, 11)) {
+            $blockName = substr($tagString, 11);
+            return '<?php $this->beginBlock("' . $blockName . '"); ?>';
+        } elseif ('endBlock' == $tagString) {
+            return '<?php $this->endBlock(); ?>';
+        } elseif ('insertBlock:' == substr($tagString, 0, 12)) {
+            $blockName = substr($tagString, 12);
+            return '<?php $this->insertBlock("' . $blockName . '"); ?>';
         }
         
         return TPL_SEPARATOR_L . $tagString . TPL_SEPARATOR_R;
