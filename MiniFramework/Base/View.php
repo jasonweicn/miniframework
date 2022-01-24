@@ -188,8 +188,10 @@ class View
         include ($script);
         $content = ob_get_contents();
         
-        // 解析模板标记
-        $content = $this->parseTpl($content);
+        if (TPL_ON === true) {
+            // 解析模板标记
+            $content = $this->parseTpl($content);
+        }
         
         ob_end_clean();
         ob_start();
