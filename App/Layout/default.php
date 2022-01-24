@@ -1,5 +1,6 @@
-<?php echo $this->_layout->header;?>
+{layout:header}
 <body>
-    <?php echo $this->_layout->content;?>
+    {layout:content}
 </body>
 </html>
+{insertBlock:jscode}
