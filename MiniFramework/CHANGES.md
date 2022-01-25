@@ -1,5 +1,20 @@
 # CHANGES #
 
+## Version 2.8.0 released. ( 2022-01-25 ) ##
+
+### 版本变化 ###
+* 新增常量 TPL_ON，默认值为 false，用于定义是否开启模板引擎。
+* 新增常量 TPL_SEPARATOR_L，默认值为"{"，用于定义模板标记开始符号。
+* 新增常量 TPL_SEPARATOR_R，默认值为"}"，用于定义模板标记结束符号。
+* 新增模板引擎，支持在 View 和 Layout 中使用类似 {$info} 的标记输出变量。
+* 改进 Mini\Base\Model::select() 方法，允许传入参数 "One"，等价于 "Row"，贴近多数人的习惯。
+* 修复 Layout 在某些特殊场景无法正确通过 isset 判断布局是否已经设置的问题。
+
+### 升级说明 ###
+* 兼容 PHP 最低版本为 7.2.0，PHP 8.0.0 已测试可正常运行。
+* 当前版本向前兼容至 V2.4.0 版本，使用 V2.4.0 及后续版本的开发者可直接升级至 V2.8.0 版本。
+* 文档已同步更新，地址：[http://www.miniframework.com/docv2/guide/](http://www.miniframework.com/docv2/guide/)
+
 ## Version 2.7.0 released. ( 2021-09-19 ) ##
 
 ### 版本变化 ###
