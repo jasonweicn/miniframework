@@ -205,6 +205,8 @@ class View
                 $tplContent = file_get_contents($script);
                 file_put_contents($tplFile, $this->parseTpl($tplContent));
             }
+            
+            $script = $tplFile;
         }
         
         if (SHOW_DEBUG === false) {
@@ -212,7 +214,7 @@ class View
         }
         
         ob_start();
-        include ($tplFile);
+        include ($script);
         $content = ob_get_contents();
         
         ob_end_clean();
