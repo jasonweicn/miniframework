@@ -61,24 +61,24 @@ class View
      * @var Layout
      */
     public $_layout;
-    
+
     /**
      * 代码块数组
-     * 
+     *
      * @var array
      */
     private $_blockData = [];
-    
+
     /**
      * 代码块开启状态
-     * 
+     *
      * @var int
      */
     private $_blockStatus = 0;
-    
+
     /**
      * JS文件数组
-     * 
+     *
      * @var array
      */
     private $_jsFile = [];
@@ -92,9 +92,9 @@ class View
         $app = App::getInstance();
         $this->_controller = $app->controller;
         $this->_action = $app->action;
-        
+
         $this->assign('baseUrl', $this->baseUrl());
-        
+
         if (LAYOUT_ON === true) {
             $this->_layout = Layout::getInstance();
             $this->_layout->setLayoutPath(LAYOUT_PATH);
@@ -120,8 +120,8 @@ class View
     /**
      * 接收来自于控制器的变量
      *
-     * @param string $variable            
-     * @param mixed $value            
+     * @param string $variable
+     * @param mixed $value
      */
     public function assign($variable, $value)
     {
@@ -139,15 +139,15 @@ class View
     {
         $view = APP_PATH . DS . 'View' . DS;
         $view .= strtolower($this->_controller) . DS . $this->_action . '.php';
-        
+
         if (! file_exists($view)) {
             throw new Exception('View "' . $this->_action . '" does not exist.', 404);
         }
-        
+
         $content = $this->render($view);
-        
+
         $_http = Http::getInstance();
-        
+
         if (LAYOUT_ON === true && $this->_layout->getLayout()) {
             $this->_layout->content = $content;
             $layoutScript = $this->_layout->getLayoutScript();
@@ -162,13 +162,13 @@ class View
         } else {
             $_http->response(200, $content);
         }
-        
+
         die();
     }
 
     /**
      * 渲染器
-     * 
+     *
      * @param string $script
      * @param boolean $check
      * @throws Exception
@@ -181,15 +181,15 @@ class View
                 throw new Exception('File "' . $script . '" does not exist.', 404);
             }
         }
-        
+
         if (TPL_ON === true) {
-            
+
             // 模板缓存key
             $tplCacheKey = 'tpl_' . md5($script);
-            
+
             // 模板缓存文件
             $tplFile = CACHE_PATH . '/' . $tplCacheKey;
-            
+
             // 检查是否需要刷新模板缓存
             $refreshCache = true;
             if (file_exists($tplFile)) {
@@ -199,33 +199,33 @@ class View
                     $refreshCache = false;
                 }
             }
-            
+
             // 刷新模板缓存
             if ($refreshCache === true) {
                 $tplContent = file_get_contents($script);
                 file_put_contents($tplFile, $this->parseTpl($tplContent));
             }
-            
+
             $script = $tplFile;
         }
-        
+
         if (SHOW_DEBUG === false) {
             ob_end_clean();
         }
-        
+
         ob_start();
         include ($script);
         $content = ob_get_contents();
-        
+
         ob_end_clean();
         ob_start();
-        
+
         return $content;
     }
-    
+
     /**
      * 开启一个代码块
-     * 
+     *
      * @param string $blockName
      * @return boolean
      */
@@ -238,13 +238,13 @@ class View
         $this->_blockData[$blockName] = '';
         ob_start();
         ob_implicit_flush(false);
-        
+
         return true;
     }
-    
+
     /**
      * 结束当前的代码块
-     * 
+     *
      * @return boolean
      */
     public function endBlock()
@@ -260,13 +260,13 @@ class View
         }
         $this->_blockData[$lastKey] = $block;
         $this->_blockStatus = 0;
-        
+
         return true;
     }
-    
+
     /**
      * 插入代码块
-     * 
+     *
      * @param string $blockName
      * @return boolean
      */
@@ -276,43 +276,46 @@ class View
             return false;
         }
         echo $this->_blockData[$blockName];
-        
+
         return true;
     }
-    
+
     /**
      * 设置JS文件资源的引入
-     * 
+     *
      * @param string $jsFileUrl
      * @return boolean
      */
     public function setJsFile($jsFileUrl)
     {
-        if (!isset($jsFileUrl) || empty($jsFileUrl)) {
+        if (! isset($jsFileUrl) || empty($jsFileUrl)) {
             return false;
         }
         $this->_jsFile[] = $jsFileUrl;
-        
+
         return true;
     }
-    
+
     /**
      * 解析模板
-     * 
+     *
      * @param string $content
      * @return string
      */
     public function parseTpl($content)
     {
         $reg = "/\\" . TPL_SEPARATOR_L . "(.*?)\\" . TPL_SEPARATOR_R . "/";
-        $content = preg_replace_callback($reg, array($this, 'parseGeneralTag'), $content);
-        
+        $content = preg_replace_callback($reg, [
+            $this,
+            'parseGeneralTag'
+        ], $content);
+
         return $content;
     }
-    
+
     /**
      * 解析普通标记
-     * 
+     *
      * @param array $tag
      * @return mixed|string
      */
@@ -340,7 +343,7 @@ class View
             $blockName = substr($tagString, 12);
             return '<?php $this->insertBlock("' . $blockName . '"); ?>';
         }
-        
+
         return TPL_SEPARATOR_L . $tagString . TPL_SEPARATOR_R;
     }
 }
