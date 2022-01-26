@@ -325,24 +325,29 @@ class View
             $tagString = $matches[1];
         }
 
-        if ('$' == substr($tagString, 0, 1)) {
+        if ('$' == substr($tagString, 0, 1)) { // 变量
             $variable = substr($tagString, 1);
             if (isset($this->$variable)) {
                 return '<?php echo $this->' . $variable . '; ?>';
             }
-        } elseif ('layout:' == substr($tagString, 0, 7)) {
+        } elseif ('const:' == substr($tagString, 0, 6)) { // 常量
+            $constName = substr($tagString, 6);
+            if (defined($constName)) {
+                return constant($constName);
+            }
+        } elseif ('layout:' == substr($tagString, 0, 7)) { // 加载布局
             $layoutName = substr($tagString, 7);
             if (isset($this->_layout->$layoutName) || $layoutName == 'content') {
                 return '<?php echo $this->_layout->' . $layoutName . '; ?>';
             } else {
                 return '<?php echo $this->render(LAYOUT_PATH . "/' . $layoutName . '.php"); ?>';
             }
-        } elseif ('beginBlock:' == substr($tagString, 0, 11)) {
+        } elseif ('beginBlock:' == substr($tagString, 0, 11)) { // 开始代码块
             $blockName = substr($tagString, 11);
             return '<?php $this->beginBlock("' . $blockName . '"); ?>';
-        } elseif ('endBlock' == $tagString) {
+        } elseif ('endBlock' == $tagString) { // 结束代码块
             return '<?php $this->endBlock(); ?>';
-        } elseif ('insertBlock:' == substr($tagString, 0, 12)) {
+        } elseif ('insertBlock:' == substr($tagString, 0, 12)) { // 插入代码块
             $blockName = substr($tagString, 12);
             return '<?php $this->insertBlock("' . $blockName . '"); ?>';
         }
