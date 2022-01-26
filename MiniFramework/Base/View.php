@@ -247,18 +247,20 @@ class View
      *
      * @return boolean
      */
-    public function endBlock()
+    public function endBlock($blockName = null)
     {
         if ($this->_blockStatus == 0) {
             return false;
         }
         $block = ob_get_clean();
-        end($this->_blockData);
-        $lastKey = key($this->_blockData);
-        if ($lastKey == null) {
-            return false;
+        if (! isset($blockName)) {
+            end($this->_blockData);
+            $blockName = key($this->_blockData);
+            if ($blockName == null) {
+                return false;
+            }
         }
-        $this->_blockData[$lastKey] = $block;
+        $this->_blockData[$blockName] = $block;
         $this->_blockStatus = 0;
 
         return true;
@@ -345,7 +347,10 @@ class View
         } elseif ('beginBlock:' == substr($tagString, 0, 11)) { // 开始代码块
             $blockName = substr($tagString, 11);
             return '<?php $this->beginBlock("' . $blockName . '"); ?>';
-        } elseif ('endBlock' == $tagString) { // 结束代码块
+        } elseif ('endBlock:' == substr($tagString, 0, 9)) { // 结束代码块
+            $blockName = substr($tagString, 9);
+            return '<?php $this->endBlock("' . $blockName . '"); ?>';
+        } elseif ('endBlock' == $tagString) { // 结束代码块，简写方式
             return '<?php $this->endBlock(); ?>';
         } elseif ('insertBlock:' == substr($tagString, 0, 12)) { // 插入代码块
             $blockName = substr($tagString, 12);
