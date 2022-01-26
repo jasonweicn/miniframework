@@ -324,6 +324,7 @@ class View
         if (isset($matches[1])) {
             $tagString = $matches[1];
         }
+
         if ('$' == substr($tagString, 0, 1)) {
             $variable = substr($tagString, 1);
             if (isset($this->$variable)) {
@@ -331,8 +332,10 @@ class View
             }
         } elseif ('layout:' == substr($tagString, 0, 7)) {
             $layoutName = substr($tagString, 7);
-            if (isset($this->_layout->$layoutName)) {
+            if (isset($this->_layout->$layoutName) || $layoutName == 'content') {
                 return '<?php echo $this->_layout->' . $layoutName . '; ?>';
+            } else {
+                return '<?php echo $this->render(LAYOUT_PATH . "/' . $layoutName . '.php"); ?>';
             }
         } elseif ('beginBlock:' == substr($tagString, 0, 11)) {
             $blockName = substr($tagString, 11);
