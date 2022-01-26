@@ -195,7 +195,7 @@ class View
             if (file_exists($tplFile)) {
                 $cacheTime = filemtime($tplFile);
                 $scriptTime = filemtime($script);
-                if ($cacheTime >= $scriptTime) {
+                if ($cacheTime > $scriptTime) {
                     $refreshCache = false;
                 }
             }
