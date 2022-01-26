@@ -185,15 +185,15 @@ class View
         if (TPL_ON === true) {
 
             // 模板缓存key
-            $tplCacheKey = 'tpl_' . md5($script);
+            $tplCacheKey = md5($script);
 
             // 模板缓存文件
-            $tplFile = CACHE_PATH . '/' . $tplCacheKey;
+            $tplCacheFile = CACHE_PATH . '/tpl_' . $tplCacheKey . '.php';
 
             // 检查是否需要刷新模板缓存
             $refreshCache = true;
-            if (file_exists($tplFile)) {
-                $cacheTime = filemtime($tplFile);
+            if (file_exists($tplCacheFile)) {
+                $cacheTime = filemtime($tplCacheFile);
                 $scriptTime = filemtime($script);
                 if ($cacheTime > $scriptTime) {
                     $refreshCache = false;
@@ -203,10 +203,10 @@ class View
             // 刷新模板缓存
             if ($refreshCache === true) {
                 $tplContent = file_get_contents($script);
-                file_put_contents($tplFile, $this->parseTpl($tplContent));
+                file_put_contents($tplCacheFile, $this->compiler($tplContent));
             }
 
-            $script = $tplFile;
+            $script = $tplCacheFile;
         }
 
         if (SHOW_DEBUG === false) {
@@ -299,12 +299,12 @@ class View
     }
 
     /**
-     * 解析模板
+     * 模板引擎编译器
      *
      * @param string $content
      * @return string
      */
-    public function parseTpl($content)
+    public function compiler($content)
     {
         $reg = "/\\" . TPL_SEPARATOR_L . "(.*?)\\" . TPL_SEPARATOR_R . "/";
         $content = preg_replace_callback($reg, [
