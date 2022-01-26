@@ -326,10 +326,22 @@ class View
         if (isset($matches[1])) {
             $tagString = $matches[1];
         }
-
         if ('$' == substr($tagString, 0, 1)) { // 变量
             $variable = substr($tagString, 1);
             if (isset($this->$variable)) {
+                return '<?php echo $this->' . $variable . '; ?>';
+            } elseif (strpos($variable, '.') !== false) { // 对象或数组
+                $names = explode('.', $variable);
+                $variable = array_shift($names);
+                if (is_object($this->$variable)) { // 对象
+                    foreach ($names as $val) {
+                        $variable .= '->' . $val;
+                    }
+                } else { // 数组
+                    foreach ($names as $val) {
+                        $variable .= '["' . $val . '"]';
+                    }
+                }
                 return '<?php echo $this->' . $variable . '; ?>';
             }
         } elseif ('const:' == substr($tagString, 0, 6)) { // 常量
