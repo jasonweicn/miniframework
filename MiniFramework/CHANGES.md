@@ -1,5 +1,11 @@
 # CHANGES #
 
+## Version 2.8.3 released. ( 2022-03-11 ) ##
+
+### 版本变化 ###
+* 修复 Mini\Db\Mysql 类中执行事务时的Bug。
+
+
 ## Version 2.8.2 released. ( 2022-01-27 ) ##
 
 ### 版本变化 ###
