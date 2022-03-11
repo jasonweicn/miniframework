@@ -416,6 +416,8 @@ class Mysql extends Db_Abstract
      */
     protected function _beginTransaction()
     {
+        $this->_connect();
+        $this->_dbh->setAttribute(PDO::ATTR_AUTOCOMMIT, false);
         $this->_dbh->beginTransaction();
     }
 
@@ -424,7 +426,9 @@ class Mysql extends Db_Abstract
      */
     protected function _commit()
     {
+        $this->_connect();
         $this->_dbh->commit();
+        $this->_dbh->setAttribute(PDO::ATTR_AUTOCOMMIT, 1);
     }
 
     /**
@@ -432,7 +436,9 @@ class Mysql extends Db_Abstract
      */
     protected function _rollBack()
     {
+        $this->_connect();
         $this->_dbh->rollBack();
+        $this->_dbh->setAttribute(PDO::ATTR_AUTOCOMMIT, 1);
     }
 
     /**
@@ -444,14 +450,11 @@ class Mysql extends Db_Abstract
     public function execTrans(array $arraySql)
     {
         try {
-            $this->_connect();
-            $this->_dbh->setAttribute(PDO::ATTR_AUTOCOMMIT, false);
             $this->_beginTransaction();
             foreach ($arraySql as $sql) {
                 $this->execSql($sql);
             }
             $this->_commit();
-            $this->_dbh->setAttribute(PDO::ATTR_AUTOCOMMIT, 1);
             return true;
         } catch (\PDOException $e) {
             $this->_rollBack();
