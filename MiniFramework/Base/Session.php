@@ -77,15 +77,20 @@ class Session
      * @param string $name
      * @return mixed|NULL
      */
-    public static function get($name)
+    public static function get($name = null)
     {
-        if (! is_string($name)) {
-            throw new Exception('The session name must be a string.');
+        if (isset($name) && $name != null) {
+            if (! is_string($name)) {
+                throw new Exception('The session name must be a string.');
+            }
+            
+            if (isset($_SESSION[$name])) {
+                return $_SESSION[$name];
+            }
+        } else {
+            return $_SESSION;
         }
         
-        if (isset($_SESSION[$name])) {
-            return $_SESSION[$name];
-        }
         
         return null;
     }
