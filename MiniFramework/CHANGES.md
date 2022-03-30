@@ -1,5 +1,12 @@
 # CHANGES #
 
+## Version 2.8.4 released. ( 2022-03-30 ) ##
+
+### 版本变化 ###
+* 改进 Mini\Base\Session 类，允许 get 方法在不传入参数时返回全部的会话数据。
+* 改进 Mini\Base\Request 类的 getHeader 方法，当指定的名称不存在时返回 null，不指定名称时返回全部 header 数据。
+
+
 ## Version 2.8.3 released. ( 2022-03-11 ) ##
 
 ### 版本变化 ###
