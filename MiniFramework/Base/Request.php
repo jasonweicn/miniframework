@@ -290,8 +290,12 @@ class Request
             }
         }
         
-        if (isset($this->_headers[$name])) {
-            return $this->_headers[$name];
+        if (isset($name)) {
+            if (isset($this->_headers[$name])) {
+                return $this->_headers[$name];
+            } else {
+                return null;
+            }
         }
         
         return $this->_headers;
