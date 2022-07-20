@@ -91,7 +91,6 @@ class Session
             return $_SESSION;
         }
         
-        
         return null;
     }
 
