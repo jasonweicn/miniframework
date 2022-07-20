@@ -156,6 +156,7 @@ class Http
             $this->sendHttpStatus($code);
             
             foreach ($this->_headers as $name => $value) {
+                $name = str_replace(' ', '-', ucwords(str_replace('-', ' ', $name)));
                 header($name . ': ' . $value);
             }
         }
