@@ -67,9 +67,13 @@ function getClientIp()
             $ip = getenv('REMOTE_ADDR');
         }
     }
-    $matches = [];
-    preg_match("/[\d\.]{7,15}/", $ip, $matches);
-    $ip = ! empty($matches[0]) ? $matches[0] : '0.0.0.0';
+    
+    // Compatible with IPv4 and IPv6
+    if (! preg_match('/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/', $ip)) {
+        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) === false) {
+            $ip = '0.0.0.0';
+        }
+    }
 
     return $ip;
 }
