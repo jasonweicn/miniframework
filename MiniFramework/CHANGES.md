@@ -1,5 +1,15 @@
 # CHANGES #
 
+
+## Version 2.8.5 released. ( 2022-07-29 ) ##
+
+### 版本变化 ###
+* 格式化 Header 信息输出。
+* 改进 getClientIp() 全局函数，兼容 IPv6 地址格式。
+* 改进校验客户端 CSRF Token 无效时的报错方式。
+
+
+
 ## Version 2.8.4 released. ( 2022-03-30 ) ##
 
 ### 版本变化 ###
@@ -7,10 +17,12 @@
 * 改进 Mini\Base\Request 类的 getHeader 方法，当指定的名称不存在时返回 null，不指定名称时返回全部 header 数据。
 
 
+
 ## Version 2.8.3 released. ( 2022-03-11 ) ##
 
 ### 版本变化 ###
 * 修复 Mini\Db\Mysql 类中执行事务时的Bug。
+
 
 
 ## Version 2.8.2 released. ( 2022-01-27 ) ##
@@ -23,11 +35,13 @@
 * 修复模板引擎缓存文件在配置不当时可能通过浏览器访问源代码的问题。
 
 
+
 ## Version 2.8.1 released. ( 2022-01-26 ) ##
 
 ### 版本变化 ###
 * 修复模板引擎关闭状态下页面无法正常渲染的Bug。
 * 修复在某些特殊情况下模板缓存无法被更新的问题。
+
 
 
 ## Version 2.8.0 released. ( 2022-01-25 ) ##
@@ -44,6 +58,7 @@
 * 兼容 PHP 最低版本为 7.2.0，PHP 8.0.0 已测试可正常运行。
 * 当前版本向前兼容至 V2.4.0 版本，使用 V2.4.0 及后续版本的开发者可直接升级至 V2.8.0 版本。
 * 文档已同步更新，地址：[http://www.miniframework.com/docv2/guide/](http://www.miniframework.com/docv2/guide/)
+
 
 
 ## Version 2.7.0 released. ( 2021-09-19 ) ##
