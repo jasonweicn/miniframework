@@ -425,7 +425,9 @@ class Request
         }
         
         if (! $clientCsrfToken) {
-            throw new Exception('Client CSRF-Token invalid.');
+            $this->_http->sendHttpStatus(403);
+            echo 'Client CSRF-Token invalid.';
+            die();
         }
         
         $serverCsrfToken = $this->loadCsrfToken('session');

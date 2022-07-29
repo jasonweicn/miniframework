@@ -180,7 +180,10 @@ class App
                     if ($this->_request->checkCsrfToken() === true) {
                         $this->_request->createCsrfToken(CSRF_TYPE);
                     } else {
-                        throw new Exception('Client CSRF-Token invalid.');
+                        $http = Http::getInstance();
+                        $http->sendHttpStatus(403);
+                        echo 'Client CSRF-Token invalid.';
+                        die();
                     }
                 }
             }
