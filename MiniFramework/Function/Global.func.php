@@ -473,3 +473,20 @@ function arrayToUrlParams(array $array, $type = 1)
     }
     return implode($splitSymbol, $tmp);
 }
+
+/**
+ * 获取远程文件大小
+ * 
+ * @param string $url
+ * @return int
+ */
+function getRemoteFileSize($url)
+{
+    $headers = get_headers($url, 1);
+    $size = 0;
+    if (isset($headers['Content-Length'])) {
+        $size = $headers['Content-Length'];
+    }
+    
+    return $size;
+}
