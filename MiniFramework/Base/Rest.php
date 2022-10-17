@@ -65,7 +65,7 @@ class Rest
         $this->_request = Request::getInstance();
         $this->http = Http::getInstance();
 
-        $requestMethod = $this->_request->method();
+        $requestMethod = $this->_request->getMethod();
 
         if ($requestMethod == 'POST') {
             $this->params->setParams($this->params->_post);

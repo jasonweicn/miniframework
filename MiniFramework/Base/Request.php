@@ -152,9 +152,18 @@ class Request
     }
 
     /**
-     * 获取请求方法
+     * 获取请求方法（旧名称，建议使用新名称 getMethod）
      */
     public function method()
+    {
+        return $this->getMethod();
+    }
+    
+    /**
+     * 获取请求方法（新名称）
+     * @return string
+     */
+    public function getMethod()
     {
         if (isset($_SERVER['REQUEST_METHOD'])) {
             $method = $_SERVER['REQUEST_METHOD'];
