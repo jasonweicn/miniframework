@@ -144,7 +144,7 @@ class Http
     public function response($code, $content)
     {
         if (! isset(self::$status[$code])) {
-            throw new \Exception('Invalid http status code: ' . $code);
+            throw new Exception('Invalid http status code: ' . $code);
         }
         
         if (SHOW_DEBUG === false) {
