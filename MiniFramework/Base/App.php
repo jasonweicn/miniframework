@@ -95,6 +95,7 @@ class App
     final protected function __construct()
     {
         set_error_handler('Mini\Base\App::customError');
+        register_shutdown_function('Mini\Base\App::beforeShutdown');
         
         if (LOG_ON === true) {
             Log::getInstance();
@@ -325,6 +326,16 @@ class App
             if ($fatal === true) {
                 Exception::showErrorPage(500);
             }
+        }
+    }
+    
+    /**
+     * Before shutdown
+     */
+    public static function beforeShutdown()
+    {
+        if ($error = error_get_last()) {
+            self::customError($error['type'], $error['message'], $error['file'], $error['line']);
         }
     }
 }
