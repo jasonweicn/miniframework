@@ -86,7 +86,7 @@ class Http
      *
      * @var Http
      */
-    protected static $_instance;
+    protected static $_instance = [];
 
     /**
      * 用于输出的Header信息数组
@@ -102,10 +102,11 @@ class Http
      */
     public static function getInstance()
     {
-        if (self::$_instance === null) {
-            self::$_instance = new self();
+        $name =  get_called_class();
+        if (self::$_instance[$name] === null) {
+            self::$_instance[$name] = new $name();
         }
-        return self::$_instance;
+        return self::$_instance[$name];
     }
     
     /**
