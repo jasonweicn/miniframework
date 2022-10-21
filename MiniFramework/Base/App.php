@@ -211,6 +211,19 @@ class App
     }
 
     /**
+     * 设置动作
+     * 
+     * @param string $value
+     * @return \Mini\Base\App
+     */
+    public function setAction($value)
+    {
+        $this->action = $value;
+        
+        return $this;
+    }
+
+    /**
      * 调派
      */
     public function dispatch()
