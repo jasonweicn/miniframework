@@ -196,6 +196,19 @@ class App
         
         $this->dispatch();
     }
+    
+    /**
+     * 设置控制器
+     * 
+     * @param string $value
+     * @return \Mini\Base\App
+     */
+    public function setController($value)
+    {
+        $this->controller = $value;
+        
+        return $this;
+    }
 
     /**
      * 调派
