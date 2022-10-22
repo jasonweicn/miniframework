@@ -49,20 +49,6 @@ class Request
     protected $_baseUrl = null;
 
     /**
-     * 控制器
-     *
-     * @var string
-     */
-    public $_controller;
-
-    /**
-     * 动作
-     *
-     * @var string
-     */
-    public $_action;
-
-    /**
      * QUERY_STRING转化的数组
      *
      * @var array
@@ -176,26 +162,6 @@ class Request
         }
         
         return strtoupper($method);
-    }
-
-    /**
-     * 设置控制器
-     *
-     * @param string $value            
-     */
-    public function setControllerName($value)
-    {
-        $this->_controller = $value;
-    }
-
-    /**
-     * 设置动作
-     *
-     * @param string $value            
-     */
-    public function setActionName($value)
-    {
-        $this->_action = $value;
     }
 
     /**

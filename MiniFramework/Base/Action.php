@@ -84,14 +84,12 @@ class Action
      * @param string $controller            
      * @param array $params            
      */
-    final protected function _forward($action, $controller = null, array $params = NULL)
+    final protected function _forward($action, $controller = null, array $params = null)
     {
+        $app = App::getInstance();
         if ($controller !== null) {
-            $this->_request->setControllerName($controller);
+            $app->setController($controller);
         }
-        
-        $this->_request->setActionName($action);
-        
-        App::getInstance()->dispatch();
+        $app->setAction($action)->dispatch();
     }
 }

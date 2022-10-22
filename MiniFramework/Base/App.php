@@ -100,11 +100,6 @@ class App
         if (LOG_ON === true) {
             Log::getInstance();
         }
-        
-        $this->_params = Params::getInstance();
-        $this->getRouter();
-        
-        $this->_request = Request::getInstance();
     }
     
     /**
@@ -161,6 +156,9 @@ class App
      */
     public function run()
     {
+        $this->_params = Params::getInstance();
+        $this->_request = Request::getInstance();
+        $this->getRouter();
         $requestParams = $this->_request->parseRequestParams($this->_router->getRouteType());
         $isCli = $this->_router->isCli();
         unset($this->_router);
@@ -228,9 +226,6 @@ class App
      */
     public function dispatch()
     {
-        $this->controller = $this->_request->_controller;
-        $this->action = $this->_request->_action;
-        
         $controllerName = ucfirst($this->controller);
         $isApi = (REST_ON === true && $controllerName == 'Api') ? true : false;
         

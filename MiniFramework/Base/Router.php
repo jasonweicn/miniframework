@@ -35,20 +35,6 @@ class Router
     private $_request;
 
     /**
-     * 控制器
-     *
-     * @var string
-     */
-    public $_controller;
-
-    /**
-     * 动作
-     *
-     * @var string
-     */
-    public $_action;
-
-    /**
      * 路由方式
      *
      * @var string
@@ -117,13 +103,13 @@ class Router
         }
         
         if ($this->checkRoute($controller)) {
-            $this->_request->setControllerName($controller);
+            App::getInstance()->setController($controller);
         } else {
             throw new Exception('Controller name invalid.', 404);
         }
         
         if ($this->checkRoute($action)) {
-            $this->_request->setActionName(strtolower($action));
+            App::getInstance()->setAction($action);
         } else {
             throw new Exception('Action name invalid.', 404);
         }
