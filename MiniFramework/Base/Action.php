@@ -87,6 +87,11 @@ class Action
     final protected function _forward($action, $controller = null, array $params = null)
     {
         $app = App::getInstance();
+        if ($action == $app->action) {
+            if ($controller === null || $controller == $app->controller) {
+                return false;
+            }
+        }
         if ($controller !== null) {
             $app->setController($controller);
         }
