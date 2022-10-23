@@ -95,19 +95,35 @@ class App
     final protected function __construct()
     {
         set_error_handler('Mini\Base\App::customError');
-        register_shutdown_function('Mini\Base\App::beforeShutdown');
+        set_exception_handler('Mini\Base\App::customExcepion');
         
         if (LOG_ON === true) {
             Log::getInstance();
         }
     }
-    
+
     /**
      * 克隆
      */
     private function __clone()
     {}
-    
+
+    /**
+     * 自定义异常处理方法
+     * 
+     * @param \Throwable $e
+     */
+    public static function customExcepion(\Throwable $e)
+    {
+        Log::record($e->getMessage(), Log::ERROR, ['file' => $e->getFile(), 'line' => $e->getLine()]);
+        self::showError([
+            'level'     => 'ERROR',
+            'message'   => $e->getMessage(),
+            'file'      => $e->getFile(),
+            'line'      => $e->getLine()
+        ], true);
+    }
+
     /**
      * 自定义错误处理方法
      * 
@@ -194,7 +210,7 @@ class App
         
         $this->dispatch();
     }
-    
+
     /**
      * 设置控制器
      * 
@@ -289,7 +305,7 @@ class App
         }
         return $this->_router;
     }
-    
+
     /**
      * 初始化数据库对象池
      *
@@ -323,14 +339,14 @@ class App
         
         return $this->_dbPool;
     }
-    
+
     /**
      * 输出错误
      * 
      * @param array $error
      * @param boolean $fatal
      */
-    public static function showError($error = array(), $fatal = false)
+    public static function showError($error = [], $fatal = false)
     {
         if (SHOW_ERROR === true) {
             if (! empty($error) && is_array($error)) {
@@ -347,16 +363,6 @@ class App
             if ($fatal === true) {
                 Exception::showErrorPage(500);
             }
-        }
-    }
-    
-    /**
-     * Before shutdown
-     */
-    public static function beforeShutdown()
-    {
-        if ($error = error_get_last()) {
-            self::customError($error['type'], $error['message'], $error['file'], $error['line']);
         }
     }
 }
