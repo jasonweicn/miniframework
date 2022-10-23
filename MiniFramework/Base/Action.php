@@ -86,6 +86,11 @@ class Action
      */
     final protected function _forward($action, $controller = null, array $params = NULL)
     {
+        if ($action == $this->_request->_action) {
+            if ($controller === null || $controller == $this->_request->_controller) {
+                return false;
+            }
+        }
         if ($controller !== null) {
             $this->_request->setControllerName($controller);
         }
