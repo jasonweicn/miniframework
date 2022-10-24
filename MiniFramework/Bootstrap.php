@@ -109,12 +109,6 @@ defined('TPL_ON') or define('TPL_ON', false);
 defined('TPL_SEPARATOR_L') or define('TPL_SEPARATOR_L', '{');
 defined('TPL_SEPARATOR_R') or define('TPL_SEPARATOR_R', '}');
 
-if (SHOW_ERROR === true) {
-    ini_set('display_errors', 'On');
-} else {
-    ini_set('display_errors', 'Off');
-}
-
 require (MINI_PATH . DS . 'Base' . DS . 'Loader.php');
 Mini\Base\Loader::getInstance();
 
