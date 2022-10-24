@@ -24,6 +24,8 @@
 // +---------------------------------------------------------------------------
 namespace Mini\Base;
 
+use Mini;
+
 class Action
 {
 
@@ -42,11 +44,25 @@ class Action
     protected $params;
 
     /**
-     * Request实例
+     * Request实例（旧名称）
      *
-     * @var Request
+     * @var Mini\Base\Request
      */
     protected $_request;
+
+    /**
+     * Request实例（新名称）
+     * 
+     * @var Mini\Base\Request
+     */
+    protected $request;
+
+    /**
+     * Response实例
+     *  
+     * @var Mini\Base\Response
+     */
+    protected $response;
 
     /**
      * 构造
@@ -59,7 +75,8 @@ class Action
     {
         $this->view = new View();
         $this->params = Params::getInstance();
-        $this->_request = Request::getInstance();
+        $this->request = $this->_request = Request::getInstance();
+        $this->response = Response::getInstance();
         
         if (method_exists($this, '_init')) {
             $this->_init();
