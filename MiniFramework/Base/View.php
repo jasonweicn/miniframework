@@ -139,15 +139,11 @@ class View
     {
         $view = APP_PATH . DS . 'View' . DS;
         $view .= strtolower($this->_controller) . DS . $this->_action . '.php';
-
         if (! file_exists($view)) {
             throw new Exception('View "' . $this->_action . '" does not exist.', 404);
         }
-
         $content = $this->render($view);
-
-        $_http = Http::getInstance();
-
+        $response = Response::getInstance();
         if (LAYOUT_ON === true && $this->_layout->getLayout()) {
             $this->_layout->content = $content;
             $layoutScript = $this->_layout->getLayoutScript();
@@ -158,9 +154,9 @@ class View
                     $finalViewPage = str_replace('</body>', $js . "\n</body>", $finalViewPage);
                 }
             }
-            $_http->response(200, $finalViewPage);
+            $response->httpStatus(200)->send($finalViewPage);
         } else {
-            $_http->response(200, $content);
+            $response->httpStatus(200)->send($content);
         }
 
         die();

@@ -58,18 +58,15 @@ class Exception extends \Exception
      */
     public static function showErrorPage($code)
     {
-        $http = Http::getInstance();
-        $status = $http->isStatus($code);
-
+        $response = Response::getInstance();
+        $status = $response->getStatusMsg($code);
         if ($status === false) {
             $code = 500;
-            $status = $http->isStatus($code);
+            $response->getStatusMsg($code);
         }
-
         $info = '<html><head><title>Error</title></head><body><h1>An error occurred</h1>';
         $info .= '<h2>' . $code . ' ' . $status . '</h2></body></html>';
-
-        $http->header('Content-Type', 'text/html; charset=utf-8')->response($code, $info);
+        $response->header('Content-Type', 'text/html; charset=utf-8')->httpStatus($code)->send($info);
 
         die();
     }

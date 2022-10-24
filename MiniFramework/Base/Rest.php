@@ -40,13 +40,17 @@ class Rest
      * @var Request
      */
     protected $_request;
+    
+    protected $request;
+    
+    protected $response;
 
     /**
      * Http实例
      *
      * @var Http
      */
-    protected $http;
+    //protected $http;
 
     /**
      * Rest Instance
@@ -62,11 +66,10 @@ class Rest
     {
         self::$_instance = $this;
         $this->params = Params::getInstance();
-        $this->_request = Request::getInstance();
-        $this->http = Http::getInstance();
+        $this->request = $this->_request = Request::getInstance();
+        $this->response = Response::getInstance();
 
-        $requestMethod = $this->_request->getMethod();
-
+        $requestMethod = $this->request->getMethod();
         if ($requestMethod == 'POST') {
             $this->params->setParams($this->params->_post);
         } elseif ($requestMethod == 'PUT') {
@@ -81,7 +84,6 @@ class Rest
         }
 
         $requestMethod = strtolower($requestMethod);
-
         if (method_exists($this, $requestMethod)) {
             $this->$requestMethod();
         } else {
@@ -99,22 +101,16 @@ class Rest
     public function responseJson($code = 200, $msg = '', $data = null)
     {
         if ($msg == '') {
-            $msg = Http::isStatus($code) === false ? '' : Http::isStatus($code);
+            $msg = $this->response->getStatusMsg($code) === false ? '' : $this->response->getStatusMsg($code);
         }
-
-        $content = array(
-            'code' => $code,
-            'msg' => $msg,
-            'data' => $data
-        );
+        $content = ['code' => $code, 'msg' => $msg, 'data' => $data];
         $json = pushJson($content, false);
-
-        $headers = $this->_request->getHeaders();
+        $headers = $this->request->getHeaders();
         if (isset($headers['Ver']) && preg_match("/^\d+$/", $headers['Ver'])) {
-            $this->http->header('X-Api-Ver', $headers['Ver']);
+            $this->response->header('X-Api-Ver', $headers['Ver']);
         }
 
-        $this->http->header('Content-Type', 'application/json')->response($code, $json);
+        $this->response->type('json')->httpStatus($code)->send($json);
     }
 
     /**
@@ -127,7 +123,7 @@ class Rest
     public function responseXml($code = 200, $msg = '', $data = [])
     {
         if ($msg == '') {
-            $msg = Http::isStatus($code) === false ? '' : Http::isStatus($code);
+            $msg = $this->response->getStatusMsg($code) === false ? '' : $this->response->getStatusMsg($code);
         }
 
         $xml = pushXml($data, false, false, 'data', [
@@ -135,12 +131,12 @@ class Rest
             'msg' => $msg
         ]);
 
-        $headers = $this->_request->getHeaders();
+        $headers = $this->request->getHeaders();
         if (isset($headers['Ver']) && preg_match("/^\d+$/", $headers['Ver'])) {
-            $this->http->header('X-Api-Ver', $headers['Ver']);
+            $this->response->header('X-Api-Ver', $headers['Ver']);
         }
 
-        $this->http->header('Content-Type', 'application/xml')->response($code, $xml);
+        $this->response->type('xml')->httpStatus($code)->send($xml);
     }
 
     /**
@@ -148,7 +144,7 @@ class Rest
      */
     public function forbidden()
     {
-        $this->http->response(403, '403 - Forbidden');
+        $this->response->httpStatus(403)->send('403 - Forbidden');
     }
 
     /**

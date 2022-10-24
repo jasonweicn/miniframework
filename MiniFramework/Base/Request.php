@@ -26,20 +26,12 @@ namespace Mini\Base;
 
 class Request
 {
-
     /**
      * Request实例
      *
      * @var Request
      */
     protected static $_instance;
-    
-    /**
-     * Http实例
-     * 
-     * @var Http
-     */
-    protected $_http;
 
     /**
      * 基础地址
@@ -70,19 +62,26 @@ class Request
     private $_headers = [];
 
     /**
+     * Header Object
+     * 
+     * @var Object
+     */
+    private $_header;
+
+    /**
      * 预处理过的REQUEST_URI
      *
      * @var string
      */
     private $_requestUri;
-    
+
     /**
      * CSRF令牌存储参数名
      * 
      * @var string
      */
     private $_csrfParamName = '_mini-csrf-token';
-    
+
     private $_csrfHeaderParamName = 'X-Mini-Csrf-Token';
 
     /**
@@ -97,13 +96,13 @@ class Request
         }
         return self::$_instance;
     }
-    
+
     /**
      * 构造
      */
     protected function __construct()
     {
-        $this->_http = Http::getInstance();
+        // Nothing ...
     }
 
     private function __clone()
@@ -144,7 +143,7 @@ class Request
     {
         return $this->getMethod();
     }
-    
+
     /**
      * 获取请求方法（新名称）
      * @return string
@@ -250,30 +249,37 @@ class Request
     }
 
     /**
-     * 获取请求Header信息数组
-     *
-     * @param string $name            
-     * @return multitype:
+     * Get request header data
+     * 
+     * @param string $name
+     * @return array
      */
     public function getHeaders($name = null)
     {
-        if (empty($this->_headers)) {
+        $header = $this->getHeader();
+        
+        return $header->getAll();
+    }
+
+    /**
+     * Get request header object
+     * 
+     * @return object|\Mini\Base\Header
+     */
+    public function getHeader()
+    {
+        if ($this->_header === null) {
+            $this->_header = new Header();
             foreach ($_SERVER as $key => $val) {
                 if ('HTTP_' == substr($key, 0, 5)) {
-                    $this->_headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($key, 5)))))] = $val;
+                    $this->_header->add(
+                        str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($key, 5))))),
+                        $val);
                 }
             }
         }
         
-        if (isset($name)) {
-            if (isset($this->_headers[$name])) {
-                return $this->_headers[$name];
-            } else {
-                return null;
-            }
-        }
-        
-        return $this->_headers;
+        return $this->_header;
     }
 
     /**
@@ -307,7 +313,7 @@ class Request
         
         return $this->_requestUri;
     }
-    
+
     /**
      * 获取CSRF令牌存储键名
      * 
@@ -317,7 +323,7 @@ class Request
     {
         return $this->_csrfParamName;
     }
-    
+
     /**
      * 创建CSRF令牌
      * 
@@ -336,12 +342,13 @@ class Request
             setcookie($this->_csrfParamName, $token, 0, '/', null, null, true);
         } elseif ($type == 'header') {
             $this->_http->header($this->_csrfHeaderParamName, $token);
+            
         }
         
         
         return $token;
     }
-    
+
     /**
      * 读取CSRF令牌
      * 
@@ -376,7 +383,7 @@ class Request
         
         return $token;
     }
-    
+
     /**
      * 校验客户端传入的CSRF令牌
      * 
