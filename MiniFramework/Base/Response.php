@@ -205,7 +205,7 @@ class Response
     /**
      * Set Content-Type
      * 
-     * @param string $type
+     * @param string $type html|text|json|xml
      * @return \Mini\Base\Response
      */
     public function type($type)
