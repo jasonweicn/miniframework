@@ -95,13 +95,25 @@ class Action
     }
 
     /**
-     * 转至给定的控制器和动作
+     * 转至给定的控制器和动作（旧名称）
      *
      * @param string $action            
      * @param string $controller            
      * @param array $params            
      */
     final protected function _forward($action, $controller = null, array $params = null)
+    {
+        $this->forward($action, $controller, $params);
+    }
+    
+    /**
+     * 转至给定的控制器和动作
+     * 
+     * @param string $action
+     * @param string $controller
+     * @param array $params
+     */
+    final protected function forward($action, $controller = null, array $params = null)
     {
         $app = App::getInstance();
         if ($action == $app->action) {
