@@ -433,7 +433,7 @@ function isIndexArray($array)
  */
 function isTimestamp($timestamp)
 {
-    if (strtotime(date('Y-m-d H:i:s', $timestamp)) === (int)$timestamp) {
+    if (strtotime(date('Y-m-d H:i:s', intval($timestamp))) == $timestamp) {
         return true;
     }
     
