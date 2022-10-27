@@ -101,7 +101,7 @@ QQ交流群：745683429 （入群请备注：MF）
 关于作者
 --------
 
-作者：Jason Wei
+作者：魏杰（Jason）
 
 信箱：jasonwei06@hotmail.com
 
