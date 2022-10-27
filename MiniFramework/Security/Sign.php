@@ -40,6 +40,13 @@ class Sign
      * @var int
      */
     private $expireTime = 300;
+    
+    /**
+     * 加密方式
+     * 
+     * @var string
+     */
+    private $encryptType = 'md5';
 
     /**
      * 设置签名过期时间
@@ -68,6 +75,21 @@ class Sign
         $this->salt = $salt;
         
         return true;
+    }
+    
+    /**
+     * 设置加密方式
+     * 
+     * @param string $type md5|sha1
+     * @return \Mini\Security\Sign
+     */
+    public function setEncryptType($type)
+    {
+        if ($type == 'md5' || $type == 'sha1') {
+            $this->encryptType = $type;
+        }
+        
+        return $this;
     }
 
     /**
@@ -132,8 +154,13 @@ class Sign
         }
         $dataStr = implode('&', $tmp);
 
-        // 3.字符串加盐并通过MD5生成签名
-        $sign = md5($dataStr . '|' . $this->salt);
+        // 3.字符串加盐后生成签名
+        $sign = '';
+        if ($this->encryptType == 'md5') {
+            $sign = md5($dataStr . '|' . $this->salt);
+        } else if ($this->encryptType == 'sha1') {
+            $sign = sha1($dataStr . '|' . $this->salt);
+        }
 
         return $sign;
     }
