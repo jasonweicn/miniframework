@@ -1,6 +1,28 @@
 # CHANGES #
 
 
+## Version 2.9.0 released. ( 2022-10-28 ) ##
+
+### 版本变化 ###
+* 新增 Mini\Base\Header 类，用于处理 Request 和 Response 的 Header 信息。
+* 新增 Mini\Base\Response 类，用于响应客户端，控制请求结果的输出。
+* 新增 Mini\Base\App::setAction() 方法，用于设置动作。
+* 新增 Mini\Base\App::setController() 方法，用于设置控制器。
+* 新增 Mini\Base\Action::forward() 替代原 _forward() 方法，旧方法暂时保留，新旧两个方法功能完全一致。
+* 新增 Mini\Security\Sign 类的 setEncryptType() 方法，用于指定加密方式。
+* 改进 Controller 和 Action 的设置由 Mini\Base\App 类负责处理。
+* 改进在部分核心类库中用 Mini\Base\Response 替代 Mini\Base\Http 以规范响应输出。
+* 改进并优化框架异常报错的特性。
+* 修复 Action 中使用 $this->_forward() 跳转相同的 Action 时出现死循环的 Bug。
+* 修复 Mini\Base\Http 在被继承的场景中可能出现的实例获取Bug。
+* 修复全局函数 isTimestamp() 校验时间戳的 Bug。
+
+### 升级说明 ###
+* 兼容 PHP 最低版本为 7.2.0，PHP 8.0.0 已测试可正常运行。
+* 当前版本向前兼容至 2.4.0 版本，使用 2.4.0 及后续版本的开发者可直接升级至 2.9.0 版本。
+* 文档已同步更新，地址：[http://www.miniframework.com/docv2/guide/](http://www.miniframework.com/docv2/guide/)
+
+
 ## Version 2.8.6 released. ( 2022-10-20 ) ##
 
 ### 版本变化 ###
