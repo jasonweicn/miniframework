@@ -128,6 +128,9 @@ class Example extends Action
         
         $signObj = new \Mini\Security\Sign();
         
+        // 指定用 sha1 来进行加密（默认为：md5）
+        $signObj->setEncryptType('sha1');
+        
         // 获得一个签名
         $sign = $signObj->sign($data);
         
@@ -149,6 +152,9 @@ class Example extends Action
     function verifysignAction()
     {
         $signObj = new \Mini\Security\Sign();
+        
+        // 验证时需要使用相同的加密方式
+        $signObj->setEncryptType('sha1');
         
         // 设定签名过期时间为30秒（默认为：300秒）
         $signObj->setExpireTime(30);
