@@ -28,18 +28,18 @@ class Sign
 {
 
     /**
-     * MD5签名加盐(建议通过setSalt方法改掉默认值)
+     * 签名加盐(建议通过setSalt方法改掉默认值)
      *
      * @var string
      */
     public $salt = 'PRi6LN^p!#C7UI5&';
 
     /**
-     * 签名过期时间
+     * 签名过期时间（秒）
      *
      * @var int
      */
-    private $expireTime = 300;
+    private $expireTime = 10;
     
     /**
      * 加密方式
