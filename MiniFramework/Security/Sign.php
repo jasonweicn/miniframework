@@ -28,11 +28,11 @@ class Sign
 {
 
     /**
-     * 签名加盐(建议通过setSalt方法改掉默认值)
+     * 签名加盐
      *
      * @var string
      */
-    public $salt = 'PRi6LN^p!#C7UI5&';
+    public $salt;
 
     /**
      * 签名过期时间（秒）
@@ -155,11 +155,12 @@ class Sign
         $dataStr = implode('&', $tmp);
 
         // 3.字符串加盐后生成签名
+        $salt = isset($this->salt) ? $this->salt : APP_PATH;
         $sign = '';
         if ($this->encryptType == 'md5') {
-            $sign = md5($dataStr . '|' . $this->salt);
+            $sign = md5($dataStr . '|' . $salt);
         } else if ($this->encryptType == 'sha1') {
-            $sign = sha1($dataStr . '|' . $this->salt);
+            $sign = sha1($dataStr . '|' . $salt);
         }
 
         return $sign;
