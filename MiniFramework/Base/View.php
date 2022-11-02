@@ -199,6 +199,7 @@ class View
             // 刷新模板缓存
             if ($refreshCache === true) {
                 $tplContent = file_get_contents($script);
+                is_dir(CACHE_PATH) or @mkdir(CACHE_PATH, 0700, true);
                 file_put_contents($tplCacheFile, $this->compiler($tplContent));
             }
 
