@@ -43,7 +43,7 @@ class Example extends Action
         $this->view->assign('t', $t);
         
         Session::start();
-        if (! Session::is_set('example_session')) {
+        if (! Session::has('example_session')) {
             Session::set('example_session', $t);
         }
         
