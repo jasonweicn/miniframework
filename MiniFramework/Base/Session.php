@@ -118,13 +118,25 @@ class Session
     }
 
     /**
-     * 检查会话数据是否存在
+     * 检查会话数据是否存在（旧方法名，建议使用has方法）
      *
      * @param string $name
      * @throws Exception
      * @return boolean
      */
     public static function is_set($name)
+    {
+        return self::has($name);
+    }
+    
+    /**
+     * 检查会话数据是否存在
+     * 
+     * @param string $name
+     * @throws Exception
+     * @return boolean
+     */
+    public static function has($name)
     {
         if (! is_string($name)) {
             throw new Exception('The session name must be a string.');
