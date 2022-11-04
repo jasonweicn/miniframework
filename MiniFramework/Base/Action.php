@@ -104,7 +104,7 @@ class Action
     {
         $this->forward($action, $controller);
     }
-    
+
     /**
      * 转至给定的控制器和动作
      * 
@@ -123,6 +123,26 @@ class Action
             $app->setController($controller);
         }
         $app->setAction($action)->dispatch();
+        die();
+    }
+
+    /**
+     * 显性跳转
+     * 
+     * @param string $action
+     * @param string $controller
+     */
+    final protected function redirect(string $action, string $controller = null)
+    {
+        $baseUrl = $this->request->getBaseUrl();
+        $redirectUrl = $baseUrl;
+        if ($controller !== null) {
+            $redirectUrl .= '/' . $controller;
+        } else {
+            $redirectUrl .= '/' . App::getInstance()->controller;
+        }
+        $redirectUrl .= '/' . $action;
+        header('Location:' . $redirectUrl);
         die();
     }
 }
