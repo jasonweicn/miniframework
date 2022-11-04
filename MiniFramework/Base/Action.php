@@ -123,5 +123,6 @@ class Action
             $app->setController($controller);
         }
         $app->setAction($action)->dispatch();
+        die();
     }
 }
