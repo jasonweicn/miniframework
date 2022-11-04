@@ -97,13 +97,12 @@ class Action
     /**
      * 转至给定的控制器和动作（旧名称）
      *
-     * @param string $action            
-     * @param string $controller            
-     * @param array $params            
+     * @param string $action
+     * @param string $controller
      */
-    final protected function _forward($action, $controller = null, array $params = null)
+    final protected function _forward($action, $controller = null)
     {
-        $this->forward($action, $controller, $params);
+        $this->forward($action, $controller);
     }
     
     /**
@@ -111,9 +110,8 @@ class Action
      * 
      * @param string $action
      * @param string $controller
-     * @param array $params
      */
-    final protected function forward($action, $controller = null, array $params = null)
+    final protected function forward($action, $controller = null)
     {
         $app = App::getInstance();
         if ($action == $app->action) {
