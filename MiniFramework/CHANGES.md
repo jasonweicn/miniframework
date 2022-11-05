@@ -1,6 +1,17 @@
 # CHANGES #
 
 
+## Version 2.9.1 released. ( 2022-11-06 ) ##
+
+### 版本变化 ###
+* 新增 Mini\Base\Action 类的 redirect() 方法，用于进行显性跳转。
+* 新增 Mini\Base\Session 类的 has() 方法，替代原有 is_set() 方法。
+* 改进 Mini\Base\View 类的 render() 方法，当 Cache 目录不存在时尝试自动创建。
+* 改进 Mini\Security\Sign 类，未定义签名加盐时，默认以 APP_PATH 作为盐进行签名加密。
+* 变更 Mini\Security\Sign 类的 $expireTime 签名过期时间属性默认值，从300秒缩短为10秒。
+* 修复 Mini\Base\Action 的 forward() 方法转向后，原调用方法会继续执行的 Bug。
+
+
 ## Version 2.9.0 released. ( 2022-10-28 ) ##
 
 ### 版本变化 ###
