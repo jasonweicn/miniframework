@@ -63,13 +63,28 @@ class Router
         $this->_request = Request::getInstance();
         
         if (true === $this->isCli()) {
-            
             // CLI (/index.php Controller/Action param1=value1 param2=value2 ...)
-            
             $this->_routeType = 'cli';
-            
+        } elseif (false === strpos($_SERVER['REQUEST_URI'], $_SERVER['SCRIPT_NAME'])) {
+            // Rewrite (/Controller/Action/param1/value1/param2/value2)
+            $this->_routeType = 'rewrite';
+        } else {
+            // GET (/index.php?c=index&a=index)
+            $this->_routeType = 'get';
+        }
+        
+        $this->route();
+    }
+
+    /**
+     * 路由
+     * 
+     * @throws Exception
+     */
+    public function route()
+    {
+        if ($this->_routeType == 'cli') {
             if (isset($_SERVER['argc']) && $_SERVER['argc'] > 1) {
-                
                 if (preg_match("/^([a-zA-Z][a-zA-Z0-9]*)\/([a-zA-Z][a-zA-Z0-9]*)$/", $_SERVER['argv'][1], $m)) {
                     $controller = isset($m[1]) ? $m[1] : 'index';
                     $action = isset($m[2]) ? $m[2] : 'index';
@@ -79,20 +94,11 @@ class Router
             } else {
                 $controller = $action = 'index';
             }
-        } elseif (false === strpos($_SERVER['REQUEST_URI'], $_SERVER['SCRIPT_NAME'])) {
-            
-            // Rewrite (/Controller/Action/param1/value1/param2/value2)
-            
-            $this->_routeType = 'rewrite';
+        } elseif ($this->_routeType == 'rewrite') {
             $this->_uriArray = $this->parseUrlToArray();
-            
             $controller = (isset($this->_uriArray[1]) && ! empty($this->_uriArray[1])) ? $this->_uriArray[1] : 'index';
             $action = (isset($this->_uriArray[2]) && ! empty($this->_uriArray[2])) ? $this->_uriArray[2] : 'index';
-        } else {
-            
-            // GET (/index.php?c=index&a=index)
-            
-            $this->_routeType = 'get';
+        } elseif ($this->_routeType == 'get') {
             if (empty($_SERVER['QUERY_STRING'])) {
                 $controller = $action = 'index';
             } else {
