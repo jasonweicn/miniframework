@@ -64,13 +64,13 @@ class Router
         
         if (true === $this->isCli()) {
             // CLI (/index.php Controller/Action param1=value1 param2=value2 ...)
-            $this->_routeType = 'cli';
+            $this->setRouteType('cli');
         } elseif (false === strpos($_SERVER['REQUEST_URI'], $_SERVER['SCRIPT_NAME'])) {
             // Rewrite (/Controller/Action/param1/value1/param2/value2)
-            $this->_routeType = 'rewrite';
+            $this->setRouteType('rewrite');
         } else {
             // GET (/index.php?c=index&a=index)
-            $this->_routeType = 'get';
+            $this->setRouteType('get');
         }
         
         $this->route();
