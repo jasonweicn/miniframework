@@ -126,7 +126,13 @@ class Router
      */
     public function setRouteType($type)
     {
-        $this->_routeType = $type;
+        if ($type == 'cli' || $type == 'rewrite' || $type == 'get') {
+            $this->_routeType = $type;
+        } else {
+            throw new Exception('Router type invalid.', 500);
+        }
+        
+        return $this;
     }
 
     /**
