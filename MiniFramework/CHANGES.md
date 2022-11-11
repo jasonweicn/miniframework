@@ -1,6 +1,15 @@
 # CHANGES #
 
 
+## Version 2.9.2 released. ( 2022-11-11 ) ##
+
+### 版本变化 ###
+* 新增 Mini\Base\Request 类的 getInputStream() 方法，用于获取原始输入流。
+* 改进 Mini\Base\Router 类，将主要的路由代码迁移到一个新的 route() 方法中，为后续扩展做准备。
+* 改进 Mini\Base\Router 的 setRouteType() 方法，增加针对 $type 的类型验证。
+* 改进 Mini\Base\View 的 render() 方法，当模板缓存无法写入时抛出异常。
+
+
 ## Version 2.9.1 released. ( 2022-11-06 ) ##
 
 ### 版本变化 ###
