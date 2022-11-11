@@ -283,6 +283,16 @@ class Request
     }
 
     /**
+     * 获取原始输入流
+     * 
+     * @return string
+     */
+    public function getInputStream()
+    {
+        return file_get_contents('php://input');
+    }
+
+    /**
      * 获取预处理后的REQUEST_URI
      *
      * @return string
