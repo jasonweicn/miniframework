@@ -156,7 +156,7 @@ class Example extends Action
         // 验证时需要使用相同的加密方式
         $signObj->setEncryptType('sha1');
         
-        // 设定签名过期时间为30秒（默认为：300秒）
+        // 设定签名过期时间为30秒（默认为：10秒）
         $signObj->setExpireTime(30);
         
         // 获得签名校验结果，传入参数get代表对GET请求进行签名校验
