@@ -49,7 +49,7 @@ class Sign
     private $encryptType = 'md5';
 
     /**
-     * 设置签名过期时间
+     * 设置签名过期时间（单位：秒）
      *
      * @param int $expireTime
      * @return boolean
@@ -95,40 +95,39 @@ class Sign
     /**
      * 校验签名
      *
-     * @param string $type post|get
+     * @param string $type post|get|stream
      * @return boolean
      */
     public function verifySign($type = 'post')
     {
         $sign = '';
         $signTime = 0;
-
-        if ($type == 'get') {
-            $data = $_GET;
-        } elseif ($type == 'post') {
-            $data = $_POST;
-        }
-
-        if (isset($data['sign'])) {
-            $sign = $data['sign'];
-            unset($data['sign']);
-        } else {
-            return false;
-        }
-
-        if (isset($data['signTime'])) {
-            $signTime = $data['signTime'];
-            if (! isTimestamp($signTime)) {
+        
+        if ($type == 'post' || $type == 'get') {
+            $data = $type == 'post' ? $_POST : $_GET;
+            if (isset($data['sign']) && isset($data['signTime'])) {
+                $sign = $data['sign'];
+                $signTime = $data['signTime'];
+                unset($data['sign']);
+            } else {
                 return false;
             }
-
-            if (($signTime + $this->expireTime) <= time()) {
+        } elseif ($type == 'stream') {
+            $header = \Mini\Base\Request::getInstance()->getHeader();
+            if ($header->has('X-Sign') && $header->has('X-Signtime')) {
+                $sign = $header->get('X-Sign');
+                $signTime = $header->get('X-Signtime');
+            } else {
                 return false;
             }
-        } else {
+            $data = file_get_contents('php://input') . $signTime;
+        }
+        if (! isTimestamp($signTime)) {
             return false;
         }
-
+        if (($signTime + $this->expireTime) <= time()) {
+            return false;
+        }
         if ($sign === $this->sign($data)) {
             return true;
         } else {
@@ -139,22 +138,22 @@ class Sign
     /**
      * 生成签名
      *
-     * @param array $data
+     * @param mixed $data
      * @return string
      */
-    public function sign(array &$data)
+    public function sign($data)
     {
-        // 1.对数组进行排序
-        ksort($data);
-
-        // 2.拼接成字符串
-        $tmp = [];
-        foreach ($data as $key => $val) {
-            $tmp[] = $key . '=' . $val;
+        $dataStr = '';
+        if (is_array($data)) {
+            ksort($data);
+            $tmp = [];
+            foreach ($data as $key => $val) {
+                $tmp[] = $key . '=' . $val;
+            }
+            $dataStr = implode('&', $tmp);
+        } else {
+            $dataStr = $data;
         }
-        $dataStr = implode('&', $tmp);
-
-        // 3.字符串加盐后生成签名
         $salt = isset($this->salt) ? $this->salt : APP_PATH;
         $sign = '';
         if ($this->encryptType == 'md5') {
