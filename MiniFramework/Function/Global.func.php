@@ -30,18 +30,13 @@
  */
 function getClientIp()
 {
-    $ip = null;
-
-    if ($ip !== null) {
-        return $ip;
-    }
     if (isset($_SERVER)) {
         if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
             $arr = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
-            foreach ($arr as $ip) {
-                $ip = trim($ip);
-                if ($ip != 'unknown') {
-                    $ip = $ip;
+            foreach ($arr as $tmp) {
+                $tmp = trim($tmp);
+                if ($tmp != 'unknown') {
+                    $ip = $tmp;
                     break;
                 }
             }
@@ -58,13 +53,24 @@ function getClientIp()
         }
     } else {
         if (getenv('HTTP_X_FORWARDED_FOR')) {
-            $ip = getenv('HTTP_X_FORWARDED_FOR');
+            $arr = explode(',', getenv('HTTP_X_FORWARDED_FOR'));
+            foreach ($arr as $tmp) {
+                $tmp = trim($tmp);
+                if ($tmp != 'unknown') {
+                    $ip = $tmp;
+                    break;
+                }
+            }
         } elseif (getenv('HTTP_CLIENT_IP')) {
             $ip = getenv('HTTP_CLIENT_IP');
         } elseif (getenv('HTTP_CDN_SRC_IP')) {
             $ip = getenv('HTTP_CDN_SRC_IP');
         } else {
-            $ip = getenv('REMOTE_ADDR');
+            if (getenv('REMOTE_ADDR')) {
+                $ip = getenv('REMOTE_ADDR');
+            } else {
+                $ip = '0.0.0.0';
+            }
         }
     }
     
