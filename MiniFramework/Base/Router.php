@@ -72,19 +72,29 @@ class Router
             // GET (/index.php?c=index&a=index)
             $this->setRouteType('get');
         }
-        
-        $this->route();
+        $this->route(Config::getInstance()->load('route', false));
     }
 
     /**
      * 路由
      * 
+     * @param array $rules
      * @throws Exception
      */
-    public function route()
+    public function route($rules = null)
     {
+        $controller = $action = '';
+        if (isset($rules) && is_array($rules)) {
+            $result = $this->customRoute($rules);
+            if ($result !== false) {
+                $controller = $result['c'];
+                $action = $result['a'];
+                $this->setRouteType('custom');
+            }
+        }
         if ($this->_routeType == 'cli') {
             if (isset($_SERVER['argc']) && $_SERVER['argc'] > 1) {
+                $m = [];
                 if (preg_match("/^([a-zA-Z][a-zA-Z0-9]*)\/([a-zA-Z][a-zA-Z0-9]*)$/", $_SERVER['argv'][1], $m)) {
                     $controller = isset($m[1]) ? $m[1] : 'index';
                     $action = isset($m[2]) ? $m[2] : 'index';
@@ -111,14 +121,60 @@ class Router
         if ($this->checkRoute($controller)) {
             App::getInstance()->setController($controller);
         } else {
-            throw new Exception('Controller name invalid.', 404);
+            throw new Exception('Controller name "' . $controller . '" invalid.', 404);
         }
-        
         if ($this->checkRoute($action)) {
             App::getInstance()->setAction($action);
         } else {
-            throw new Exception('Action name invalid.', 404);
+            throw new Exception('Action name "' . $action . '" invalid.', 404);
         }
+    }
+
+    /**
+     * 自定义路由
+     * 
+     * @param array $rules
+     * @return array|boolean
+     */
+    private function customRoute($rules)
+    {
+        foreach ($rules as $rule => $target) {
+            $names = [];
+            $matches = [];
+            preg_match_all('/<(.*?)>/', $rule, $matches);
+            if (! empty($matches[1])) {
+                foreach ($matches[1] as $v) {
+                    if (strpos($v, ':')) {
+                        $names[] = $name = substr($v, 0, strpos($v, ':') - strlen($v));
+                        $rule = preg_replace('/<' . $name . ':(.*?)>/', '($1)', $rule);
+                    } else {
+                        $rule = preg_replace('/<(.*?)>/', '($1)', $rule);
+                    }
+                }
+            }
+            $rule = '/^\/' . str_replace('/', '\/', $rule)  .'$/';
+            $m = [];
+            preg_match_all($rule, $_SERVER['REQUEST_URI'], $m);
+            if (! empty($m[0])) {
+                if (! empty($names)) {
+                    unset($m[0]);
+                    $m = array_values($m);
+                    $p = Params::getInstance();
+                    foreach ($names as $k => $name) {
+                        if (isset($m[$k][0])) {
+                            $p->setParam($name, $m[$k][0]);
+                        }
+                    }
+                }
+                if (strpos($target, '/')) {
+                    $result['c'] = substr($target, 0, strpos($target, '/') - strlen($target));
+                    $result['a'] = substr($target, strpos($target, '/') + 1, strlen($target));
+                    return $result;
+                }
+            }
+        }
+        
+        return false;
     }
 
     /**
@@ -126,7 +182,7 @@ class Router
      */
     public function setRouteType($type)
     {
-        if ($type == 'cli' || $type == 'rewrite' || $type == 'get') {
+        if ($type == 'cli' || $type == 'rewrite' || $type == 'get' || $type == 'custom') {
             $this->_routeType = $type;
         } else {
             throw new Exception('Router type invalid.', 500);
