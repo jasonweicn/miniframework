@@ -1,7 +1,7 @@
 <?php
 namespace App\Controller;
 
-use Mini\Base\{Action, Session, Upload, Log, Debug};
+use Mini\Base\{Action, Session, Upload, Log, Debug, Params};
 use Mini\Captcha\Captcha;
 
 /**
@@ -163,6 +163,18 @@ class Example extends Action
         $res = $signObj->verifySign('get');
         dump($res);
         
+        die();
+    }
+    
+    /**
+     * Example 8: Route
+     */
+    function routeAction()
+    {
+        //自定义的路由规则配置在 Config/route.php 中
+        
+        $id = Params::getInstance()->getParam('id');
+        echo 'Action: example/route, id: ' . $id;
         die();
     }
 }
