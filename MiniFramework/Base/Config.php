@@ -61,10 +61,13 @@ class Config
 
     /**
      * 读取配置
-     *
-     * @param string $config            
+     * 
+     * @param string $config
+     * @param boolean $throw
+     * @throws Exception
+     * @return boolean|NULL|mixed
      */
-    public function load($config)
+    public function load($config, $throw = true)
     {
         $lastPos = strpos($config, ':');
         if ($lastPos !== false) {
@@ -73,28 +76,31 @@ class Config
         } else {
             $confName = $config;
         }
-        
         if (! isset($this->_confData[$confName])) {
-            
             if (APP_ENV == 'prod') {
                 $confFile = CONFIG_PATH . DS . $confName . '.php';
             } else {
                 $confFile = CONFIG_PATH . DS . $confName . '-' . APP_ENV . '.php';
             }
-            
             if (file_exists($confFile)) {
-                include ($confFile);
+                $res = include($confFile);
             } else {
-                throw new Exception('Config "' . $confName . '" not found.');
+                if ($throw === true) {
+                    throw new Exception('Config "' . $confName . '" not found.');
+                } else {
+                    return false;
+                }
             }
-            
-            if (isset(${$confName})) {
-                $this->_confData[$confName] = ${$confName};
+            if ($res === 1) {
+                if (isset(${$confName})) {
+                    $this->_confData[$confName] = ${$confName};
+                } else {
+                    return null;
+                }
             } else {
-                return null;
+                $this->_confData[$confName] = $res;
             }
         }
-        
         if (isset($confKey) && isset($this->_confData[$confName][$confKey])) {
             return $this->_confData[$confName][$confKey];
         }
