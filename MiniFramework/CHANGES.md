@@ -1,6 +1,16 @@
 # CHANGES #
 
 
+## Version 2.9.3 released. ( 2022-11-21 ) ##
+
+### 版本变化 ###
+* 改进全局函数 getClientIp()，完善对客户端 IP 地址获取的准确性。
+* 改进 Mini\Security\Sign 类，支持对原始输入流进行签名校验。
+* 改进 Mini\Base\Config 类的 load() 方法，支持更灵活的配置文件格式。
+* 改进 Mini\Base\Router 类，新增 customRoute() 方法，用于自定义路由规则。
+* 增加自定义路由规则的示例代码。
+
+
 ## Version 2.9.2 released. ( 2022-11-11 ) ##
 
 ### 版本变化 ###
