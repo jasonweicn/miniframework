@@ -35,7 +35,6 @@ class Exception extends \Exception
      */
     public function __construct($message, $code = 0, $level = Log::ERROR, $position = null)
     {
-        Log::record($message, $level, $position);
         parent::__construct($message, $code);
     }
 
