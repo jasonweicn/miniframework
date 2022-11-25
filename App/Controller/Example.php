@@ -1,7 +1,7 @@
 <?php
 namespace App\Controller;
 
-use Mini\Base\{Action, Session, Upload, Log, Debug, Params};
+use Mini\Base\{Action, Session, Upload, Log, Debug, Params, Response};
 use Mini\Captcha\Captcha;
 
 /**
@@ -176,5 +176,20 @@ class Example extends Action
         $id = Params::getInstance()->getParam('id');
         echo 'Action: example/route, id: ' . $id;
         die();
+    }
+
+    /**
+     * Example 9: Response
+     */
+    function responseAction()
+    {
+        // 输出的内容
+        $data = 'Hello MiniFramework!';
+        
+        // 获取 Response 实例
+        $response = Response::getInstance();
+        
+        // 设定响应状态码和类型，并通过 send 方法将内容发送给客户端。
+        $response->httpStatus(200)->type('html')->send($data);
     }
 }
