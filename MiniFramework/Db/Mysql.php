@@ -119,7 +119,7 @@ class Mysql extends Db_Abstract
                 $this->_getPdoError();
             }
             return $affected;
-        } catch (\PDOException $e) {
+        } catch (Exception $e) {
             throw new Exception($e);
         }
     }
@@ -153,7 +153,7 @@ class Mysql extends Db_Abstract
             }
 
             return $result;
-        } catch (\PDOException $e) {
+        } catch (Exception $e) {
             throw new Exception($e);
         }
     }
@@ -203,7 +203,7 @@ class Mysql extends Db_Abstract
             $stmt = $this->_dbh->prepare($sql);
             $res = $stmt->execute($prepareParams);
             return $res;
-        } catch (\PDOException $e) {
+        } catch (Exception $e) {
             throw new Exception($e);
         }
 
@@ -286,7 +286,7 @@ class Mysql extends Db_Abstract
             $stmt = $this->_dbh->prepare($sql);
             $res = $stmt->execute($prepareData);
             return $res;
-        } catch (\PDOException $e) {
+        } catch (Exception $e) {
             throw new Exception($e);
         }
 
@@ -456,7 +456,7 @@ class Mysql extends Db_Abstract
             }
             $this->_commit();
             return true;
-        } catch (\PDOException $e) {
+        } catch (Exception $e) {
             $this->_rollBack();
             throw new Exception($e);
         }
