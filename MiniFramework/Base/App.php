@@ -94,8 +94,8 @@ class App
      */
     final protected function __construct()
     {
-        set_error_handler('Mini\Base\App::customError');
-        set_exception_handler('Mini\Base\App::customExcepion');
+        set_error_handler('Mini\Base\Exception::customError');
+        set_exception_handler('Mini\Base\Exception::customExcepion');
         
         if (LOG_ON === true) {
             Log::getInstance();
@@ -107,66 +107,6 @@ class App
      */
     private function __clone()
     {}
-
-    /**
-     * 自定义异常处理方法
-     * 
-     * @param \Throwable $e
-     */
-    public static function customExcepion(\Throwable $e)
-    {
-        Log::record(str_replace(["\r\n", "\r", "\n"], ' ', $e->__toString()), Log::ERROR, ['file' => $e->getFile(), 'line' => $e->getLine()]);
-        self::showError([
-            'level'     => 'ERROR',
-            'message'   => $e->getMessage(),
-            'file'      => $e->getFile(),
-            'line'      => $e->getLine(),
-            'trace'     => $e->getTraceAsString()
-        ], true);
-    }
-
-    /**
-     * 自定义错误处理方法
-     * 
-     * @param int $level
-     * @param string $message
-     * @param string $file
-     * @param int $line
-     */
-    public static function customError($level, $message, $file, $line)
-    {
-        $error = [
-            'message' => $message,
-            'file' => $file,
-            'line' => $line
-        ];
-        
-        switch ($level) {
-            
-            case E_ERROR:
-            case E_PARSE:
-            case E_CORE_ERROR:
-            case E_COMPILE_ERROR:
-            case E_USER_ERROR:
-                Log::record($message, Log::ERROR, ['file' => $file, 'line' => $line]);
-                $error['level'] = Log::ERROR;
-                self::showError($error, true);
-                die();
-                break;
-                
-            case E_WARNING:
-                Log::record($message, Log::WARNING, ['file' => $file, 'line' => $line]);
-                $error['level'] = Log::WARNING;
-                self::showError($error);
-                break;
-                
-            default:
-                Log::record($message, Log::NOTICE, ['file' => $file, 'line' => $line]);
-                $error['level'] = Log::NOTICE;
-                self::showError($error);
-                break;
-        }
-    }
 
     /**
      * 开始
@@ -339,33 +279,5 @@ class App
         }
         
         return $this->_dbPool;
-    }
-
-    /**
-     * 输出错误
-     * 
-     * @param array $error
-     * @param boolean $fatal
-     */
-    public static function showError($error = [], $fatal = false)
-    {
-        if (SHOW_ERROR === true) {
-            if (! empty($error) && is_array($error)) {
-                $isCli = preg_match("/cli/i", PHP_SAPI) ? true : false;
-                if ($isCli) {
-                    $body = "{$error['level']}: {$error['message']} in {$error['file']} on line {$error['line']}\n";
-                } else {
-                    $body = "<p><b>{$error['level']}</b>: {$error['message']} in <b>{$error['file']}</b> on line <b>{$error['line']}</b></p>\n";
-                    if (isset($error['trace']) && ! empty($error['trace'])) {
-                        $body .= "<p><b>Stack trace</b>: \n" . $error['trace'] . "</p>";
-                    }
-                }
-                echo $body;
-            }
-        } else {
-            if ($fatal === true) {
-                Exception::showErrorPage(500);
-            }
-        }
     }
 }
