@@ -459,19 +459,19 @@ abstract class Model
                 throw new Exception('Param invalid.');
             }
             if (! is_array($params[1])) {
-                if (! in_array($params[1], $this->_compareSymbol)) {
+                if (! in_array(strtoupper($params[1]), $this->_compareSymbol)) {
                     throw new Exception('Param invalid.');
                 }
                 if (! is_array($params[2])) {
-                    $this->_options['where'] = $this->getWhereString($params[0], [$params[2]], $params[1]);
+                    $this->_options['where'] = $this->getWhereString($params[0], [$params[2]], strtoupper($params[1]));
                 } else {
-                    $this->_options['where'] = $this->getWhereString($params[0], $params[2], $params[1], 'OR');
+                    $this->_options['where'] = $this->getWhereString($params[0], $params[2], strtoupper($params[1]), 'OR');
                 }
             } else {
-                if (! in_array($params[2], $this->_logicSymbol)) {
+                if (! in_array(strtoupper($params[2]), $this->_logicSymbol)) {
                     throw new Exception('Param invalid.');
                 }
-                $this->_options['where'] = $this->getWhereString($params[0], $params[1], '=', $params[2]);
+                $this->_options['where'] = $this->getWhereString($params[0], $params[1], '=', strtoupper($params[2]));
             }
         } elseif ($paramsNum == 4) {
             if ($params[3] == null) {
