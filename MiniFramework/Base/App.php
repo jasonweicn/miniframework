@@ -115,12 +115,13 @@ class App
      */
     public static function customExcepion(\Throwable $e)
     {
-        Log::record($e->getMessage(), Log::ERROR, ['file' => $e->getFile(), 'line' => $e->getLine()]);
+        Log::record(str_replace(["\r\n", "\r", "\n"], ' ', $e->__toString()), Log::ERROR, ['file' => $e->getFile(), 'line' => $e->getLine()]);
         self::showError([
             'level'     => 'ERROR',
             'message'   => $e->getMessage(),
             'file'      => $e->getFile(),
-            'line'      => $e->getLine()
+            'line'      => $e->getLine(),
+            'trace'     => $e->getTraceAsString()
         ], true);
     }
 
@@ -355,8 +356,10 @@ class App
                     $body = "{$error['level']}: {$error['message']} in {$error['file']} on line {$error['line']}\n";
                 } else {
                     $body = "<p><b>{$error['level']}</b>: {$error['message']} in <b>{$error['file']}</b> on line <b>{$error['line']}</b></p>\n";
+                    if (isset($error['trace']) && ! empty($error['trace'])) {
+                        $body .= "<p><b>Stack trace</b>: \n" . $error['trace'] . "</p>";
+                    }
                 }
-                
                 echo $body;
             }
         } else {
