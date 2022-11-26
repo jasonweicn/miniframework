@@ -64,7 +64,7 @@ class Exception extends \Exception
             'file'      => $e->getFile(),
             'line'      => $e->getLine(),
             'trace'     => $e->getTraceAsString()
-        ], true);
+        ]);
     }
 
     /**
@@ -90,19 +90,39 @@ class Exception extends \Exception
             case E_USER_ERROR:
                 Log::record($message, Log::ERROR, ['file' => $file, 'line' => $line]);
                 $error['level'] = Log::ERROR;
-                self::showError($error, true);
+                self::showError($error);
                 die();
                 break;
             case E_WARNING:
                 Log::record($message, Log::WARNING, ['file' => $file, 'line' => $line]);
                 $error['level'] = Log::WARNING;
-                self::showError($error);
+                self::showWarning($error);
                 break;
             default:
                 Log::record($message, Log::NOTICE, ['file' => $file, 'line' => $line]);
                 $error['level'] = Log::NOTICE;
-                self::showError($error);
+                self::showWarning($error);
                 break;
+        }
+    }
+
+    /**
+     * 输出警告
+     * 
+     * @param array $error
+     */
+    public static function showWarning($error = [])
+    {
+        $isCli = preg_match("/cli/i", PHP_SAPI) ? true : false;
+        if (SHOW_ERROR === true) {
+            if (! empty($error) && is_array($error)) {
+                if ($isCli) {
+                    $body = "{$error['level']}: {$error['message']} in {$error['file']} on line {$error['line']}\n";
+                } else {
+                    $body.= "<p><b>{$error['level']}</b>: {$error['message']} in <b>{$error['file']}</b> on line <b>{$error['line']}</b></p>\n";
+                }
+                echo $body;
+            }
         }
     }
 
@@ -110,25 +130,32 @@ class Exception extends \Exception
      * 输出错误
      *
      * @param array $error
-     * @param boolean $fatal
      */
-    public static function showError($error = [], $fatal = false)
+    public static function showError($error = [])
     {
+        $isCli = preg_match("/cli/i", PHP_SAPI) ? true : false;
         if (SHOW_ERROR === true) {
             if (! empty($error) && is_array($error)) {
-                $isCli = preg_match("/cli/i", PHP_SAPI) ? true : false;
                 if ($isCli) {
                     $body = "{$error['level']}: {$error['message']} in {$error['file']} on line {$error['line']}\n";
                 } else {
-                    $body = "<p><b>{$error['level']}</b>: {$error['message']} in <b>{$error['file']}</b> on line <b>{$error['line']}</b></p>\n";
+                    $body = "<html><head><title>An error occurred</title></head><body>\n";
+                    $body.= "<p><b>{$error['level']}</b>: {$error['message']}</p>\n";
+                    $body.= "<p><b>Position</b>: {$error['file']} (line {$error['line']})</p>\n";
                     if (isset($error['trace']) && ! empty($error['trace'])) {
-                        $body .= "<p><b>Stack trace</b>: \n" . $error['trace'] . "</p>";
+                        $body .= "<p><b>Stack trace</b>: \n" . $error['trace'] . "</p>\n";
                     }
+                    if ($error['level'] != Log::WARNING && $error['level'] != log::NOTICE) {
+                        $body .= '<hr><p>Powered by MiniFramework. ' . date('r') . '</p>';
+                    }
+                    $body .= '</body></html>';
                 }
                 echo $body;
             }
         } else {
-            if ($fatal === true) {
+            if ($isCli) {
+                echo "An error occurred\n";
+            } else {
                 self::showErrorPage(500);
             }
         }
@@ -145,10 +172,11 @@ class Exception extends \Exception
         $status = $response->getStatusMsg($code);
         if ($status === false) {
             $code = 500;
-            $response->getStatusMsg($code);
+            $status = $response->getStatusMsg($code);
         }
-        $info = '<html><head><title>Error</title></head><body><h1>An error occurred</h1>';
-        $info .= '<h2>' . $code . ' ' . $status . '</h2></body></html>';
+        $info = '<html><head><title>An error occurred</title></head><body><h1>An error occurred</h1>';
+        $info .= '<h2>' . $code . ' ' . $status . '</h2>';
+        $info .= '<hr><p>Powered by MiniFramework. ' . date('r') . '</p></body></html>';
         $response->header('Content-Type', 'text/html; charset=utf-8')->httpStatus($code)->send($info);
 
         die();
