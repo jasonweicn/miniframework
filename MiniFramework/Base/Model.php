@@ -188,7 +188,7 @@ abstract class Model
                 }
             }
         } else {
-            throw new Exception('Database is not found.');
+            throw new Exception('Database object is not found.');
         }
         $this->reset();
         
@@ -218,7 +218,7 @@ abstract class Model
         if ($this->_curDb) {
             $res = $this->_curDb->update($this->getTable(), $this->_options['data'], $where);
         } else {
-            throw new Exception('Database is not found.');
+            throw new Exception('Database object is not found.');
         }
         $this->reset();
         
@@ -242,7 +242,7 @@ abstract class Model
         if ($this->_curDb) {
             $res = $this->_curDb->delete($this->getTable(), $where);
         } else {
-            throw new Exception('Database is not found.');
+            throw new Exception('Database object is not found.');
         }
         $this->reset();
         
@@ -267,7 +267,7 @@ abstract class Model
             }
             $res = $this->_curDb->query($sql, $type);
         } else {
-            throw new Exception('Database is not found.');
+            throw new Exception('Database object is not found.');
         }
         $this->reset();
         
