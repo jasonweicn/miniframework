@@ -1,6 +1,17 @@
 # CHANGES #
 
 
+## Version 2.9.4 released. ( 2022-11-28 ) ##
+
+### 版本变化 ###
+* 改进 Mini\Base\Model 类的 where() 方法，对传入的数学和逻辑运算符号大小写不敏感。
+* 改进 Mini\Db\Mysql 类中抛出异常的方式。
+* 修复日志在特定场景下会重复记录的Bug。
+* 优化异常信息显示和日志记录格式。
+* 优化异常处理机制，将与异常处理相关的方法迁移至 Mini\Base\Exception 类。
+* 完善找不到数据库对象时的异常报错信息。
+
+
 ## Version 2.9.3 released. ( 2022-11-21 ) ##
 
 ### 版本变化 ###
@@ -8,7 +19,6 @@
 * 改进 Mini\Security\Sign 类，支持对原始输入流进行签名校验。
 * 改进 Mini\Base\Config 类的 load() 方法，支持更灵活的配置文件格式。
 * 改进 Mini\Base\Router 类，新增 customRoute() 方法，用于自定义路由规则。
-* 增加自定义路由规则的示例代码。
 
 
 ## Version 2.9.2 released. ( 2022-11-11 ) ##
