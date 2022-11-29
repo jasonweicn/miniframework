@@ -109,6 +109,22 @@ class Request
     {}
 
     /**
+     * 获取 HOST
+     * 
+     * @return string
+     */
+    public function getHost()
+    {
+        if ($_SERVER['SERVER_PORT'] == 80 || $_SERVER['SERVER_PORT'] == 443) {
+            $host = $_SERVER['HTTP_HOST'];
+        } else {
+            $host = $_SERVER['HTTP_HOST'] . ':' . $_SERVER['SERVER_PORT'];
+        }
+        
+        return $host;
+    }
+
+    /**
      * 从$_SERVER['PHP_SELF']中提取基础地址
      *
      * @return string
