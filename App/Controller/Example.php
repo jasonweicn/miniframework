@@ -185,8 +185,11 @@ class Example extends Action
         //自定义的路由规则配置在 Config/route.php 中
         
         $id = Params::getInstance()->getParam('id');
-        echo 'Action: example/route, id: ' . $id;
-        die();
+        if ($id === null) {
+            $id = 'NULL';
+        }
+        $this->view->assign('id', $id);
+        $this->view->display();
     }
 
     /**
