@@ -268,13 +268,18 @@ class Request
      * Get request header data
      * 
      * @param string $name
-     * @return array
+     * @return array|mixed
      */
     public function getHeaders($name = null)
     {
         $header = $this->getHeader();
+        if (isset($name)) {
+            $result = $header->get($name);
+        } else {
+            $result = $header->getAll();
+        }
         
-        return $header->getAll();
+        return $result;
     }
 
     /**
