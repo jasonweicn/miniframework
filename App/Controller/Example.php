@@ -201,6 +201,6 @@ class Example extends Action
         $response = Response::getInstance();
         
         // 设定响应状态码和类型，并通过 send 方法将内容发送给客户端。
-        $response->httpStatus(200)->type('html')->send($data);
+        $response->httpStatus(200)->type('json')->send(json_encode($data));
     }
 }
