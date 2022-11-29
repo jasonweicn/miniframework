@@ -78,10 +78,21 @@ class Example extends Action
     function logAction()
     {
         $message = 'This is a log test.';
-
+        $log_status = LOG_ON === true ? '开启' : '关闭';
+        $log_mode = '';
+        if (LOG_MODE == 1) {
+            $log_mode = '文件';
+        } elseif (LOG_MODE == 2) {
+            $log_mode = '数据库';
+        } else {
+            $log_mode = '未知';
+        }
+        $this->view->assign('message', $message);
+        $this->view->assign('log_status', $log_status);
+        $this->view->assign('log_mode', $log_mode);
         // 如果 LOG_ON 为 true 时，下面的内容会在程序运行结束时最终写入日志文件
         Log::record($message, 'INFO', ['file'=>__FILE__, 'line'=>__LINE__]);
-        
+        $this->view->display();
     }
     
     /**
