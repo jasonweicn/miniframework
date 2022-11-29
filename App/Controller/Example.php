@@ -10,6 +10,14 @@ use Mini\Captcha\Captcha;
 class Example extends Action
 {
     /**
+     * 示例的首页
+     */
+    function indexAction()
+    {
+        $this->view->display();
+    }
+
+    /**
      * Example 1: Captcha
      */
     function captchaAction()
