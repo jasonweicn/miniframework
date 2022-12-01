@@ -125,6 +125,19 @@ class Request
     }
 
     /**
+     * 获取 User-Agent
+     * 
+     * @return string|null
+     */
+    public function getUserAgent()
+    {
+        $header = $this->getHeader();
+        $ua = $header->get('User-Agent') === false ? null : $header->get('User-Agent');
+        
+        return $ua;
+    }
+
+    /**
      * 从$_SERVER['PHP_SELF']中提取基础地址
      *
      * @return string
