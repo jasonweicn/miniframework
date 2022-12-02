@@ -111,11 +111,11 @@ abstract class Model
     public function useDb($key, $params = null)
     {
         $db = $this->loadDb($key);
-        if ($db == null) {
-            if ($params != null) {
-                $this->_curDb = $this->regDb($key, $params);
+        if ($db === null) {
+            if ($params === null || empty($params)) {
+                throw new Exception('Failed to use the "' . $key . '" database object.');
             } else {
-                return false;
+                $this->_curDb = $this->regDb($key, $params);
             }
         } else {
             $this->_curDb = $db;
