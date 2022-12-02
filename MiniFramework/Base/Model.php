@@ -24,8 +24,6 @@
 // +---------------------------------------------------------------------------
 namespace Mini\Base;
 
-use Mini\Db;
-
 abstract class Model
 {
 
@@ -135,7 +133,10 @@ abstract class Model
      */
     public function regDb($key, $params)
     {
-        $this->_dbPool[$key] = Db::factory('Mysql', $params);
+        if (isset($this->_dbPool[$key])) {
+            throw new Exception('Failed to register database object, "' . $key . '" already exists.');
+        }
+        $this->_dbPool[$key] = \Mini\Db\Db::factory('Mysql', $params);
         
         return $this->_dbPool[$key];
     }
