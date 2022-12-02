@@ -69,7 +69,7 @@ class Mysql extends Db_Abstract
             return;
 
         if (! class_exists('PDO')) {
-            throw new Exception('Not support PDO.');
+            throw new Exception('Not found PDO extension.');
         }
 
         $dsn = $this->_dsn();
