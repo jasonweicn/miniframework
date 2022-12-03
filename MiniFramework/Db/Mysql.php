@@ -25,7 +25,7 @@
 namespace Mini\Db;
 
 use Mini\Base\Exception;
-use PDO;
+use \PDO;
 
 class Mysql extends Db_Abstract
 {
