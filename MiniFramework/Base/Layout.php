@@ -102,9 +102,9 @@ class Layout
      *
      * @param string $path 布局文件存放路径
      */
-    public function setLayoutPath($path)
+    public function setLayoutPath(string $path)
     {
-        $this->_layoutPath = (string) $path;
+        $this->_layoutPath = $path;
 
         return $this;
     }
