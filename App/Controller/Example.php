@@ -54,7 +54,7 @@ class Example extends Action
         if (! Session::has('example_session')) {
             Session::set('example_session', $t);
         }
-        
+        $this->view->assign('session_id', Session::id());
         $this->view->assign('session_time', Session::get('example_session'));
         
         $this->view->display();
