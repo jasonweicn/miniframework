@@ -1,6 +1,19 @@
 # CHANGES #
 
 
+## Version 2.9.5 released. ( 2022-12-06 ) ##
+
+### 版本变化 ###
+* 新增 Mini\Base\Request 类的 getHost() 方法，用于获取当前请求的 HOST 地址。
+* 新增 Mini\Base\Request 类的 getUserAgent() 方法，用于获取当前请求的客户端 User-Agent 信息。
+* 改进 Mini\Base\Request 类的 getHeaders() 方法，支持获取指定名称的 Header 信息。
+* 改进 Mini\Base\Model 类的 regDb() 方法，当注册的数据库对象已经存在时会抛出异常。
+* 改进 Mini\Base\Model 类的 useDb() 方法，当无法正常使用数据库对象时会抛出异常。
+* 改进 Mini\Base\Layout 类的 setLayoutPath() 方法，增加针对参数的类型约束。
+* 修复 Mini\Db\Mysql 类在某些特定场景下无法正常加载 PDO 扩展的问题。
+* 优化 Mini\Db\Mysql 类的异常报错信息。
+
+
 ## Version 2.9.4 released. ( 2022-11-28 ) ##
 
 ### 版本变化 ###
