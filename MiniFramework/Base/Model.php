@@ -317,7 +317,7 @@ abstract class Model
     }
     
     /**
-     * 设置数据表
+     * 设置 FROM 数据表
      * 
      * @param string $table
      * @return \Mini\Base\Model
@@ -345,7 +345,7 @@ abstract class Model
     }
     
     /**
-     * 设置数据表（为符合使用习惯，封装了table方法）
+     * 设置 FROM 数据表（为符合使用习惯，封装了 table 方法）
      * 
      * @param string $table
      * @return \Mini\Base\Model
@@ -360,7 +360,7 @@ abstract class Model
      * 
      * @param string $table
      * @param string $condition
-     * @param string $type
+     * @param string $type (default:INNER | LEFT | RIGHT)
      * @throws Exception
      * @return \Mini\Base\Model
      */
@@ -444,7 +444,7 @@ abstract class Model
     }
     
     /**
-     * 设置查询条件
+     * 设置 WHERE 查询条件
      * 
      * @param mixed $defaultParam 通常为查询条件字符串，也可作为要查询的字段名和其他参数组合使用
      * @return \Mini\Base\Model
@@ -540,7 +540,7 @@ abstract class Model
     }
     
     /**
-     * 设置分组
+     * 设置 GROUP BY 分组
      * 
      * @param mixed $group
      * @return \Mini\Base\Model
@@ -563,7 +563,7 @@ abstract class Model
     }
     
     /**
-     * 设置排序
+     * 设置 ORDER BY
      * 
      * @param mixed $order string|array
      * @return \Mini\Base\Model
@@ -590,10 +590,10 @@ abstract class Model
     }
 
     /**
-     * LIMIT
+     * 设置 LIMIT
      * 
-     * @param int $param1
-     * @param int $param2
+     * @param int $param1 rows or offset (default:1)
+     * @param int $param2 rows
      * @throws Exception
      * @return \Mini\Base\Model
      */
