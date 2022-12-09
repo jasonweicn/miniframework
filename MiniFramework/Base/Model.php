@@ -561,7 +561,20 @@ abstract class Model
         
         return $this;
     }
-    
+
+    /**
+     * 设置 HAVING 过滤（仅在 GROUP BY 时生效）
+     * 
+     * @param string $condition
+     * @return \Mini\Base\Model
+     */
+    public function having($condition)
+    {
+        $this->_options['having'] = $condition;
+        
+        return $this;
+    }
+
     /**
      * 设置 ORDER BY
      * 
@@ -667,6 +680,10 @@ abstract class Model
             // GROUP BY
             if (isset($this->_options['group']) && $this->_options['group'] != '') {
                 $sql .= ' GROUP BY ' . $this->_options['group'];
+                // HAVING
+                if (isset($this->_options['having']) && ! empty($this->_options['having'])) {
+                    $sql .= ' HAVING ' . $this->_options['having'];
+                }
             }
             
             // ORDER BY
