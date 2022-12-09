@@ -277,6 +277,11 @@ abstract class Model
         return $res;
     }
 
+    /**
+     * 设置 DISTINCT 去重
+     * 
+     * @return \Mini\Base\Model
+     */
     public function distinct()
     {
         $this->_options['distinct'] = true;
