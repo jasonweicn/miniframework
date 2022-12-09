@@ -279,7 +279,7 @@ abstract class Model
 
     public function distinct()
     {
-        $this->_distinct = true;
+        $this->_options['distinct'] = true;
         
         return $this;
     }
@@ -639,7 +639,7 @@ abstract class Model
         }
         
         if ($this->_method == 'SELECT') {
-            if ($this->_distinct === true) {
+            if (isset($this->_options['distinct']) && $this->_options['distinct'] === true) {
                 $sql .= ' DISTINCT';
             }
             if (! isset($this->_options['field']) || $this->_options['field'] == '') {
@@ -717,7 +717,6 @@ abstract class Model
     {
         $this->_options = [];
         $this->_method = '';
-        $this->_distinct = false;
         
         return true;
     }
