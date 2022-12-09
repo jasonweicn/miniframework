@@ -40,6 +40,8 @@ abstract class Model
     
     private $_options;
     
+    private $_distinct = false;
+    
     private $_debugSql = false;
     
     /**
@@ -274,7 +276,14 @@ abstract class Model
         
         return $res;
     }
-    
+
+    public function distinct()
+    {
+        $this->_distinct = true;
+        
+        return $this;
+    }
+
     /**
      * 设置查询字段
      * 
@@ -630,6 +639,9 @@ abstract class Model
         }
         
         if ($this->_method == 'SELECT') {
+            if ($this->_distinct === true) {
+                $sql .= ' DISTINCT';
+            }
             if (! isset($this->_options['field']) || $this->_options['field'] == '') {
                 $sql .= ' * ';
             } else {
@@ -705,6 +717,7 @@ abstract class Model
     {
         $this->_options = [];
         $this->_method = '';
+        $this->_distinct = false;
         
         return true;
     }
