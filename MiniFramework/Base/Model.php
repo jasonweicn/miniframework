@@ -636,7 +636,24 @@ abstract class Model
         
         return $this;
     }
-    
+
+    /**
+     * 设置分页
+     * 
+     * @param int $page
+     * @param int $size (default:10)
+     * @return \Mini\Base\Model
+     */
+    public function page(int $page, int $size = 10)
+    {
+        $page = empty($page) ? 1 : $page;
+        $size = empty($size) ? 10 : $size;
+        $offset = $page == 1 ? 0 : $size * ($page - 1);
+        $this->limit($offset, $size);
+        
+        return $this;
+    }
+
     /**
      * 创建SQL语句
      * 
