@@ -143,8 +143,17 @@ class Log
                 throw new Exception('Log write fail.');
             }
         }
+        if (LOG_MAX_FILES) {
+            $files = glob(LOG_PATH . DS. '????-??-??.log');
+            $num = count($files);
+            if ($num > LOG_MAX_FILES) {
+                for ($i=0; $i<($num-LOG_MAX_FILES); $i++) {
+                    unlink($files[$i]);
+                }
+            }
+        }
     }
-    
+
     /**
      * 写入日志到数据库
      */
