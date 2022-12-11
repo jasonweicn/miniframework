@@ -90,6 +90,9 @@ defined('LOG_LEVEL') or define('LOG_LEVEL', 'EMERG,ALERT,CRIT,ERROR,WARNING,NOTI
 // 日志存储路径（LOG_MODE为1时生效）
 defined('LOG_PATH') or define('LOG_PATH', APP_PATH . DS . 'Log');
 
+// 日志文件存储的最大数量（值为0时允许文件数量无限增长，LOG_MODE为1时生效）
+defined('LOG_MAX_FILES') or define('LOG_MAX_FILES', 90);
+
 // 日志存储的数据库配置（LOG_MODE为2时生效）
 defined('LOG_DB_CONFIG') or define('LOG_DB_CONFIG', 'database:default');
 
