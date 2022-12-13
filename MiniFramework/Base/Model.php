@@ -259,9 +259,10 @@ abstract class Model
      * @throws Exception
      * @return array
      */
-    public function select($type = 'All')
+    public function select($type = 'all')
     {
-        $type = ($type == 'One' || $type == 'Row') ? 'Row' : 'All';
+        $type = strtolower($type);
+        $type = ($type == 'one' || $type == 'row') ? 'row' : 'all';
         $this->_method = 'SELECT';
         $sql = $this->createSql();
         if ($this->_curDb) {
