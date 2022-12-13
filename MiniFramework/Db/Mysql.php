@@ -128,10 +128,10 @@ class Mysql extends Db_Abstract
      * 查询SQL语句
      *
      * @param string $sql SQL语句
-     * @param string $queryMode 查询方式(All or Row)
+     * @param string $queryMode 查询方式(default:all | row)
      * @return array
      */
-    public function query($sql = null, $queryMode = 'All')
+    public function query($sql = null, $queryMode = 'all')
     {
         $this->_connect();
         $this->_setLastSql($sql);
@@ -143,10 +143,10 @@ class Mysql extends Db_Abstract
                 $this->_getPdoError();
             }
             $recordset->setFetchMode(PDO::FETCH_ASSOC);
-
-            if ($queryMode == 'All') {
+            $queryMode = strtolower($queryMode);
+            if ($queryMode == 'all') {
                 $result = $recordset->fetchAll();
-            } elseif ($queryMode == 'Row') {
+            } elseif ($queryMode == 'row') {
                 $result = $recordset->fetch();
             } else {
                 $result = null;
