@@ -4,7 +4,7 @@
 ## Version 2.9.6 released. ( 2022-12-19 ) ##
 
 ### 版本变化 ###
-* 新增常量 LOG_MAX_FILES，默认值90，用于定义日志文件存储的最大数量。
+* 新增常量 LOG_MAX_FILES，默认值30，用于定义日志文件存储的最大数量。
 * 新增 Mini\Base\Model 类的 distinct() 方法，用于链式操作支持 SQL 的 DISTINCT 语句。
 * 新增 Mini\Base\Model 类的 having() 方法，用于链式操作支持 SQL 的 HAVING 语句。
 * 新增 Mini\Base\Model 类的 page() 方法，帮助开发者更简单地实现分页功能。
