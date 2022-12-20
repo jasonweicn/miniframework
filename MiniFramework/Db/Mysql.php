@@ -201,6 +201,9 @@ class Mysql extends Db_Abstract
         }
         try {
             $sql = "INSERT INTO `$table` (`" . implode('`, `', array_keys($data)) . "`) VALUES (" . implode(', ', array_keys($prepareParams)) . ")";
+            if ($this->_debug === true) {
+                $this->_debugSql($sql);
+            }
             $stmt = $this->_dbh->prepare($sql);
             $res = $stmt->execute($prepareParams);
             return $res;
@@ -284,6 +287,9 @@ class Mysql extends Db_Abstract
                 $valSqls[] = "(" . implode(', ', $curParams) . ")";
             }            
             $sql .= implode(', ', $valSqls);
+            if ($this->_debug === true) {
+                $this->_debugSql($sql);
+            }
             $stmt = $this->_dbh->prepare($sql);
             $res = $stmt->execute($prepareData);
             return $res;
