@@ -214,6 +214,9 @@ abstract class Model
         }
         
         if ($this->_curDb) {
+            if ($this->_debugSql === true) {
+                $this->_curDb->debug();
+            }
             $res = $this->_curDb->update($this->getTable(), $this->_options['data'], $where);
         } else {
             throw new Exception('Database object is not found.');
