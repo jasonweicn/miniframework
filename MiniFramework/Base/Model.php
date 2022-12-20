@@ -167,7 +167,7 @@ abstract class Model
      * @throws Exception
      * @return int
      */
-    public function add($type = 'prepare')
+    public function add($prepare = true)
     {
         if (! isset($this->_options['data']) || empty($this->_options['data'])) {
             throw new Exception('Data invalid.');
@@ -177,18 +177,13 @@ abstract class Model
         }
         
         if ($this->_curDb) {
+            if ($this->_debugSql === true) {
+                $this->_curDb->debug();
+            }
             if (isIndexArray($this->_options['data'])) {
-                if ($type == 'prepare') {
-                    $res = $this->_curDb->prepareInsertAll($this->getTable(), $this->_options['data']);
-                } else {
-                    $res = $this->_curDb->insertAll($this->getTable(), $this->_options['data']);
-                }
+                $res = $this->_curDb->insertAll($this->getTable(), $this->_options['data'], $prepare);
             } else {
-                if ($type == 'prepare') {
-                    $res = $this->_curDb->prepareInsert($this->getTable(), $this->_options['data']);
-                } else {
-                    $res = $this->_curDb->insert($this->getTable(), $this->_options['data']);
-                }
+                $res = $this->_curDb->insert($this->getTable(), $this->_options['data'], $prepare);
             }
         } else {
             throw new Exception('Database object is not found.');
