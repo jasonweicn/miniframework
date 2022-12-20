@@ -111,8 +111,9 @@ class Mysql extends Db_Abstract
     {
         $this->_connect();
         $this->_setLastSql($sql);
-        if ($this->_debug === true)
+        if ($this->_debug === true) {
             $this->_debugSql($sql);
+        }
         try {
             $affected = $this->_dbh->exec($sql);
             if ($affected === false) {
