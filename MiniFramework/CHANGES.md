@@ -1,6 +1,16 @@
 # CHANGES #
 
 
+## Version 2.9.7 released. ( 2022-12-26 ) ##
+
+### 版本变化 ###
+* 改进 Mini\Base\Model 类的 add() 方法，调整参数为布尔类型，用于开闭预处理。
+* 改进 Mini\Base\Model 类的 save() 方法，支持使用 debug() 方法时输出 SQL 语句。
+* 改进 Mini\Base\Model 类的 delete() 方法，支持使用 debug() 方法时输出 SQL 语句。
+* 改进 Mini\Db\Mysql 类，使用预处理插入数据时，支持 debug 输出 SQL 语句。
+* 改进 Mini\Base\Model 类，增加事务处理的相关方法。
+
+
 ## Version 2.9.6 released. ( 2022-12-19 ) ##
 
 ### 版本变化 ###
