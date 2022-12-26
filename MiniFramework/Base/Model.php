@@ -733,7 +733,43 @@ abstract class Model
     {
         return $this->_curDb->getLastSql();
     }
-    
+
+    /**
+     * 事务开始
+     * 
+     * @return \Mini\Base\Model
+     */
+    public function beginTransaction()
+    {
+        $this->_curDb->beginTransaction();
+        
+        return $this;
+    }
+
+    /**
+     * 事务提交
+     * 
+     * @return \Mini\Base\Model
+     */
+    public function commit()
+    {
+        $this->_curDb->commit();
+        
+        return $this;
+    }
+
+    /**
+     * 事务回滚
+     * 
+     * @return \Mini\Base\Model
+     */
+    public function rollBack()
+    {
+        $this->_curDb->rollBack();
+        
+        return $this;
+    }
+
     /**
      * 获取当前操作的表
      * 
