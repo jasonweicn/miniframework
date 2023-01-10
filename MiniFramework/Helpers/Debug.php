@@ -107,4 +107,43 @@ class Debug
         
         return "unknown";
     }
+
+    /**
+     * 获取内存占用情况
+     * 
+     * @param string $unit (default:B | KB | MB | GB | TB | PB)
+     * @param boolean $type
+     * @return string|number
+     */
+    public static function memoryUsage($unit = 'B', $type = true) {
+        $memory  = ( ! function_exists('memory_get_usage')) ? '0' : memory_get_usage();
+        $unit = strtoupper($unit);
+        switch($unit) {
+            case 'PB':
+                $memory = round($memory / 1024 / 1024 / 1024 / 1024 / 1024, 2);
+                break;
+            case 'TB':
+                $memory = round($memory / 1024 / 1024 / 1024 / 1024, 2);
+                break;
+            case 'GB':
+                $memory = round($memory / 1024 / 1024 / 1024, 2);
+                break;
+            case 'MB':
+                $memory = round($memory / 1024 / 1024, 2);
+                break;
+            case 'KB':
+                $memory = round($memory / 1024, 2);
+                break;
+            case 'B':
+            default:
+                $unit = 'B';
+                $memory = $memory;
+                break;
+        }
+        if ($type === true) {
+            $memory = $memory . $unit;
+        }
+        
+        return $memory;
+    } 
 }
