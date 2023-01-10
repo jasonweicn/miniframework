@@ -1,8 +1,9 @@
 <?php
 namespace App\Controller;
 
-use Mini\Base\{Action, Session, Upload, Log, Debug, Params, Response};
+use Mini\Base\{Action, Session, Upload, Log, Params, Response};
 use Mini\Captcha\Captcha;
+use Mini\Helpers\Debug;
 
 /**
  * Example
