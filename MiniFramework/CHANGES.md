@@ -1,6 +1,14 @@
 # CHANGES #
 
 
+## Version 2.9.8 released. ( 2024-01-07 ) ##
+
+### 版本变化 ###
+* 将 Mini\Base\Debug 迁移至 Mini\Helpers\Debug 后续作为助手类使用。
+* 新增 Mini\Helpers\Debug 类的 memoryUsage() 方法，用于获取内存占用情况。
+* 调整代码对 PHP 8.2 以上版本进行兼容。
+
+
 ## Version 2.9.7 released. ( 2022-12-26 ) ##
 
 ### 版本变化 ###
