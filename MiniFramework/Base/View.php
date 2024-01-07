@@ -42,6 +42,12 @@ class View
     private $_action;
 
     /**
+     * View层变量数组
+     * @var array
+     */
+    private array $variables = [];
+
+    /**
      * Request实例
      *
      * @var Request
@@ -114,7 +120,14 @@ class View
 
     public function __set($variable, $value)
     {
-        $this->assign($variable, $value);
+        $this->variables[$variable] = $value;
+        
+        return true;
+    }
+
+    public function __get($variable)
+    {
+        return isset($this->variables[$variable]) ? $this->variables[$variable] : null;
     }
 
     /**
@@ -125,11 +138,7 @@ class View
      */
     public function assign($variable, $value)
     {
-        if (substr($variable, 0, 1) != '_') {
-            $this->$variable = $value;
-            return true;
-        }
-        return false;
+        return $this->__set($variable, $value);
     }
 
     /**

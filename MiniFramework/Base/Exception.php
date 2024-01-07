@@ -119,7 +119,7 @@ class Exception extends \Exception
                 if ($isCli) {
                     $body = "{$error['level']}: {$error['message']} in {$error['file']} on line {$error['line']}\n";
                 } else {
-                    $body.= "<p><b>{$error['level']}</b>: {$error['message']} in <b>{$error['file']}</b> on line <b>{$error['line']}</b></p>\n";
+                    $body = "<p><b>{$error['level']}</b>: {$error['message']} in <b>{$error['file']}</b> on line <b>{$error['line']}</b></p>\n";
                 }
                 echo $body;
             }
