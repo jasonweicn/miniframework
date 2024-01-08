@@ -84,6 +84,15 @@ class Action
     }
 
     /**
+     * 析构
+     */
+    function __destruct() {
+        if (method_exists($this, '_end')) {
+            $this->_end();
+        }
+    }
+
+    /**
      * 向View传入变量
      *
      * @param mixed $variable            
