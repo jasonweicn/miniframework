@@ -129,6 +129,11 @@ class View
     {
         return isset($this->variables[$variable]) ? $this->variables[$variable] : null;
     }
+    
+    public function __isset($variable)
+    {
+        return isset($this->variables[$variable]) ? true : false;
+    }
 
     /**
      * 接收来自于控制器的变量
