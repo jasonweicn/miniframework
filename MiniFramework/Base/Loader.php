@@ -59,7 +59,7 @@ class Loader
     {
         spl_autoload_register([
             __CLASS__,
-            'Mini\Base\Loader::autoload'
+            'autoload'
         ]);
     }
     
