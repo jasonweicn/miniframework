@@ -143,7 +143,7 @@ class Exception extends \Exception
                     $body.= "<p><b>{$error['level']}</b>: {$error['message']}</p>\n";
                     $body.= "<p><b>Position</b>: {$error['file']} (line {$error['line']})</p>\n";
                     if (isset($error['trace']) && ! empty($error['trace'])) {
-                        $body .= "<p><b>Stack trace</b>: \n" . $error['trace'] . "</p>\n";
+                        $body .= "<p><b>Stack trace</b>: <br>\n" . str_replace("\n", "<br>\n", $error['trace']) . "</p>\n";
                     }
                     if ($error['level'] != Log::WARNING && $error['level'] != log::NOTICE) {
                         $body .= '<hr><p>Powered by MiniFramework. ' . date('r') . '</p>';
