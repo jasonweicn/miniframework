@@ -77,6 +77,13 @@ class App
     private $_dbPool;
 
     /**
+     * 是否为 API 接口请求
+     * 
+     * @var boolean
+     */
+    protected $isApi;
+
+    /**
      * 获取实例
      *
      * @return object
@@ -184,9 +191,9 @@ class App
     public function dispatch()
     {
         $controllerName = ucfirst($this->controller);
-        $isApi = (REST_ON === true && $controllerName == 'Api') ? true : false;
+        $this->isApi = (REST_ON === true && $controllerName == 'Api') ? true : false;
         
-        if ($isApi === true) {
+        if ($this->isApi === true) {
             
             $apiName = ucfirst($this->action);
             $headers = $this->_request->getHeaders();
