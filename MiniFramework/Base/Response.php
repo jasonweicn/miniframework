@@ -67,6 +67,12 @@ class Response
     private $_type = 'html';
 
     /**
+     * 字符编码
+     * @var string
+     */
+    private $_charset;
+
+    /**
      * Http status
      *  
      * @var array
@@ -218,6 +224,21 @@ class Response
         
         return $this;
     }
+    
+    /**
+     * Set charset
+     * 
+     * @param string $charset
+     * @return \Mini\Base\Response
+     */
+    public function charset($charset)
+    {
+        if (! empty($charset)) {
+            $this->_charset = $charset;
+        }
+        
+        return $this;
+    }
 
     /**
      * 输出
@@ -242,7 +263,12 @@ class Response
                 header($name . ': ' . $value);
             }
             if (! isset($headers['Content-Type'])) {
-                header('Content-Type: ' . $this->_contentType[$this->_type]);
+                if (! empty($this->_charset)) {
+                    header('Content-Type: ' . $this->_contentType[$this->_type] . '; charset=' . $this->_charset);
+                } else {
+                    header('Content-Type: ' . $this->_contentType[$this->_type]);
+                }
+                
             }
             header('Cache-Control: ' . HTTP_CACHE_CONTROL);
         }
