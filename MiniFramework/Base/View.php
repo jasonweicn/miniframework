@@ -43,9 +43,10 @@ class View
 
     /**
      * View层变量数组
+     * 
      * @var array
      */
-    private array $variables = [];
+    private $variables = [];
 
     /**
      * Request实例
