@@ -188,7 +188,7 @@ class App
     /**
      * 调派
      */
-    public function dispatch()
+    public function dispatch($arguments = null)
     {
         $controllerName = ucfirst($this->controller);
         $this->isApi = (REST_ON === true && $controllerName == 'Api') ? true : false;
@@ -213,7 +213,7 @@ class App
             }
             
             if (class_exists($apiName)) {
-                $api = new $apiName();
+                $api = new $apiName($arguments);
             } else {
                 throw new Exception('Api "' . $apiName . '" does not exist.', 404);
             }
@@ -234,7 +234,7 @@ class App
             $action = $this->action . 'Action';
             
             if (method_exists($controller, $action)) {
-                $controller->$action();
+                $controller->$action($arguments);
             } else {
                 throw new Exception('Action "' . $this->action . '" does not exist.', 404);
             }
