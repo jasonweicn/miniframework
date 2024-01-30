@@ -16,7 +16,7 @@ class Info extends Rest
     {
         $info = 'Hello World!';
         
-        // 输出JSON
-        $this->responseJson(200, 'success', $info);
+        // 输出（默认为 JSON 格式）
+        $this->response(200, 'success', $info);
     }
 }

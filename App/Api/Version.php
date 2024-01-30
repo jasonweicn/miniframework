@@ -29,13 +29,15 @@ class Version extends Rest
         if (empty($type) || $type == 'json') {
             
             // 输出JSON
-            $this->responseJson(200, 'success', $version);
+            $this->type('json')->response(200, 'success', $version);
+            
         } elseif ($type == 'xml') {
             
             // 输出XML
-            $this->responseXml(200, 'success', [
+            $this->type('xml')->response(200, 'success', [
                 'version' => $version
             ]);
+            
         }
     }
 

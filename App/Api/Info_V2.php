@@ -20,7 +20,7 @@ class Info_V2 extends Rest
         
         $info = 'Hello World!(V' . $headers['Ver'] . ')';
         
-        // 输出JSON
-        $this->responseJson(200, 'success', $info);
+        // 输出（默认为 JSON 格式）
+        $this->response(200, 'success', $info);
     }
 }
