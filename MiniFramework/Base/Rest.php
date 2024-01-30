@@ -46,6 +46,13 @@ class Rest
     protected $response;
 
     /**
+     * Response type
+     * 
+     * @var string
+     */
+    protected $responseType = 'json';
+
+    /**
      * Http实例
      *
      * @var Http
@@ -88,6 +95,37 @@ class Rest
             $this->$requestMethod();
         } else {
             $this->forbidden();
+        }
+    }
+
+    /**
+     * Set response type
+     * 
+     * @param string $type ( json | xml )
+     * @return \Mini\Base\Rest
+     */
+    public function type($type)
+    {
+        if ($type == 'json' || $type == 'xml') {
+            $this->responseType = $type;
+        }
+        
+        return $this;
+    }
+
+    /**
+     * Response
+     * 
+     * @param number $code
+     * @param string $msg
+     * @param array $data
+     */
+    public function response($code = 200, $msg = '', $data = [])
+    {
+        if ($this->responseType == 'xml') {
+            $this->responseXml($code, $msg, $data);
+        } else{
+            $this->responseJson($code, $msg, $data);
         }
     }
 
