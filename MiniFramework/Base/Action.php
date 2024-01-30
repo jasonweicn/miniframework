@@ -119,8 +119,9 @@ class Action
      * 
      * @param string $action
      * @param string $controller
+     * @param mixed $arguments
      */
-    final protected function forward($action, $controller = null)
+    final protected function forward($action, $controller = null, $arguments = null)
     {
         $app = App::getInstance();
         if ($action == $app->action) {
@@ -131,7 +132,11 @@ class Action
         if ($controller !== null) {
             $app->setController($controller);
         }
-        $app->setAction($action)->dispatch();
+        if ($arguments !== null) {
+            $app->setAction($action)->dispatch($arguments);
+        } else {
+            $app->setAction($action)->dispatch();
+        }
         die();
     }
 
