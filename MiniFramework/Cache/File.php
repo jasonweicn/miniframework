@@ -33,6 +33,7 @@ class File extends Cache_Abstract
      * @param string $name
      * @param mixed $value
      * @param int $expire
+     * @return boolean
      */
     public function set($name, $value, $expire = null)
     {
@@ -51,7 +52,16 @@ class File extends Cache_Abstract
         if (! file_exists(CACHE_PATH) && ! is_dir(CACHE_PATH)) {
             mkdir(CACHE_PATH, 0744, true);
         }
-        file_put_contents(CACHE_PATH . DS . $cache_key, $cache_value);
+        if (file_exists(CACHE_PATH . DS . $cache_key)) {
+            if (! is_writeable(CACHE_PATH . DS . $cache_key)) {
+                return false;
+            }
+        }
+        if (false === file_put_contents(CACHE_PATH . DS . $cache_key, $cache_value)) {
+            return false;
+        }
+        
+        return true;
     }
 
     /**
@@ -97,7 +107,9 @@ class File extends Cache_Abstract
     {
         $cache_key = $this->getCacheKey($name);
         $cache_file = CACHE_PATH . DS . $cache_key;
-        @unlink($cache_file);
+        if (file_exists($cache_file)) {
+            unlink($cache_file);
+        }
     }
 
     /**
