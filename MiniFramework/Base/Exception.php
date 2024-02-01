@@ -39,18 +39,6 @@ class Exception extends \Exception
     }
 
     /**
-     * 重构 toString
-     */
-    public function __toString()
-    {
-        if (SHOW_ERROR === true) {
-            return parent::__toString();
-        } else {
-            self::showErrorPage($this->code);
-        }
-    }
-
-    /**
      * 自定义异常处理方法
      *
      * @param \Throwable $e
@@ -61,6 +49,7 @@ class Exception extends \Exception
         self::showError([
             'level'     => 'ERROR',
             'message'   => $e->getMessage(),
+            'code'      => $e->getCode(),
             'file'      => $e->getFile(),
             'line'      => $e->getLine(),
             'trace'     => $e->getTraceAsString()
@@ -134,30 +123,29 @@ class Exception extends \Exception
     public static function showError($error = [])
     {
         $isCli = preg_match("/cli/i", PHP_SAPI) ? true : false;
+        if ($isCli) {
+            echo "{$error['level']}: {$error['message']} in {$error['file']} on line {$error['line']}\n";
+            die();
+        }
         if (SHOW_ERROR === true) {
-            if (! empty($error) && is_array($error)) {
-                if ($isCli) {
-                    $body = "{$error['level']}: {$error['message']} in {$error['file']} on line {$error['line']}\n";
-                } else {
-                    $body = "<html><head><title>An error occurred</title></head><body>\n";
-                    $body.= "<p><b>{$error['level']}</b>: {$error['message']}</p>\n";
-                    $body.= "<p><b>Position</b>: {$error['file']} (line {$error['line']})</p>\n";
-                    if (isset($error['trace']) && ! empty($error['trace'])) {
-                        $body .= "<p><b>Stack trace</b>: <br>\n" . str_replace("\n", "<br>\n", $error['trace']) . "</p>\n";
-                    }
-                    if ($error['level'] != Log::WARNING && $error['level'] != log::NOTICE) {
-                        $body .= '<hr><p>Powered by MiniFramework. ' . date('r') . '</p>';
-                    }
-                    $body .= '</body></html>';
-                }
-                echo $body;
-            }
-        } else {
-            if ($isCli) {
+            if (empty($error) || !is_array($error)) {
                 echo "An error occurred\n";
-            } else {
-                self::showErrorPage(500);
+                die();
             }
+            $body = "<html><head><title>An error occurred</title></head><body>\n";
+            $body.= "<p><b>{$error['level']}</b>: {$error['message']}</p>\n";
+            $body.= "<p><b>Position</b>: {$error['file']} (line {$error['line']})</p>\n";
+            if (isset($error['trace']) && ! empty($error['trace'])) {
+                $body .= "<p><b>Stack trace</b>: <br>\n" . str_replace("\n", "<br>\n", $error['trace']) . "</p>\n";
+            }
+            if ($error['level'] != Log::WARNING && $error['level'] != log::NOTICE) {
+                $body .= '<hr><p>Powered by MiniFramework. ' . date('r') . '</p>';
+            }
+            $body .= '</body></html>';
+            $response = Response::getInstance();
+            $response->header('Content-Type', 'text/html; charset=utf-8')->httpStatus($error['code'])->send($body);
+        } else {
+            self::showErrorPage($error['code']);
         }
     }
 
