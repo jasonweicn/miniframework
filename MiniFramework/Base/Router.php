@@ -84,14 +84,6 @@ class Router
     public function route($rules = null)
     {
         $controller = $action = '';
-        if (isset($rules) && is_array($rules)) {
-            $result = $this->customRoute($rules);
-            if ($result !== false) {
-                $controller = $result['c'];
-                $action = $result['a'];
-                $this->setRouteType('custom');
-            }
-        }
         if ($this->_routeType == 'cli') {
             if (isset($_SERVER['argc']) && $_SERVER['argc'] > 1) {
                 $m = [];
@@ -104,17 +96,27 @@ class Router
             } else {
                 $controller = $action = 'index';
             }
-        } elseif ($this->_routeType == 'rewrite') {
-            $this->_uriArray = $this->parseUrlToArray();
-            $controller = (isset($this->_uriArray[1]) && ! empty($this->_uriArray[1])) ? $this->_uriArray[1] : 'index';
-            $action = (isset($this->_uriArray[2]) && ! empty($this->_uriArray[2])) ? $this->_uriArray[2] : 'index';
-        } elseif ($this->_routeType == 'get') {
-            if (empty($_SERVER['QUERY_STRING'])) {
-                $controller = $action = 'index';
-            } else {
-                $queryStringArray = $this->_request->getQueryStringArray();
-                $controller = isset($queryStringArray['c']) ? $queryStringArray['c'] : 'index';
-                $action = isset($queryStringArray['a']) ? $queryStringArray['a'] : 'index';
+        } else {
+            if (isset($rules) && is_array($rules)) {
+                $result = $this->customRoute($rules);
+                if ($result !== false) {
+                    $controller = $result['c'];
+                    $action = $result['a'];
+                    $this->setRouteType('custom');
+                }
+            }
+            if ($this->_routeType == 'rewrite') {
+                $this->_uriArray = $this->parseUrlToArray();
+                $controller = (isset($this->_uriArray[1]) && ! empty($this->_uriArray[1])) ? $this->_uriArray[1] : 'index';
+                $action = (isset($this->_uriArray[2]) && ! empty($this->_uriArray[2])) ? $this->_uriArray[2] : 'index';
+            } elseif ($this->_routeType == 'get') {
+                if (empty($_SERVER['QUERY_STRING'])) {
+                    $controller = $action = 'index';
+                } else {
+                    $queryStringArray = $this->_request->getQueryStringArray();
+                    $controller = isset($queryStringArray['c']) ? $queryStringArray['c'] : 'index';
+                    $action = isset($queryStringArray['a']) ? $queryStringArray['a'] : 'index';
+                }
             }
         }
         
