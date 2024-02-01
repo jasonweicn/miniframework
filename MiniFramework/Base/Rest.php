@@ -75,6 +75,7 @@ class Rest
         $this->params = Params::getInstance();
         $this->request = $this->_request = Request::getInstance();
         $this->response = Response::getInstance();
+        $this->response->type($this->responseType);
 
         $requestMethod = $this->request->getMethod();
         if ($requestMethod == 'POST') {
