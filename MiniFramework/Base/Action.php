@@ -132,6 +132,7 @@ class Action
         if ($controller !== null) {
             $app->setController($controller);
         }
+        $this->view->_layout->setLayout(null);
         if ($arguments !== null) {
             $app->setAction($action)->dispatch($arguments);
         } else {
