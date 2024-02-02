@@ -103,7 +103,7 @@ class View
         $this->assign('baseUrl', $this->baseUrl());
 
         if (LAYOUT_ON === true) {
-            $this->_layout = Layout::getInstance();
+            $this->_layout = new Layout();
             $this->_layout->setLayoutPath(LAYOUT_PATH);
         }
     }

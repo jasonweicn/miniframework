@@ -47,30 +47,6 @@ class Layout
      * @var string
      */
     protected $_layout;
-
-    /**
-     * Layout Instance
-     *
-     * @var Layout
-     */
-    protected static $_instance;
-
-    /**
-     * 获取实例
-     */
-    public static function getInstance()
-    {
-        if (self::$_instance === null) {
-            self::$_instance = new self();
-        }
-        return self::$_instance;
-    }
-    
-    /**
-     * 构造
-     */
-    final protected function __construct()
-    {}
     
     /**
      * 克隆
