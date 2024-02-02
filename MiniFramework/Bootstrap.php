@@ -48,7 +48,10 @@ defined('URL_SUFFIX') or define('URL_SUFFIX', 'htm|html|shtml');
 // URL（伪静态）分割符号
 defined('URL_SPLIT_SYMBOL') or define('URL_SPLIT_SYMBOL', '_');
 
-// 是否显示错误信息
+// 自定义错误页面，留空将显示框架默认错误页（格式：controller/action）
+defined('ERROR_PAGE') or define('ERROR_PAGE', '');
+
+// 是否显示错误信息（值为 false 时，将显示 ERROR_PAGE 定义的错误页面）
 defined('SHOW_ERROR') or define('SHOW_ERROR', false);
 
 // 是否显示开发者调试信息
