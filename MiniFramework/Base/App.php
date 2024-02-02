@@ -81,7 +81,7 @@ class App
      * 
      * @var boolean
      */
-    protected $isApi;
+    public $isApi;
 
     /**
      * 获取实例

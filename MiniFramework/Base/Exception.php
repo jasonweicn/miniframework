@@ -128,22 +128,15 @@ class Exception extends \Exception
             die();
         }
         if (SHOW_ERROR === true) {
-            if (empty($error) || !is_array($error)) {
-                echo "An error occurred\n";
-                die();
-            }
-            $body = "<html><head><title>An error occurred</title></head><body>\n";
-            $body.= "<p><b>{$error['level']}</b>: {$error['message']}</p>\n";
-            $body.= "<p><b>Position</b>: {$error['file']} (line {$error['line']})</p>\n";
-            if (isset($error['trace']) && ! empty($error['trace'])) {
-                $body .= "<p><b>Stack trace</b>: <br>\n" . str_replace("\n", "<br>\n", $error['trace']) . "</p>\n";
-            }
-            if ($error['level'] != Log::WARNING && $error['level'] != log::NOTICE) {
-                $body .= '<hr><p>Powered by MiniFramework. ' . date('r') . '</p>';
-            }
-            $body .= '</body></html>';
             $response = Response::getInstance();
-            $response->header('Content-Type', 'text/html; charset=utf-8')->httpStatus($error['code'])->send($body);
+            $app = \Mini\Base\App::getInstance();
+            if ($app->isApi === true) {
+                $json = self::toJson($error);
+                $response->type('json')->httpStatus($error['code'])->send($json);
+            } else {
+                $body = self::toHtml($error);
+                $response->type('html')->httpStatus($error['code'])->send($body);
+            }
         } else {
             self::showErrorPage($error['code']);
         }
@@ -168,5 +161,54 @@ class Exception extends \Exception
         $response->header('Content-Type', 'text/html; charset=utf-8')->httpStatus($code)->send($info);
 
         die();
+    }
+    
+    /**
+     * 错误信息转为 JSON 格式
+     * 
+     * @param array $error
+     * @return string|boolean
+     */
+    public static function toJson($error)
+    {
+        $data = [
+            'code' => $error['code'],
+            'message' => $error['message'],
+            'position' => [
+                'file' => $error['file'],
+                'line' => $error['line']
+            ],
+            'trace' => explode("\n", $error['trace'])
+        ];
+        
+        return pushJson($data, false);
+    }
+    
+    /**
+     * 错误信息转为 HTML 格式
+     * 
+     * @param array $error
+     * @return string
+     */
+    public static function toHtml($error)
+    {
+        $html = "<html>\n";
+        $html.= "<head><title>An error occurred</title></head>\n";
+        $html.= "<body>\n";
+        if (empty($error) || !is_array($error)) {
+            $html .= "<h1>An error occurred</h1>\n";
+        } else {
+            $html .= "<p><b>{$error['level']}</b>: {$error['message']}</p>\n";
+            $html .= "<p><b>Position</b>: {$error['file']} (line {$error['line']})</p>\n";
+            if (isset($error['trace']) && ! empty($error['trace'])) {
+                $html .= "<p><b>Stack trace</b>: <br>\n" . str_replace("\n", "<br>\n", $error['trace']) . "</p>\n";
+            }
+            if ($error['level'] != Log::WARNING && $error['level'] != log::NOTICE) {
+                $html .= "<hr><p>Powered by MiniFramework. " . date('r') . "</p>\n";
+            }
+        }
+        $html .= '</body></html>';
+        
+        return $html;
     }
 }

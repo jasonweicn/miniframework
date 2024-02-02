@@ -224,6 +224,16 @@ class Response
         
         return $this;
     }
+
+    /**
+     * Get Content-Type
+     * 
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->_type;
+    }
     
     /**
      * Set charset
