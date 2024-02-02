@@ -18,5 +18,8 @@ const REST_ON = true;
 // 是否开启模板功能（默认值：false）
 const TPL_ON = true;
 
+// 自定义错误页（默认值：空）
+const ERROR_PAGE = 'error/index';
+
 // 引入 MiniFramework 就是这么简单
 require dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'MiniFramework' . DIRECTORY_SEPARATOR . 'Bootstrap.php';
