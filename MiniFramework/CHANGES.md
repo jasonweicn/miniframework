@@ -1,6 +1,30 @@
 # CHANGES #
 
 
+## Version 2.10.0 released. ( 2024-02-02 ) ##
+
+### 版本变化 ###
+* 新增常量 ERROR_PAGE，默认值为空，用于声明自定义错误页面。
+* 新增支持输出自定义错误页的特性。
+* 新增自定义错误页的示例代码。
+* 新增 Mini\Base\Response 类的 charset() 方法，用于在响应头中自定义字符编码。
+* 新增 Mini\Base\Rest 类的 response() 和 type() 方法，对输出进行统一封装。
+* 调整错误信息输出方式，当启用 REST 模式对 API 接口请求遇到异常时，将以 JSON 格式输出错误信息。
+* 改进 Mini\Base\App 类的 dispatch() 方法，支持传入参数带入 Action 中。
+* 改进 Mini\Base\App 类，增加名为 isApi 属性，用于判断当前请求是否为 REST 接口。
+* 改进 Mini\Base\Action 类的 forward() 方法，支持跳转时传递参数。
+* 改进 Mini\Base\Rest 类，在构造阶段即将默认的 json 方式传递给 Response 对象。
+* 改进 Mini\Base\Exception 类，在 CLI 模式下运行时默认输出错误信息。
+* 改进 Mini\Base\Loader 类，在自动加载过程遇到文件不存在时不主动抛出错误。
+* 改进 Mini\Base\Layout 类的 setLayout() 方法，参数允许留空或传入 null 以清除历史布局设置。
+* 调整 Mini\Base\Layout 类，取消单例模式，改为常规的实例化对象方式。
+* 改进 Mini\Base\Action 类的 forward() 方法，跳转前默认清除历史的布局设置。
+* 改进 Mini\Base\View 类的属性声明方式，以兼容 PHP 7.2 和 7.3 版本。
+* 改进框架默认的报错输出格式，优化阅读体验。
+* 修复 Mini\Cache\File 类的 set() 和 del() 两个方法中写入和删除文件的Bug。
+* 修复配置自定义路由与 CLI 模式运行时出现的路由冲突问题。
+
+
 ## Version 2.9.9 released. ( 2024-01-09 ) ##
 
 ### 版本变化 ###
