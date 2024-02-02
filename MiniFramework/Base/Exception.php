@@ -49,7 +49,7 @@ class Exception extends \Exception
         self::showError([
             'level'     => 'ERROR',
             'message'   => $e->getMessage(),
-            'code'      => $e->getCode(),
+            'code'      => $e->getCode() == 0 ? 500 : $e->getCode(),
             'file'      => $e->getFile(),
             'line'      => $e->getLine(),
             'trace'     => $e->getTraceAsString()
@@ -138,7 +138,7 @@ class Exception extends \Exception
                 $response->type('html')->httpStatus($error['code'])->send($body);
             }
         } else {
-            self::showErrorPage($error['code']);
+            self::showErrorPage($error['code'], $error);
         }
     }
 
@@ -147,20 +147,40 @@ class Exception extends \Exception
      *
      * @param int $code
      */
-    public static function showErrorPage($code)
+    public static function showErrorPage($code, $error = null)
     {
-        $response = Response::getInstance();
-        $status = $response->getStatusMsg($code);
-        if ($status === false) {
-            $code = 500;
-            $status = $response->getStatusMsg($code);
+        $customErrorPage = false;
+        if (! empty(ERROR_PAGE) && substr_count(ERROR_PAGE, '/') == 1) {
+            $customErrorPage = true;
         }
-        $info = '<html><head><title>An error occurred</title></head><body><h1>An error occurred</h1>';
-        $info .= '<h2>' . $code . ' ' . $status . '</h2>';
-        $info .= '<hr><p>Powered by MiniFramework. ' . date('r') . '</p></body></html>';
-        $response->header('Content-Type', 'text/html; charset=utf-8')->httpStatus($code)->send($info);
-
-        die();
+        if ($customErrorPage === true) {
+            $r = explode('/', ERROR_PAGE);
+            $controller = $r[0];
+            $action = $r[1];
+            $app = App::getInstance();
+            if ($action == $app->action) {
+                if ($controller === null || $controller == $app->controller) {
+                    return false;
+                }
+            }
+            if ($controller !== null) {
+                $app->setController($controller);
+            }
+            $app->setAction($action)->dispatch($error);
+            die();
+        } else {
+            $response = Response::getInstance();
+            $status = $response->getStatusMsg($code);
+            if ($status === false) {
+                $code = 500;
+                $status = $response->getStatusMsg($code);
+            }
+            $info = '<html><head><title>An error occurred</title></head><body><h1>An error occurred</h1>';
+            $info .= '<h2>' . $code . ' ' . $status . '</h2>';
+            $info .= '<hr><p>Powered by MiniFramework. ' . date('r') . '</p></body></html>';
+            $response->type('html')->httpStatus($code)->send($info);
+            die();
+        }
     }
     
     /**
