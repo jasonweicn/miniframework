@@ -119,17 +119,21 @@ class Layout
 
     /**
      * 设置布局
-     *
+     * 
      * @param string $name 布局名称
+     * @return \Mini\Base\Layout
      */
-    public function setLayout($name)
+    public function setLayout($name = null)
     {
-        if (! preg_match('/^[a-zA-Z][a-zA-Z0-9_]*$/', $name)) {
-            throw new Exception('Layout "' . $name . '"  invalid.');
+        if ($name == null) {
+            $this->_layout = null;
+        } else {
+            if (! preg_match('/^[a-zA-Z][a-zA-Z0-9_]*$/', $name)) {
+                throw new Exception('Layout "' . $name . '"  invalid.');
+            }
+            $this->_layout = (string) $name;
         }
-
-        $this->_layout = (string) $name;
-
+        
         return $this;
     }
 
