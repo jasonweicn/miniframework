@@ -115,10 +115,11 @@ class Loader
         
         $classfile = $classPath . DS . $className . '.php';
         
+        
         if (file_exists($classfile)) {
             include_once ($classfile);
         } else {
-            throw new Exception('Library "' . $className . '" not found.');
+            return false;
         }
         
         return true;
