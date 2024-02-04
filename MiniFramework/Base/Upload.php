@@ -170,7 +170,7 @@ class Upload
         }
         
         if ($this->savePath == '') {
-            $this->savePath = date('Y' . DS . 'm' . DS . 'd');
+            $this->savePath = date('Y\\' . DS . 'm\\' . DS . 'd');
         }
         
         // check permission & create dir
