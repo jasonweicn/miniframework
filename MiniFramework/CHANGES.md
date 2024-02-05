@@ -1,6 +1,13 @@
 # CHANGES #
 
 
+## Version 2.10.2 released. ( 2024-02-05 ) ##
+
+### 版本变化 ###
+* 修复 Mini\Base\Exception 类无法正常显示 MySQL 报错信息的Bug。
+* 修复 Mini\Captcha\Captcha 类 create() 方法不能正常显示验证码的Bug。
+
+
 ## Version 2.10.1 released. ( 2024-02-05 ) ##
 
 ### 版本变化 ###
