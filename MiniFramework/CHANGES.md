@@ -1,6 +1,12 @@
 # CHANGES #
 
 
+## Version 2.10.1 released. ( 2024-02-05 ) ##
+
+### 版本变化 ###
+* 修复 Mini\Base\Upload 类的 saveOne() 无法正确设置上传文件保存路径的Bug。
+
+
 ## Version 2.10.0 released. ( 2024-02-02 ) ##
 
 ### 版本变化 ###
