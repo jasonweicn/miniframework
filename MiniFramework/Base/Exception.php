@@ -45,11 +45,15 @@ class Exception extends \Exception
      */
     public static function customExcepion(\Throwable $e)
     {
+        $code = 500;
+        if (Response::getInstance()->getStatusMsg($e->getCode()) !== false) {
+            $code = $e->getCode();
+        }
         Log::record(str_replace(["\r\n", "\r", "\n"], ' ', $e->__toString()), Log::ERROR, ['file' => $e->getFile(), 'line' => $e->getLine()]);
         self::showError([
             'level'     => 'ERROR',
             'message'   => $e->getMessage(),
-            'code'      => $e->getCode() == 0 ? 500 : $e->getCode(),
+            'code'      => $code == 0 ? 500 : $code,
             'file'      => $e->getFile(),
             'line'      => $e->getLine(),
             'trace'     => $e->getTraceAsString()
