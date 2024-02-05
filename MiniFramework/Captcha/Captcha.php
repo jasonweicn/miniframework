@@ -144,7 +144,7 @@ class Captcha
             } else {
                 $posX = mt_rand($i * $fontBox - ceil($fontBox / 2), $i * $fontBox);
             }
-            $baseY = ceil($this->_imY / 2) + ($size / 2);
+            $baseY = ceil($this->_imY / 2) + floor($size / 2);
             $posLimit = floor(($this->_imY - $size) / 2);
             $posY = mt_rand($baseY - $posLimit, $baseY + $posLimit); // Y方向位置
                                      
