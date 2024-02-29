@@ -196,10 +196,11 @@ abstract class Model
     /**
      * 保存数据
      * 
+     * @param $prepare
      * @throws Exception
      * @return int
      */
-    public function save()
+    public function save($prepare = true)
     {
         if (! isset($this->_options['data']) || empty($this->_options['data'])) {
             throw new Exception('Data invalid.');
@@ -217,7 +218,7 @@ abstract class Model
             if ($this->_debugSql === true) {
                 $this->_curDb->debug();
             }
-            $res = $this->_curDb->update($this->getTable(), $this->_options['data'], $where);
+            $res = $this->_curDb->update($this->getTable(), $this->_options['data'], $where, $prepare);
         } else {
             throw new Exception('Database object is not found.');
         }

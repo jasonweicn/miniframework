@@ -306,20 +306,67 @@ class Mysql extends Db_Abstract
      * @param string $table 表名
      * @param array $data 数据 array(col => value)
      * @param string $where 条件
+     * @param boolean $prepare 是否进行预处理
      * @return int
      */
-    public function update($table, array $data, $where = '')
+    public function update($table, array $data, $where = '', $prepare = true)
     {
-        $sql = '';
-        if (! empty($data)) {
-            foreach ($data as $key => $value) {
-                $sql .= ", `$key`='$value'";
+        if ($prepare === true) {
+            $result = $this->prepareUpdate($table, $data, $where);
+        } else {
+            $sql = '';
+            if (! empty($data)) {
+                foreach ($data as $key => $value) {
+                    $sql .= ", `$key`='$value'";
+                }
             }
+            $sql = substr($sql, 1);
+            $sql = "UPDATE `$table` SET $sql" . (($where) ? " WHERE $where" : '');
+            
+            $result = $this->execSql($sql);
+        }
+        
+        return $result;
+    }
+
+    /**
+     * 预处理方式更新记录
+     * 
+     * @param string $table
+     * @param array $data
+     * @param string $where
+     * @return boolean
+     */
+    public function prepareUpdate($table, array $data, $where = '')
+    {
+        $this->_connect();
+        if (empty($data)) {
+            return false;
+        }
+        $prepareParams = [];
+        $sql = '';
+        foreach ($data as $k => $v) {
+            if (is_array($v)) {
+                throw new Exception('Value cannot be an array.');
+                return false;
+            }
+            $prepareParams[':' . $k] = $v;
+            $sql .= ', `' . $k . '`=:' . $k;
         }
         $sql = substr($sql, 1);
-        $sql = "UPDATE `$table` SET $sql" . (($where) ? " WHERE $where" : '');
-
-        return $this->execSql($sql);
+        try {
+            $sql = "UPDATE `$table` SET $sql" . (($where) ? " WHERE $where" : '');
+            if ($this->_debug === true) {
+                $this->_debugSql($sql);
+            }
+            $stmt = $this->_dbh->prepare($sql);
+            $res = $stmt->execute($prepareParams);
+            return $res;
+        } catch (Exception $e) {
+            throw new Exception($e);
+        }
+        
+        return false;
     }
 
     /**
