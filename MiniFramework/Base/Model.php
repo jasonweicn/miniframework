@@ -164,10 +164,11 @@ abstract class Model
     /**
      * 添加数据
      * 
+     * @param bool $prepare
      * @throws Exception
      * @return int
      */
-    public function add($prepare = true)
+    public function add(bool $prepare = true)
     {
         if (! isset($this->_options['data']) || empty($this->_options['data'])) {
             throw new Exception('Data invalid.');
@@ -196,11 +197,11 @@ abstract class Model
     /**
      * 保存数据
      * 
-     * @param $prepare
+     * @param bool $prepare
      * @throws Exception
      * @return int
      */
-    public function save($prepare = true)
+    public function save(bool $prepare = true)
     {
         if (! isset($this->_options['data']) || empty($this->_options['data'])) {
             throw new Exception('Data invalid.');
