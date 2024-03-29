@@ -1,6 +1,13 @@
 # CHANGES #
 
 
+## Version 2.10.3 released. ( 2024-03-29 ) ##
+
+### 版本变化 ###
+* 改进 Mini\Db\Mysql 类，支持更新数据时进行预处理。
+* 改进 Mini\Base\Model 类，支持更新数据时进行预处理。
+
+
 ## Version 2.10.2 released. ( 2024-02-05 ) ##
 
 ### 版本变化 ###
