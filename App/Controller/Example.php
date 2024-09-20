@@ -215,4 +215,31 @@ class Example extends Action
         // 设定响应状态码和类型，并通过 send 方法将内容发送给客户端。
         $response->httpStatus(200)->type('json')->send(json_encode($data));
     }
+    
+    /**
+     * Example 10: Encryption
+     */
+    function encryptionAction()
+    {
+        // 密钥
+        $key = 'Abc123';
+        
+        // 明文
+        $plaintext = 'Hello World!';
+        
+        // 实例化加密类
+        $encryption = new \Mini\Security\Encryption();
+        
+        // 加密数据
+        $ciphertext = $encryption->encryptData($plaintext, $key);
+        
+        // 解密数据
+        $decrypted = $encryption->decryptData($ciphertext, $key);
+        
+        $this->view->assign('key', $key);
+        $this->view->assign('plaintext', $plaintext);
+        $this->view->assign('ciphertext', $ciphertext);
+        $this->view->assign('decrypted', $decrypted);
+        $this->view->display();
+    }
 }

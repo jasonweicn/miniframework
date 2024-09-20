@@ -63,6 +63,11 @@ td {padding: 10px;}
         <td>响应控制（Response）</td>
         <td><a href="<?php echo $this->baseUrl();?>/example/response" target="_blank"><?php echo $this->baseUrl();?>/example/reponse</a></td>
       </tr>
+      <tr>
+        <td>10</td>
+        <td>加密解密（Encryption）</td>
+        <td><a href="<?php echo $this->baseUrl();?>/example/encryption" target="_blank"><?php echo $this->baseUrl();?>/example/encryption</a></td>
+      </tr>
     </tbody>
   </table>
   <hr />
