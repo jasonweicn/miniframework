@@ -76,7 +76,7 @@ class Encryption
      * @param string $plaintext 明文数据
      * @param string $key 密钥
      * @param string $algorithm 加密算法，默认为 'aes-256-gcm'
-     * @return string 加密后的密文
+     * @return string|false 加密后的密文或 false
      */
     public function encryptData($plaintext, $key, $algorithm = 'aes-256-gcm')
     {
@@ -110,7 +110,8 @@ class Encryption
      * @param string $ciphertext 密文数据
      * @param string $key 密钥
      * @param string $algorithm 加密算法，默认为 'aes-256-gcm'
-     * @return string 解密后的明文
+     * @return string|false 解密后的明文或 false
+
      */
     public function decryptData($ciphertext, $key, $algorithm = 'aes-256-gcm')
     {
