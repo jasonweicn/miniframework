@@ -49,6 +49,9 @@ class Cache
         ])) {
             throw new Exception('Adapter "' . $adapter . '" does not exist.');
         }
+        if ($adapter != 'File' && !extension_loaded(strtolower($adapter))) {
+            throw new Exception('The ' . $adapter . ' extension is not enabled.');
+        }
 
         $adapterName = '\\Mini\\Cache\\' . ucwords($adapter);
 
