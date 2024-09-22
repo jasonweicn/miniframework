@@ -496,3 +496,25 @@ function getRemoteFileSize($url)
     
     return $size;
 }
+
+/**
+ * 检测传入的字符串是否含有引起 SQL 注入的字符
+ * @param string $string
+ * @return boolean
+ */
+function checkInject(string $string)
+{
+    $blackList = [
+        'select', 'insert', 'update', 'delete',
+        'drop', 'union', 'or', 'and', 'into', 'load_file', 'outfile', 'exec',
+        '*', '/*', '*/', './', '../'
+    ];
+    $string = strtolower($string);
+    foreach ($blackList as $keyword) {
+        if (strpos($string, $keyword) !== false) {
+            return true;
+        }
+    }
+    
+    return false;
+}
