@@ -161,7 +161,7 @@ class Params
      */
     public function checkInject($string)
     {
-        return preg_match('/select|insert|update|delete|\/\*|\*|\.\.\/|\.\/|union|into|load_file|outfile/i', $string);
+        return checkInject($string);
     }
 
     /**
