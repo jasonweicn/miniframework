@@ -210,7 +210,11 @@ function dump($var, $label = null, $echo = true)
     if ($cli === true) {
         $output = PHP_EOL . $label . PHP_EOL . $output . PHP_EOL;
     } else {
-        $output = '<pre>' . PHP_EOL . $label . PHP_EOL . $output . '</pre>' . PHP_EOL;
+        if ($label === null) {
+            $output = '<pre>' . PHP_EOL . $output . '</pre>' . PHP_EOL;
+        } else {
+            $output = '<pre>' . PHP_EOL . $label . PHP_EOL . $output . '</pre>' . PHP_EOL;
+        }
     }
 
     if ($echo) {
