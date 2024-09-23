@@ -189,28 +189,27 @@ class Mysql extends Db_Abstract
     {
         $this->_connect();
         if (empty($data)) {
-            return false;
-        }
-        $prepareParams = [];
-        foreach ($data as $k => $v) {
-            if (is_array($v)) {
-                throw new Exception('Value cannot be an array.');
-                return false;
-            }
-            $prepareParams[':' . $k] = $v;
+            throw new Exception('The data cannot be empty.');
         }
         try {
-            $sql = "INSERT INTO `$table` (`" . implode('`, `', array_keys($data)) . "`) VALUES (" . implode(', ', array_keys($prepareParams)) . ")";
+            $sql = "INSERT INTO `$table` (`" . implode('`, `', array_keys($data)) . "`) VALUES (:" . implode(', :', array_keys($data)) . ")";
+            $this->_setLastSql($sql);
             if ($this->_debug === true) {
                 $this->_debugSql($sql);
             }
             $stmt = $this->_dbh->prepare($sql);
-            $res = $stmt->execute($prepareParams);
+            foreach ($data as $key => $value) {
+                if (is_array($value)) {
+                    throw new Exception('The value cannot be an array.');
+                }
+                $stmt->bindValue(":$key", $value);
+            }
+            $res = $stmt->execute();
             return $res;
         } catch (Exception $e) {
-            throw new Exception($e);
+            throw $e;
         }
-
+        
         return false;
     }
 
