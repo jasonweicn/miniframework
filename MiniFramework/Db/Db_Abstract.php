@@ -241,13 +241,19 @@ abstract class Db_Abstract
     /**
      * 输出调试信息
      * 
-     * @param string $sql            
+     * @param string $sql
+     * @param array $values 
      */
-    protected function _debugSql($sql)
+    protected function _debugSql($sql, array $values = null)
     {
-        echo "<p>----------DEBUG SQL BEGIN----------</p>\n";
-        echo "<p><pre>$sql</pre></p>\n";
-        echo "<p>----------DEBUG SQL END----------</p>\n";
+        echo "<p>----------DEBUG SQL BEGIN----------</p>" . PHP_EOL;
+        echo "<p>SQL:</p>" . PHP_EOL;
+        echo "<pre>$sql</pre>" . PHP_EOL;
+        if ($values !== null) {
+            echo "<p>VALUES:</p>" . PHP_EOL;
+            dump($values);
+        }
+        echo "<p>----------DEBUG SQL END----------</p>" . PHP_EOL;
         die();
     }
 }
