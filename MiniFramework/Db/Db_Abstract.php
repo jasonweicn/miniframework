@@ -129,46 +129,39 @@ abstract class Db_Abstract
      * 构造
      *
      * @param array $params
-     *            => array (
-     *            host          => (string) 主机，默认值为localhost
+     *            => [
+     *            host          => (string) 主机（非必填，默认值为：localhost）
+     *            port          => (string) 端口（非必填）
      *            dbname        => (string) 数据库名
      *            username      => (string) 用户名
      *            passwd        => (string) 密码
-     *            
-     *            port          => (string) 端口
-     *            charset       => (string) 字符集编码，默认值为utf8
-     *            persistent    => (boolean) 是否启用持久连接，默认值为false
-     *            )
+     *            charset       => (string) 字符集编码（非必填，默认值为：utf8）
+     *            persistent    => (boolean) 是否启用持久连接（非必填，默认值为：false）
+     *            ]
      * @return Db_Abstract
      */
     public function __construct($params)
     {
         if (! is_array($params)) {
-            throw new Exception('Adapter params must be in an array.');
+            throw new Exception('Adapter params must be an array.');
         }
-        
         $adapterClassName = get_class($this);
-        
         if (! isset($params['host'])) {
-            throw new Exception('Database(' . $adapterClassName . ') host is not defined.');
-        } elseif (! isset($params['port'])) {
-            throw new Exception('Database(' . $adapterClassName . ') port is not defined.');
-        } elseif (! isset($params['username'])) {
-            throw new Exception('Database(' . $adapterClassName . ') username is not defined.');
-        } elseif (! isset($params['passwd'])) {
-            throw new Exception('Database(' . $adapterClassName . ') passwd is not defined.');
-        } elseif (! isset($params['dbname'])) {
-            throw new Exception('Database(' . $adapterClassName . ') dbname is not defined.');
+            $params['host'] = 'localhost';
         }
-        
+        if (! isset($params['dbname'])) {
+            throw new Exception('Database adapter (' . $adapterClassName . ') param [dbname] is not defined.');
+        } elseif (! isset($params['username'])) {
+            throw new Exception('Database adapter (' . $adapterClassName . ') param [username] is not defined.');
+        } elseif (! isset($params['passwd'])) {
+            throw new Exception('Database adapter (' . $adapterClassName . ') param [passwd] is not defined.');
+        }
         if (! isset($params['charset'])) {
             $params['charset'] = 'utf8';
         }
-        
         if (! isset($params['persistent'])) {
             $params['persistent'] = false;
         }
-        
         $this->_params = $params;
     }
 
