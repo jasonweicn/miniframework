@@ -182,7 +182,7 @@ class Mysql extends Db_Abstract
      * 预处理方式插入记录
      *
      * @param string $table 表名
-     * @param array $data 数据 array(col => value)
+     * @param array $data 数据 [column => value]
      * @return boolean
      */
     public function prepareInsert($table, array $data)
@@ -246,48 +246,47 @@ class Mysql extends Db_Abstract
      * 预处理方式批量插入记录
      *
      * @param string $table
-     * @param array $dataArray = array(
-     *        0 => array(col1 => value1, col2 => value2),
-     *        1 => array(col1 => value1, col2 => value2),
+     * @param array $records = [
+     *        0 => array(column1 => value1, column2 => value2),
+     *        1 => array(column1 => value1, column2 => value2),
      *        ...
-     *        )
+     *        ]
      * @return boolean
      */
-    public function prepareInsertAll($table, array $dataArray)
+    public function prepareInsertAll($table, array $records)
     {
         $this->_connect();
-        if (empty($dataArray)) {
-            return false;
+        if (empty($records)) {
+            throw new Exception('The records cannot be empty.');
+        }
+        if (! isIndexArray($records)) {
+            throw new Exception('The records is not an indexed array.');
+            
         }
         $prepareParams = [];
         $prepareData = [];
-        foreach ($dataArray as $key => $data) {
-            if (empty($data)) {
-                throw new Exception('Incorrect data format.');
-                return false;
+        foreach ($records as $index => $record) {
+            if (empty($record) || ! is_array($record)) {
+                throw new Exception('The record at index [' . $index . '] is not an array.');
             }
-            if (! is_array($data)) {
-                throw new Exception('Incorrect data format.');
-                return false;
-            }
-            foreach ($data as $k => $v) {
-                if (is_array($v)) {
-                    throw new Exception('Value cannot be an array.');
-                    return false;
+            foreach ($record as $column => $value) {
+                if (is_array($value)) {
+                    throw new Exception('The value of the key [' . $column . '] in the records at index [' . $index . '] cannot be an array.');
                 }
-                $prepareParams[$key][] = ':' . $k . $key;
-                $prepareData[':' . $k . $key] = $v;
+                $prepareParams[$index][] = ':' . $column . $index;
+                $prepareData[':' . $column . $index] = $value;
             }
         }
         try {
-            $sql = "INSERT INTO `$table` (`" . implode('`, `', array_keys($dataArray[0])) . "`) VALUES ";
+            $sql = "INSERT INTO `$table` (`" . implode('`, `', array_keys($records[0])) . "`) VALUES ";
             $valSqls = [];
             foreach ($prepareParams as $curParams) {
                 $valSqls[] = "(" . implode(', ', $curParams) . ")";
             }            
             $sql .= implode(', ', $valSqls);
+            $this->_setLastSql($sql);
             if ($this->_debug === true) {
-                $this->_debugSql($sql);
+                $this->_debugSql($sql, $prepareData);
             }
             $stmt = $this->_dbh->prepare($sql);
             $res = $stmt->execute($prepareData);
