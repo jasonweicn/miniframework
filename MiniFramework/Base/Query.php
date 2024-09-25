@@ -421,10 +421,15 @@ abstract class Query
             if ($params[0] == null) {
                 throw new Exception('Param invalid.');
             }
-            if (! is_array($params[1])) {
-                $this->_options['where'] = $this->getWhereString($params[0], [$params[1]]);
+            // [key1=>value1, key2=>value2], AND|OR
+            if (is_array($params[0]) && in_array($params[1], $this->_logicSymbol)) {
+                $this->_options['where'] = $this->getWhereByMultiFields($params[0], $params[1]);
             } else {
-                $this->_options['where'] = $this->getWhereString($params[0], $params[1], '=', 'OR');
+                if (! is_array($params[1])) {
+                    $this->_options['where'] = $this->getWhereString($params[0], [$params[1]]);
+                } else {
+                    $this->_options['where'] = $this->getWhereString($params[0], $params[1], '=', 'OR');
+                }
             }
         } elseif ($paramsNum == 3) {
             if ($params[0] == null) {
@@ -493,6 +498,22 @@ abstract class Query
         }
         
         return $whereString;
+    }
+    
+    private function getWhereByMultiFields($conditions, $logicSymbol = 'AND')
+    {
+        if (! is_array($conditions)) {
+            throw new Exception('Invalid query conditions.');
+        }
+        if (! in_array($logicSymbol, $this->_logicSymbol)) {
+            throw new Exception('Invalid query logic symbol.');
+        }
+        foreach ($conditions as $field => $value) {
+            $indexArray[] = $field . '="' . $value . '"';
+        }
+        $where = implode(' ' . $logicSymbol . ' ', $indexArray);
+        
+        return $where;
     }
     
     /**
