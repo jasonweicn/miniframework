@@ -90,6 +90,15 @@ abstract class Db_Abstract
      * @param boolean $prepare        
      */
     abstract protected function insert($table, array $data, $prepare = true);
+    
+    /**
+     * 插入多条记录
+     * 
+     * @param string $table
+     * @param array $dataArray
+     * @param boolean $prepare
+     */
+    abstract protected function insertAll($table, array $dataArray, $prepare = true);
 
     /**
      * 更新记录
