@@ -24,6 +24,7 @@
 // +---------------------------------------------------------------------------
 namespace Mini\Captcha;
 
+use Mini\Base\Exception;
 use Mini\Base\Session;
 
 class Captcha
@@ -109,6 +110,9 @@ class Captcha
      */
     public function create($len = 4, $push = true)
     {
+        if (! extension_loaded('gd')) {
+            throw new Exception('GD library is not installed or not enabled.');
+        }
         $str = '3456789ABCDEFGHJKMNPRSTWXYabcdeghkmnpqwxy';
         $strLen = strlen($str);
         $text = '';
