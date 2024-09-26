@@ -237,6 +237,26 @@ abstract class Query
         
         return $res;
     }
+    
+    /**
+     * 查询返回一行
+     * 
+     * @return array
+     */
+    public function selectRow()
+    {
+        return $this->select('row');
+    }
+    
+    /**
+     * 查询返回所有行
+     * 
+     * @return array
+     */
+    public function selectAll()
+    {
+        return $this->select('all');
+    }
 
     /**
      * 设置 DISTINCT 去重
