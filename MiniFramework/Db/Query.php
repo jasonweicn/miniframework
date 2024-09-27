@@ -26,7 +26,7 @@ namespace Mini\Db;
 
 use Mini\Base\Exception;
 
-abstract class Query
+class Query
 {
 
     /**
@@ -34,7 +34,7 @@ abstract class Query
      *
      * @var object
      */
-    protected $_dbPool;
+    //protected $_dbPool;
     
     /**
      * 当前数据对象
@@ -83,28 +83,10 @@ abstract class Query
         'OR'
     ];
 
-    /**
-     * 加载数据库对象
-     * 
-     * @param string $key
-     */
-    abstract public function loadDb(string $key);
-
-    /**
-     * 设置当前使用的数据库
-     * 
-     * @param string $key
-     * @param array $params
-     */
-    abstract public function useDb(string $key, array $params = []);
-
-    /**
-     * 注册数据库对象
-     * 
-     * @param string $key
-     * @param array $params
-     */
-    abstract public function regDb(string $key, array $params);
+    function __construct($db)
+    {
+        $this->_curDb = $db;
+    }
 
     /**
      * 传入用于更新或插入的数据

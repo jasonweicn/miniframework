@@ -30,6 +30,13 @@ class Model extends Query
 {
 
     /**
+     * 数据库对象池
+     *
+     * @var array
+     */
+    private $_dbPool;
+
+    /**
      * 构造
      *
      * @return Action
@@ -40,7 +47,7 @@ class Model extends Query
             $this->_dbPool = App::getInstance()->getDbPool();
             $db = $this->loadDb('default');
             if ($db) {
-                $this->_curDb = $db;
+                parent::__construct($db);
             }
         }
     }
