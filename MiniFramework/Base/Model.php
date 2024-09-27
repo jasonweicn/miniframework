@@ -36,6 +36,10 @@ class Model extends Query
     {
         if (DB_AUTO_CONNECT === true) {
             $this->_dbPool = App::getInstance()->getDbPool();
+            $db = $this->loadDb('default');
+            if ($db) {
+                $this->_curDb = $db;
+            }
         }
     }
 
