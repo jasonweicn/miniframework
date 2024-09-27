@@ -24,6 +24,8 @@
 // +---------------------------------------------------------------------------
 namespace Mini\Base;
 
+use Mini\Db\Query;
+
 class Model extends Query
 {
 
