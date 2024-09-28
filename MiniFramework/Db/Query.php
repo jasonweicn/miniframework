@@ -119,18 +119,14 @@ class Query
         if (! is_array($this->_options['data'])) {
             throw new Exception('Data is not array.');
         }
-        
-        if ($this->_curDb) {
-            if ($this->_debugSql === true) {
-                $this->_curDb->debug();
-            }
-            if (isIndexArray($this->_options['data'])) {
-                $res = $this->_curDb->insertAll($this->getTable(), $this->_options['data'], $prepare);
-            } else {
-                $res = $this->_curDb->insert($this->getTable(), $this->_options['data'], $prepare);
-            }
+        $this->checkDbObjectExist();
+        if ($this->_debugSql === true) {
+            $this->_curDb->debug();
+        }
+        if (isIndexArray($this->_options['data'])) {
+            $res = $this->_curDb->insertAll($this->getTable(), $this->_options['data'], $prepare);
         } else {
-            throw new Exception('Database object is not found.');
+            $res = $this->_curDb->insert($this->getTable(), $this->_options['data'], $prepare);
         }
         $this->reset();
         
@@ -156,15 +152,11 @@ class Query
         } else {
             $where = $this->_options['where'];
         }
-        
-        if ($this->_curDb) {
-            if ($this->_debugSql === true) {
-                $this->_curDb->debug();
-            }
-            $res = $this->_curDb->update($this->getTable(), $this->_options['data'], $where, $prepare);
-        } else {
-            throw new Exception('Database object is not found.');
+        $this->checkDbObjectExist();
+        if ($this->_debugSql === true) {
+            $this->_curDb->debug();
         }
+        $res = $this->_curDb->update($this->getTable(), $this->_options['data'], $where, $prepare);
         $this->reset();
         
         return $res;
@@ -183,15 +175,11 @@ class Query
         } else {
             $where = $this->_options['where'];
         }
-        
-        if ($this->_curDb) {
-            if ($this->_debugSql === true) {
-                $this->_curDb->debug();
-            }
-            $res = $this->_curDb->delete($this->getTable(), $where);
-        } else {
-            throw new Exception('Database object is not found.');
+        $this->checkDbObjectExist();
+        if ($this->_debugSql === true) {
+            $this->_curDb->debug();
         }
+        $res = $this->_curDb->delete($this->getTable(), $where);
         $this->reset();
         
         return $res;
@@ -209,14 +197,11 @@ class Query
         $type = ($type == 'one' || $type == 'row') ? 'row' : 'all';
         $this->_method = 'SELECT';
         $sql = $this->createSql();
-        if ($this->_curDb) {
-            if ($this->_debugSql === true) {
-                $this->_curDb->debug();
-            }
-            $res = $this->_curDb->query($sql, $type);
-        } else {
-            throw new Exception('Database object is not found.');
+        $this->checkDbObjectExist();
+        if ($this->_debugSql === true) {
+            $this->_curDb->debug();
         }
+        $res = $this->_curDb->query($sql, $type);
         $this->reset();
         
         return $res;
@@ -290,7 +275,7 @@ class Query
     public function table($table = null)
     {
         if ($table === null) {
-            throw new Exception('Param invalid.');
+            throw new Exception('Table name invalid.');
         }
         if (is_array($table)) {
             $tableString = '';
@@ -746,6 +731,18 @@ class Query
         $this->_curDb->rollBack();
         
         return $this;
+    }
+
+    /**
+     * 检查数据库对象是否可用
+     * 
+     * @return void
+     */
+    private function checkDbObjectExist()
+    {
+        if ($this->_curDb === null) {
+            throw new Exception('Database object is not found.');
+        }
     }
 
     /**
