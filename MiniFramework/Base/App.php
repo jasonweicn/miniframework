@@ -287,4 +287,37 @@ class App
         
         return $this->_dbPool;
     }
+
+    /**
+     * 加载数据库对象
+     * 
+     * @param string $key 对象KEY
+     * @return NULL|object
+     */
+    public static function loadDb(string $key)
+    {
+        $instance = self::getInstance();
+        if (!isset($instance->_dbPool[$key])) {
+            return null;
+        }
+        return $instance->_dbPool[$key];
+    }
+
+    /**
+     * 注册数据库对象
+     *
+     * @param string $key 对象KEY
+     * @param array $params 数据库配置参数
+     * @return object 数据库对象
+     */
+    public static function regDb(string $key, array $params)
+    {
+        $instance = self::getInstance();
+        if (isset($instance->_dbPool[$key])) {
+            throw new Exception('Failed to register database object, "' . $key . '" already exists.');
+        }
+        $instance->_dbPool[$key] = \Mini\Db\Db::factory('Mysql', $params);
+        
+        return $instance->_dbPool[$key];
+    }
 }
