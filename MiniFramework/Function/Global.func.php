@@ -26,52 +26,29 @@
 /**
  * 获取客户端IP地址
  *
- * @return NULL | string
+ * @return string
  */
 function getClientIp()
 {
-    if (isset($_SERVER)) {
-        if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $arr = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
-            foreach ($arr as $tmp) {
-                $tmp = trim($tmp);
-                if ($tmp != 'unknown') {
-                    $ip = $tmp;
-                    break;
-                }
-            }
-        } elseif (isset($_SERVER['HTTP_CLIENT_IP'])) {
-            $ip = $_SERVER['HTTP_CLIENT_IP'];
-        } elseif (isset($_SERVER['HTTP_CDN_SRC_IP'])) {
-            $ip = $_SERVER['HTTP_CDN_SRC_IP'];
-        } else {
-            if (isset($_SERVER['REMOTE_ADDR'])) {
-                $ip = $_SERVER['REMOTE_ADDR'];
-            } else {
-                $ip = '0.0.0.0';
+    $ip = '0.0.0.0';
+    
+    if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) || getenv('HTTP_X_FORWARDED_FOR')) {
+        $forwards = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']) : explode(',', getenv('HTTP_X_FORWARDED_FOR'));
+        foreach ($forwards as $tmp) {
+            $tmp = trim($tmp);
+            if ($tmp != 'unknown') {
+                $ip = $tmp;
+                break;
             }
         }
+    } elseif (isset($_SERVER['HTTP_CLIENT_IP']) || getenv('HTTP_CLIENT_IP')) {
+        $ip = isset($_SERVER['HTTP_CLIENT_IP']) ? $_SERVER['HTTP_CLIENT_IP'] : getenv('HTTP_CLIENT_IP');
+    } elseif (isset($_SERVER['HTTP_CDN_SRC_IP']) || getenv('HTTP_CDN_SRC_IP')) {
+        $ip = isset($_SERVER['HTTP_CDN_SRC_IP']) ? $_SERVER['HTTP_CDN_SRC_IP'] : getenv('HTTP_CDN_SRC_IP');
+    } elseif (isset($_SERVER['REMOTE_ADDR']) || getenv('REMOTE_ADDR')) {
+        $ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : getenv('REMOTE_ADDR');
     } else {
-        if (getenv('HTTP_X_FORWARDED_FOR')) {
-            $arr = explode(',', getenv('HTTP_X_FORWARDED_FOR'));
-            foreach ($arr as $tmp) {
-                $tmp = trim($tmp);
-                if ($tmp != 'unknown') {
-                    $ip = $tmp;
-                    break;
-                }
-            }
-        } elseif (getenv('HTTP_CLIENT_IP')) {
-            $ip = getenv('HTTP_CLIENT_IP');
-        } elseif (getenv('HTTP_CDN_SRC_IP')) {
-            $ip = getenv('HTTP_CDN_SRC_IP');
-        } else {
-            if (getenv('REMOTE_ADDR')) {
-                $ip = getenv('REMOTE_ADDR');
-            } else {
-                $ip = '0.0.0.0';
-            }
-        }
+        $ip = '0.0.0.0';
     }
     
     // Compatible with IPv4 and IPv6
@@ -80,7 +57,7 @@ function getClientIp()
             $ip = '0.0.0.0';
         }
     }
-
+    
     return $ip;
 }
 
@@ -116,8 +93,9 @@ function getRandomString($len = 8)
     $str = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
     $strLen = strlen($str);
     $randomString = '';
-    if (! is_int($len) || $len <= 0)
+    if (!is_int($len) || $len <= 0) {
         $len = 8;
+    }
     for ($i = 0; $i < $len; $i ++) {
         $randomString .= substr($str, rand(0, $strLen - 1), 1);
     }
