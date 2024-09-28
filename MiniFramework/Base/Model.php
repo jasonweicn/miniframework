@@ -30,13 +30,6 @@ class Model extends Query
 {
 
     /**
-     * 数据库对象池
-     *
-     * @var array
-     */
-    private $_dbPool;
-
-    /**
      * 构造
      *
      * @return Action
@@ -44,7 +37,6 @@ class Model extends Query
     function __construct()
     {
         if (DB_AUTO_CONNECT === true) {
-            $this->_dbPool = App::getInstance()->getDbPool();
             $db = $this->loadDb('default');
             if ($db) {
                 parent::__construct($db);
@@ -53,18 +45,14 @@ class Model extends Query
     }
 
     /**
-     * 加载数据库对象
+     * 加载数据库对象 ( 指向 App::loadDb )
      *
      * @param string $key
      * @return NULL|object
      */
     public function loadDb(string $key)
     {
-        if (! isset($this->_dbPool[$key])) {
-            return null;
-        }
-        
-        return $this->_dbPool[$key];
+        return App::loadDb($key);
     }
     
     /**
@@ -91,7 +79,7 @@ class Model extends Query
     }
     
     /**
-     * 注册数据库对象
+     * 注册数据库对象 ( 指向 App::regDb )
      * 
      * @param string $key
      * @param array $params
@@ -99,11 +87,6 @@ class Model extends Query
      */
     public function regDb(string $key, array $params)
     {
-        if (isset($this->_dbPool[$key])) {
-            throw new Exception('Failed to register database object, "' . $key . '" already exists.');
-        }
-        $this->_dbPool[$key] = \Mini\Db\Db::factory('Mysql', $params);
-        
-        return $this->_dbPool[$key];
+        return App::regDb($key, $params);
     }
 }
