@@ -35,6 +35,8 @@ class Config
     protected static $_instance;
 
     private $_confData = [];
+    
+    private $_isThrowException = true;
 
     /**
      * 获取实例
@@ -50,8 +52,10 @@ class Config
     /**
      * 构造
      */
-    final protected function __construct()
-    {}
+    final protected function __construct($isThrowException = true)
+    {
+        $this->_isThrowException = $isThrowException;
+    }
     
     /**
      * 克隆
@@ -67,8 +71,10 @@ class Config
      * @throws Exception
      * @return boolean|NULL|mixed
      */
-    public function load($config, $throw = true)
+    public static function load($config, $throw = true)
     {
+        $instance = self::getInstance();
+        $instance->_isThrowException = $throw;
         $lastPos = strpos($config, ':');
         if ($lastPos !== false) {
             $confName = strstr($config, ':', true);
@@ -76,35 +82,115 @@ class Config
         } else {
             $confName = $config;
         }
-        if (! isset($this->_confData[$confName])) {
-            if (APP_ENV == 'prod') {
-                $confFile = CONFIG_PATH . DS . $confName . '.php';
-            } else {
-                $confFile = CONFIG_PATH . DS . $confName . '-' . APP_ENV . '.php';
-            }
-            if (file_exists($confFile)) {
-                $res = include($confFile);
-            } else {
-                if ($throw === true) {
-                    throw new Exception('Config "' . $confName . '" not found.');
-                } else {
-                    return false;
-                }
-            }
-            if ($res === 1) {
-                if (isset(${$confName})) {
-                    $this->_confData[$confName] = ${$confName};
-                } else {
-                    return null;
-                }
-            } else {
-                $this->_confData[$confName] = $res;
-            }
-        }
-        if (isset($confKey) && isset($this->_confData[$confName][$confKey])) {
-            return $this->_confData[$confName][$confKey];
+        
+        // 如果未找到配置则尝试从配置文件读入
+        if (!isset($instance->_confData[$confName])) {
+            $instance->setFromFile($confName);
         }
         
-        return $this->_confData[$confName];
+        if (isset($confKey)) {
+            if (!isset($instance->_confData[$confName][$confKey])) {
+                return $instance->report('Config "' . $confName . ':' . $confKey . '" not found.');
+            }
+            return $instance->_confData[$confName][$confKey];
+        }
+        
+        return $instance->_confData[$confName];
+    }
+    
+    /**
+     * 设置配置项
+     * 
+     * @param mixed $value 配置的值
+     * @param string $name 配置名
+     * @return boolean
+     */
+    public static function set($value, string $name)
+    {
+        $instance = self::getInstance();
+        if ($name === null) {
+            return $instance->report('Invalid config name.');
+        }
+        list($name, $key) = $instance->parseConfigName($name);
+        if ($key === null) {
+            if (isset($instance->_confData[$name])) {
+                return $instance->report('Config "' . $name . '" already exists.');
+            }
+            $instance->_confData[$name] = $value;
+        } else {
+            if (isset($instance->_confData[$name][$key])) {
+                return $instance->report('Config "' . $name . ':' . $key . '" already exists.');
+            }
+            $instance->_confData[$name][$key] = $value;
+        }
+        
+        return true;
+    }
+    
+    /**
+     * 从文件设置配置项
+     * 
+     * @param string $name 配置名
+     * @return boolean|NULL
+     */
+    private function setFromFile($name)
+    {
+        $file = '';
+        if (APP_ENV == 'prod') {
+            $file = CONFIG_PATH . DS . $name . '.php';
+        } else {
+            $file = CONFIG_PATH . DS . $name . '-' . APP_ENV . '.php';
+        }
+        if (file_exists($file)) {
+            $res = include($file);
+        } else {
+            return $this->report('Config "' . $name . '" not found.');
+        }
+        if ($res === 1) {
+            if (isset(${$name})) {
+                $this->_confData[$name] = ${$name};
+            } else {
+                return null;
+            }
+        } else {
+            $this->_confData[$name] = $res;
+        }
+        
+        return true;
+    }
+    
+    /**
+     * 解析配置名
+     * 
+     * @param string $name
+     * @return array
+     */
+    private function parseConfigName(string $name)
+    {
+        $lastPos = strpos($name, ':');
+        if ($lastPos !== false) {
+            $confName = strstr($name, ':', true);
+            $confKey = substr($name, $lastPos + 1);
+        } else {
+            $confName = $name;
+            $confKey = null;
+        }
+        
+        return [$confName, $confKey];
+    }
+    
+    /**
+     * 异常报告
+     * 
+     * @param string $msg
+     * @return boolean
+     */
+    private function report(string $msg)
+    {
+        if ($this->_isThrowException === true) {
+            throw new Exception($msg);
+        }
+        
+        return false;
     }
 }
