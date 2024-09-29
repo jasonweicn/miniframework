@@ -85,7 +85,9 @@ class Config
         
         // 如果未找到配置则尝试从配置文件读入
         if (!isset($instance->_confData[$confName])) {
-            $instance->setFromFile($confName);
+            if (!$instance->setFromFile($confName)) {
+                return false;
+            }
         }
         
         if (isset($confKey)) {
