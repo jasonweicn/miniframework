@@ -306,11 +306,11 @@ function isImage($file)
             return false;
             break;
     }
-    if ($img == false) {
+    if ($img === false) {
         return false;
-    } else {
-        return true;
     }
+    
+    return true;
 }
 
 /**
