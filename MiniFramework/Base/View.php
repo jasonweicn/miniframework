@@ -343,13 +343,14 @@ class View
      */
     private function parseGeneralTag($matches)
     {
+        $code = '';
         if (isset($matches[1])) {
             $tagString = $matches[1];
         }
         if ('$' == substr($tagString, 0, 1)) { // 变量
             $variable = substr($tagString, 1);
             if (isset($this->$variable)) {
-                return '<?php echo $this->' . $variable . '; ?>';
+                $code = '<?php echo $this->' . $variable . '; ?>';
             } elseif (strpos($variable, '.') !== false) { // 对象或数组
                 $names = explode('.', $variable);
                 $variable = array_shift($names);
@@ -362,33 +363,35 @@ class View
                         $variable .= '["' . $val . '"]';
                     }
                 }
-                return '<?php echo $this->' . $variable . '; ?>';
+                $code = '<?php echo $this->' . $variable . '; ?>';
             }
         } elseif ('const:' == substr($tagString, 0, 6)) { // 常量
             $constName = substr($tagString, 6);
             if (defined($constName)) {
-                return constant($constName);
+                $code = constant($constName);
             }
         } elseif ('layout:' == substr($tagString, 0, 7)) { // 加载布局
             $layoutName = substr($tagString, 7);
             if (isset($this->_layout->$layoutName) || $layoutName == 'content') {
-                return '<?php echo $this->_layout->' . $layoutName . '; ?>';
+                $code = '<?php echo $this->_layout->' . $layoutName . '; ?>';
             } else {
-                return '<?php echo $this->render(LAYOUT_PATH . "/' . $layoutName . '.php"); ?>';
+                $code =  '<?php echo $this->render(LAYOUT_PATH . "/' . $layoutName . '.php"); ?>';
             }
         } elseif ('beginBlock:' == substr($tagString, 0, 11)) { // 开始代码块
             $blockName = substr($tagString, 11);
-            return '<?php $this->beginBlock("' . $blockName . '"); ?>';
+            $code = '<?php $this->beginBlock("' . $blockName . '"); ?>';
         } elseif ('endBlock:' == substr($tagString, 0, 9)) { // 结束代码块
             $blockName = substr($tagString, 9);
-            return '<?php $this->endBlock("' . $blockName . '"); ?>';
+            $code = '<?php $this->endBlock("' . $blockName . '"); ?>';
         } elseif ('endBlock' == $tagString) { // 结束代码块，简写方式
-            return '<?php $this->endBlock(); ?>';
+            $code = '<?php $this->endBlock(); ?>';
         } elseif ('insertBlock:' == substr($tagString, 0, 12)) { // 插入代码块
             $blockName = substr($tagString, 12);
-            return '<?php $this->insertBlock("' . $blockName . '"); ?>';
+            $code = '<?php $this->insertBlock("' . $blockName . '"); ?>';
+        } else {
+            $code = TPL_SEPARATOR_L . $tagString . TPL_SEPARATOR_R;
         }
 
-        return TPL_SEPARATOR_L . $tagString . TPL_SEPARATOR_R;
+        return $code;
     }
 }
