@@ -131,7 +131,7 @@ class Log
     {
         $c = count(self::$_logs);
         $t = isset(self::$_logs[$c - 1]['time']) ? strtotime(self::$_logs[$c - 1]['time']) : time();
-        is_dir(LOG_PATH) or @mkdir(LOG_PATH, 0700, true);
+        is_dir(LOG_PATH) || @mkdir(LOG_PATH, 0700, true);
         $logFile = LOG_PATH . DS . date('Y-m-d', $t) . '.log';
         foreach (self::$_logs as $log) {
             $result = file_put_contents(
