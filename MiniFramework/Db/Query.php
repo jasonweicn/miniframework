@@ -267,7 +267,7 @@ class Query
      */
     public function table($table = null)
     {
-        if ($table === null) {
+        if ($table === null || $table == '') {
             throw new Exception('Table name invalid.');
         }
         if (is_array($table)) {
