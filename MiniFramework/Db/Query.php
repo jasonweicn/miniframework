@@ -30,13 +30,6 @@ class Query
 {
 
     /**
-     * 数据库对象池
-     *
-     * @var object
-     */
-    //protected $_dbPool;
-    
-    /**
      * 当前数据对象
      * 
      * @var object
