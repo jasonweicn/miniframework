@@ -136,8 +136,9 @@ class Mysql extends Db_Abstract
     {
         $this->_connect();
         $this->_setLastSql($sql);
-        if ($this->_debug === true)
+        if ($this->_debug === true) {
             $this->_debugSql($sql);
+        }
         try {
             $recordset = $this->_dbh->query($sql);
             if ($recordset === false) {
@@ -172,7 +173,7 @@ class Mysql extends Db_Abstract
         if ($prepare === true) {
             $result = $this->prepareInsert($table, $data);
         } else {
-            $result = $this->execSql("INSERT INTO `$table` (`" . implode('`,`', array_keys($data)) . "`) VALUES ('" . implode("','", $data) . "')");;
+            $result = $this->execSql("INSERT INTO `$table` (`" . implode('`,`', array_keys($data)) . "`) VALUES ('" . implode("','", $data) . "')");
         }
         
         return $result;
