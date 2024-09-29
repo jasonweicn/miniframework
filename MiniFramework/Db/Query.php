@@ -393,52 +393,58 @@ class Query
         $paramsNum = func_num_args();
         $params = func_get_args();
         
-        if ($paramsNum == 1) {
-            // 只传入一个参数时，默认为兼容旧版本的调用方式
-            if ($defaultParam == null) {
-                throw new Exception('Param invalid.');
-            }
-            $this->_options['where'] = trim($defaultParam);
-        } elseif ($paramsNum == 2) {
-            if ($params[0] == null) {
-                throw new Exception('Param invalid.');
-            }
-            // [key1=>value1, key2=>value2], AND|OR
-            if (is_array($params[0]) && in_array($params[1], $this->_logicSymbol)) {
-                $this->_options['where'] = $this->getWhereByMultiFields($params[0], $params[1]);
-            } else {
+        switch ($paramsNum) {
+            case 1:
+                // 只传入一个参数时，默认为兼容旧版本的调用方式
+                if ($defaultParam == null) {
+                    throw new Exception('Param invalid.');
+                }
+                $this->_options['where'] = trim($defaultParam);
+                break;
+            case 2:
+                if ($params[0] == null) {
+                    throw new Exception('Param invalid.');
+                }
+                // [key1=>value1, key2=>value2], AND|OR
+                if (is_array($params[0]) && in_array($params[1], $this->_logicSymbol)) {
+                    $this->_options['where'] = $this->getWhereByMultiFields($params[0], $params[1]);
+                } else {
+                    if (! is_array($params[1])) {
+                        $this->_options['where'] = $this->getWhereString($params[0], [$params[1]]);
+                    } else {
+                        $this->_options['where'] = $this->getWhereString($params[0], $params[1], '=', 'OR');
+                    }
+                }
+                break;
+            case 3:
+                if ($params[0] == null) {
+                    throw new Exception('Param invalid.');
+                }
                 if (! is_array($params[1])) {
-                    $this->_options['where'] = $this->getWhereString($params[0], [$params[1]]);
+                    if (! in_array(strtoupper($params[1]), $this->_compareSymbol)) {
+                        throw new Exception('Param invalid.');
+                    }
+                    if (! is_array($params[2])) {
+                        $this->_options['where'] = $this->getWhereString($params[0], [$params[2]], strtoupper($params[1]));
+                    } else {
+                        $this->_options['where'] = $this->getWhereString($params[0], $params[2], strtoupper($params[1]), 'OR');
+                    }
                 } else {
-                    $this->_options['where'] = $this->getWhereString($params[0], $params[1], '=', 'OR');
+                    if (! in_array(strtoupper($params[2]), $this->_logicSymbol)) {
+                        throw new Exception('Param invalid.');
+                    }
+                    $this->_options['where'] = $this->getWhereString($params[0], $params[1], '=', strtoupper($params[2]));
                 }
-            }
-        } elseif ($paramsNum == 3) {
-            if ($params[0] == null) {
-                throw new Exception('Param invalid.');
-            }
-            if (! is_array($params[1])) {
-                if (! in_array(strtoupper($params[1]), $this->_compareSymbol)) {
+                break;
+            case 4:
+                if ($params[3] == null) {
                     throw new Exception('Param invalid.');
                 }
-                if (! is_array($params[2])) {
-                    $this->_options['where'] = $this->getWhereString($params[0], [$params[2]], strtoupper($params[1]));
-                } else {
-                    $this->_options['where'] = $this->getWhereString($params[0], $params[2], strtoupper($params[1]), 'OR');
-                }
-            } else {
-                if (! in_array(strtoupper($params[2]), $this->_logicSymbol)) {
-                    throw new Exception('Param invalid.');
-                }
-                $this->_options['where'] = $this->getWhereString($params[0], $params[1], '=', strtoupper($params[2]));
-            }
-        } elseif ($paramsNum == 4) {
-            if ($params[3] == null) {
+                $this->_options['where'] = $this->getWhereString($params[0], $params[2], $params[1], $params[3]);
+                break;
+            default:
                 throw new Exception('Param invalid.');
-            }
-            $this->_options['where'] = $this->getWhereString($params[0], $params[2], $params[1], $params[3]);
-        } else {
-            throw new Exception('Param invalid.');
+                break;
         }
         
         return $this;
