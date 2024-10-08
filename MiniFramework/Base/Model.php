@@ -248,7 +248,39 @@ abstract class Model extends Query
         
         return $res;
     }
-
+    
+    /**
+     * 创建新记录
+     * 
+     * @return int|bool
+     */
+    public function create()
+    {
+        $reflection = new \ReflectionClass($this);
+        $data = [];
+        $properties = $reflection->getProperties(\ReflectionProperty::IS_PUBLIC | \ReflectionProperty::IS_PROTECTED);
+        $currentClass = $reflection;
+        foreach ($properties as $property) {
+            if ($property->isPrivate()) {
+                continue;
+            }
+            $declaringClass = $property->getDeclaringClass();
+            if ($declaringClass == $currentClass) {
+                $propertyName = $property->getName();
+                $data[$propertyName] = $this->$propertyName;
+            }
+        }
+        if (empty($data)) {
+            return false;
+        }
+        
+        $this->table($this->tableName());
+        $this->data($data);
+        $res = $this->add();
+        
+        return $res;
+    }
+    
     /**
      * 持久化存储（将当前模型中改变的属性保存至数据库）
      *
