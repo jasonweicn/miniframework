@@ -165,7 +165,7 @@ abstract class Model extends Query
      *
      * @param mixed $value 字段值
      * @param string $fieldName 字段名称
-     * @return $this
+     * @return $this | false
      */
     public function findByField($value, string $fieldName)
     {
@@ -176,8 +176,10 @@ abstract class Model extends Query
         if ($row) {
             $this->setProperty($row);
             $primaryKeyValue = $row[$this->primaryKeyName()];
+            $this->setOriginalPrimaryKeyValue($primaryKeyValue);
+        } else {
+            return false;
         }
-        $this->setOriginalPrimaryKeyValue($primaryKeyValue);
         
         return $this;
     }
@@ -187,7 +189,7 @@ abstract class Model extends Query
      *
      * @param array $conditions 条件数组，例如：[k1=>v1,k2=>v2]
      * @param string $logicSymbol 逻辑符号，例如： AND 或 OR
-     * @return $this
+     * @return $this | false
      */
     public function findByFields(array $conditions, $logicSymbol = 'AND')
     {
@@ -198,8 +200,10 @@ abstract class Model extends Query
         if ($row) {
             $this->setProperty($row);
             $primaryKeyValue = $row[$this->primaryKeyName()];
+            $this->setOriginalPrimaryKeyValue($primaryKeyValue);
+        } else {
+            return false;
         }
-        $this->setOriginalPrimaryKeyValue($primaryKeyValue);
         
         return $this;
     }
