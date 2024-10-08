@@ -231,7 +231,7 @@ abstract class Model extends Query
         
         return $objects;
     }
-    
+
     /**
      * 从数据库中删除当前记录
      * 
@@ -248,7 +248,7 @@ abstract class Model extends Query
         
         return $res;
     }
-    
+
     /**
      * 持久化存储（将当前模型中改变的属性保存至数据库）
      *
@@ -267,11 +267,11 @@ abstract class Model extends Query
             return true;
         }
         
-        // 保存数据（主键为 null 时作为新记录插入）
+        // 保存数据（主键为 null 时返回 false）
         $this->table($this->tableName());
         $this->data($persistData);
         if ($this->_originalPrimaryKeyValue === null) {
-            $res = $this->add();
+            return false;
         } else {
             $this->where($this->primaryKeyName(), $this->_originalPrimaryKeyValue);
             $res = $this->save();
