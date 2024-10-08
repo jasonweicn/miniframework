@@ -1,6 +1,36 @@
 # CHANGES #
 
 
+## Version 2.11.0 released. ( 2024-10-?? ) ##
+
+### 版本变化 ###
+* 新增 Mini\Security\Encryption 类，用于处理数据的加密和解密。
+* 新增 Mini\Db\Query 类，承接 Mini\Base\Model 用于构造数据库查询，可单独实例化使用。（当前版本做了兼容处理，开发者此前编写的 Model 继承 Mini\Base\Model 仍可正常工作。）
+* 新增 Mini\Base\App 类的 loadDb() 和 regDb() 两个静态方法，用于加载和注册数据库对象。
+* 新增两个数据库链式操作方法，分别为 selectRow() 和 selectAll() 方法，等价于 select('row') 或 select('all') 查询。
+* 升级 Mini\Base\Model 类，支持 ORM 数据模型特性，允许将对象与数据表进行映射和操作。（参见文档：[https://www.miniframework.com/docv2/guide/shu-ju-mo-xing.html](https://www.miniframework.com/docv2/guide/shu-ju-mo-xing.html)）
+* 新增 checkInject() 全局函数，检测传入的字符串是否含有引起 SQL 注入的字符。
+* 调整 Mini\Base\Params::checkInject() 方法，直接调用更优化的 checkInject() 全局函数。
+* 改进 Mini\Base\Params 类的 getStr() 方法兼容性，避免 NOTICE 级别报错。
+* 改进数据库自动连接机制，框架会自动加载连接配置文件中名为 default 的数据库配置。
+* 改进 Mini\Db\Mysql 类的 prepareInsert() 方法，改用 bindValue 绑定数据。（在传入的数据为空数组时由 return false 改为抛出异常，请注意检查代码兼容性。）
+* 改进 Mini\Db\Mysql 类的 prepareInsertAll() 方法，对异常的提示信息进行完善。
+* 改进 Mini\Db\Db_Abstract 类的 _debugSql() 方法，支持显示用于预处理的数据。
+* 改进 Mini\Db\Db_Abstract 类的构造方法，将适配器参数中的 host 和 port 两项改为可选参数。
+* 改进数据库链式操作的 where() 方法，新增一种查询条件的写法。
+* 改进数据库链式操作的 table() 方法，当参数为空字符串时抛出异常。
+* 改进 Mini\Cache\Cache 类，当开发者指定的适配器扩展未安装时抛出异常。
+* 改进 Mini\Captcha\Captcha 类的 create() 方法，在创建验证码图像前如检查 GD 库未正确安装则抛出异常。
+* 改进 Mini\Base\Config 类，新增支持静态调用方法，和通过变量设置配置项的机制。
+* 改进全局函数 dump()，减少空白行输出。
+* 改写部分文件的代码，更符合编码规范。
+
+### 升级说明 ###
+* 兼容 PHP 最低版本为 7.2.0（建议升级至 PHP 8）
+* 当前版本向前兼容至 2.4.0 版本，使用 2.4.0 及后续版本的开发者可直接升级至 2.11.0 版本。
+* 文档已同步更新，地址：[http://www.miniframework.com/docv2/guide/](http://www.miniframework.com/docv2/guide/)
+
+
 ## Version 2.10.3 released. ( 2024-03-29 ) ##
 
 ### 版本变化 ###
