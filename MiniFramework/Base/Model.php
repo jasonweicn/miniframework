@@ -258,7 +258,7 @@ abstract class Model extends Query
     {
         $reflection = new \ReflectionClass($this);
         $data = [];
-        $properties = $reflection->getProperties(\ReflectionProperty::IS_PUBLIC | \ReflectionProperty::IS_PROTECTED);
+        $properties = $reflection->getProperties(\ReflectionProperty::IS_PUBLIC);
         $currentClass = $reflection;
         foreach ($properties as $property) {
             if ($property->isPrivate()) {
@@ -355,7 +355,7 @@ abstract class Model extends Query
     private function initProperty()
     {
         $reflection = new \ReflectionClass($this);
-        $properties = $reflection->getProperties(\ReflectionProperty::IS_PUBLIC | \ReflectionProperty::IS_PROTECTED);
+        $properties = $reflection->getProperties(\ReflectionProperty::IS_PUBLIC);
         $currentClass = $reflection;
         foreach ($properties as $property) {
             if ($property->isPrivate()) {
@@ -395,7 +395,7 @@ abstract class Model extends Query
     public function dump(string $type = 'object')
     {
         $reflection = new \ReflectionClass($this);
-        $properties = $reflection->getProperties(\ReflectionProperty::IS_PUBLIC | \ReflectionProperty::IS_PROTECTED);
+        $properties = $reflection->getProperties(\ReflectionProperty::IS_PUBLIC);
         $propertys = [];
         $currentClass = $reflection;
         foreach ($properties as $property) {
