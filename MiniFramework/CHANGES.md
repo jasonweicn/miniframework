@@ -1,7 +1,7 @@
 # CHANGES #
 
 
-## Version 2.11.0 released. ( 2024-10-?? ) ##
+## Version 2.11.0 released. ( 2024-10-08 ) ##
 
 ### 版本变化 ###
 * 新增 Mini\Security\Encryption 类，用于处理数据的加密和解密。
