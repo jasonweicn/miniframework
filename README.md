@@ -4,10 +4,12 @@ MiniFramework
 MiniFramework 是一款遵循 Apache2 开源协议发布的，支持 MVC 和 RESTful 的超轻量级 PHP 开发框架。
 MiniFramework 能够帮助开发者用最小的学习成本快速构建 Web 应用，在满足开发者最基础的分层开发、数据库和缓存访问等少量功能基础上，做到尽可能精简，以帮助您的应用基于框架高效运行。
 
+
 快速入门
 --------
 
 MiniFramework 快速入门学习文档：[http://www.miniframework.com/docv2/guide/](http://www.miniframework.com/docv2/guide/)
+
 
 安装部署
 --------
@@ -107,8 +109,6 @@ QQ交流群：745683429 （入群请备注：MF）
 
 博客：[http://www.sunbloger.com](http://www.sunbloger.com)
 
-微博：[https://weibo.com/jasonweicn](https://weibo.com/jasonweicn)
-
 
 开源协议
 --------
@@ -116,3 +116,9 @@ QQ交流群：745683429 （入群请备注：MF）
 MiniFramework 遵循 Apache License Version 2.0 开源协议发布。
 
 协议详细内容请浏览项目目录中的 LICENSE 文件。
+
+
+官网地址
+--------
+
+网址：[https://www.miniframework.com/](https://www.miniframework.com/)
