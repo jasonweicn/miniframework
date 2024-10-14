@@ -41,6 +41,9 @@ class Session
      */
     public static function start($params = [])
     {
+        if (self::$_isStart === true) {
+            return true;
+        }
         $flag = false;
         if (version_compare(PHP_VERSION, '5.4.0', '>=')) {
             if (session_status() != 2) {
@@ -87,6 +90,7 @@ class Session
      */
     public static function get($name = null)
     {
+        self::start();
         if (isset($name) && $name != null) {
             if (! is_string($name)) {
                 throw new Exception('The session name must be a string.');
@@ -112,6 +116,7 @@ class Session
      */
     public static function set($name, $value)
     {
+        self::start();
         if (! is_string($name)) {
             throw new Exception('The session name must be a string.');
         }
@@ -146,6 +151,7 @@ class Session
      */
     public static function has($name)
     {
+        self::start();
         if (! is_string($name)) {
             throw new Exception('The session name must be a string.');
         }
@@ -160,6 +166,9 @@ class Session
      */
     public static function destroy()
     {
+        if (self::$_isStart === false) {
+            return false;
+        }
         if (isset($_SESSION)) {
             $_SESSION = [];
             if (ini_get('session.use_cookies')) {
@@ -169,8 +178,12 @@ class Session
                     );
             }
         }
+        $result = session_destroy();
+        if ($result === true) {
+            self::$_isStart = false;
+        }
         
-        return session_destroy();
+        return $result;
     }
     
     /**
