@@ -109,30 +109,25 @@ class Sign
                 $sign = $data['sign'];
                 $signTime = $data['signTime'];
                 unset($data['sign']);
-            } else {
-                return false;
             }
         } elseif ($type == 'stream') {
             $header = \Mini\Base\Request::getInstance()->getHeader();
             if ($header->has('X-Sign') && $header->has('X-Signtime')) {
                 $sign = $header->get('X-Sign');
                 $signTime = $header->get('X-Signtime');
-            } else {
-                return false;
             }
             $data = file_get_contents('php://input') . $signTime;
         }
-        if (! isTimestamp($signTime)) {
+        if (empty($sign) || empty($signTime)) {
             return false;
         }
-        if (($signTime + $this->expireTime) <= time()) {
-            return false;
+        if (isTimestamp($signTime) === true && ($signTime + $this->expireTime) > time()) {
+            if ($sign === $this->sign($data)) {
+                return true;
+            }
         }
-        if ($sign === $this->sign($data)) {
-            return true;
-        } else {
-            return false;
-        }
+        
+        return false;
     }
 
     /**

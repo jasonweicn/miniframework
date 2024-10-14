@@ -105,7 +105,7 @@ class Loader
             if ($name == APP_NAMESPACE) {
                 $classPath = APP_PATH . ltrim($classPath, APP_NAMESPACE);
             } else {
-                $classPath = MINI_PATH . DS . str_replace($name . '\\', '', $namespace);;
+                $classPath = MINI_PATH . DS . str_replace($name . '\\', '', $namespace);
             }
             
             $className = substr($className, $lastPos + 1);
