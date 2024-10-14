@@ -65,8 +65,9 @@ class Mysql extends Db_Abstract
      */
     protected function _connect()
     {
-        if ($this->_dbh)
+        if ($this->_dbh) {
             return;
+        }
 
         if (! class_exists('PDO')) {
             throw new Exception('Not found PDO extension.');
@@ -84,7 +85,7 @@ class Mysql extends Db_Abstract
             }
         }
 
-        if (isset($this->_params['persistent']) && ($this->_params['persistent'] == true)) {
+        if (isset($this->_params['persistent']) && $this->_params['persistent'] === true) {
             $this->_params['options'][PDO::ATTR_PERSISTENT] = true;
         } else {
             $this->_params['options'][PDO::ATTR_PERSISTENT] = false;
@@ -205,8 +206,7 @@ class Mysql extends Db_Abstract
                 }
                 $stmt->bindValue(":$key", $value);
             }
-            $res = $stmt->execute();
-            return $res;
+            return $stmt->execute();
         } catch (Exception $e) {
             throw $e;
         }
@@ -290,8 +290,7 @@ class Mysql extends Db_Abstract
                 $this->_debugSql($sql, $prepareData);
             }
             $stmt = $this->_dbh->prepare($sql);
-            $res = $stmt->execute($prepareData);
-            return $res;
+            return $stmt->execute($prepareData);
         } catch (Exception $e) {
             throw new Exception($e);
         }
@@ -347,7 +346,6 @@ class Mysql extends Db_Abstract
         foreach ($data as $k => $v) {
             if (is_array($v)) {
                 throw new Exception('Value cannot be an array.');
-                return false;
             }
             $prepareParams[':' . $k] = $v;
             $sql .= ', `' . $k . '`=:' . $k;
@@ -359,8 +357,7 @@ class Mysql extends Db_Abstract
                 $this->_debugSql($sql);
             }
             $stmt = $this->_dbh->prepare($sql);
-            $res = $stmt->execute($prepareParams);
-            return $res;
+            return $stmt->execute($prepareParams);
         } catch (Exception $e) {
             throw new Exception($e);
         }
