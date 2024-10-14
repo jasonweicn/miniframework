@@ -34,8 +34,9 @@ class Memcached extends Cache_Abstract
      */
     protected function _connect()
     {
-        if ($this->_cache_server)
-            return;
+        if ($this->_cache_server) {
+            return true;
+        }
         
         try {
             $this->_cache_server = new \Memcached();
