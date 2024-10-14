@@ -28,6 +28,13 @@ class Session
 {
 
     /**
+     * 会话是否已开启
+     * 
+     * @var boolean
+     */
+    private static $_isStart = false;
+
+    /**
      * 开启会话
      *
      * @param array $params
@@ -56,6 +63,7 @@ class Session
             // 开启会话
             session_start();
         }
+        self::$_isStart = true;
         
         return true;
     }
@@ -68,7 +76,7 @@ class Session
      */
     public static function id($id = null)
     {
-        return isset($id) ? session_id($id) : session_id();
+        return (isset($id) && self::$_isStart === false) ? session_id($id) : session_id();
     }
 
     /**
