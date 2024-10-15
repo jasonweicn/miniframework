@@ -347,8 +347,8 @@ class Mysql extends Db_Abstract
             if (is_array($v)) {
                 throw new Exception('Value cannot be an array.');
             }
-            $prepareParams[':' . $k] = $v;
-            $sql .= ', `' . $k . '`=:' . $k;
+            $prepareParams[':v_' . $k] = $v;
+            $sql .= ', `' . $k . '`=:' . 'v_' . $k;
         }
         $sql = substr($sql, 1);
         try {
