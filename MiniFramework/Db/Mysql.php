@@ -353,6 +353,7 @@ class Mysql extends Db_Abstract
         $sql = substr($sql, 1);
         try {
             $sql = "UPDATE `$table` SET $sql" . (($where) ? " WHERE $where" : '');
+            $this->_setLastSql($sql);
             if ($this->_debug === true) {
                 $this->_debugSql($sql);
             }
