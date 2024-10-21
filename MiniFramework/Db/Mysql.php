@@ -133,7 +133,47 @@ class Mysql extends Db_Abstract
      * @param string $queryMode 查询方式(default:all | row)
      * @return array
      */
-    public function query($sql = null, $queryMode = 'all')
+    public function query($sql = null, $queryMode = 'all', array $params = [])
+    {
+        $this->_connect();
+        try {
+            if ($params) {
+                $result = $this->prepareQuery($sql, $queryMode, $params);
+            } else {
+                $this->_setLastSql($sql);
+                if ($this->_debug === true) {
+                    $this->_debugSql($sql);
+                }
+                $recordset = $this->_dbh->query($sql);
+                if ($recordset === false) {
+                    $this->_getPdoError();
+                }
+                $recordset->setFetchMode(PDO::FETCH_ASSOC);
+                $queryMode = strtolower($queryMode);
+                if ($queryMode == 'all') {
+                    $result = $recordset->fetchAll();
+                } elseif ($queryMode == 'row') {
+                    $result = $recordset->fetch();
+                } else {
+                    $result = null;
+                }
+            }
+            
+            return $result;
+        } catch (Exception $e) {
+            throw new Exception($e);
+        }
+    }
+    
+    /**
+     *  预处理方式查询
+     * 
+     * @param string $sql
+     * @param string $queryMode
+     * @param array $params
+     * @return array|NULL|array
+     */
+    public function prepareQuery($sql = null, $queryMode = 'all', array $params)
     {
         $this->_connect();
         $this->_setLastSql($sql);
@@ -141,20 +181,24 @@ class Mysql extends Db_Abstract
             $this->_debugSql($sql);
         }
         try {
-            $recordset = $this->_dbh->query($sql);
-            if ($recordset === false) {
+            $stmt = $this->_dbh->prepare($sql);
+            foreach ($params as $key => $value) {
+                $stmt->bindValue(":" . $key, $value);
+            }
+            if ($stmt->execute()) {
+                $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            } else {
                 $this->_getPdoError();
             }
-            $recordset->setFetchMode(PDO::FETCH_ASSOC);
             $queryMode = strtolower($queryMode);
             if ($queryMode == 'all') {
-                $result = $recordset->fetchAll();
+                $result = $stmt->fetchAll();
             } elseif ($queryMode == 'row') {
-                $result = $recordset->fetch();
+                $result = $stmt->fetch();
             } else {
                 $result = null;
             }
-
+            
             return $result;
         } catch (Exception $e) {
             throw new Exception($e);
