@@ -108,7 +108,7 @@ class Mysql extends Db_Abstract
      * @param string $sql
      * @return int
      */
-    public function execSql($sql = null)
+    public function execSql($sql)
     {
         $this->_connect();
         $this->_setLastSql($sql);
@@ -131,14 +131,15 @@ class Mysql extends Db_Abstract
      *
      * @param string $sql SQL语句
      * @param string $queryMode 查询方式(default:all | row)
+     * @param array $binds 预处理绑定数据
      * @return array
      */
-    public function query($sql = null, $queryMode = 'all', array $params = [])
+    public function query($sql, $queryMode = 'all', $binds = [])
     {
         $this->_connect();
         try {
-            if ($params) {
-                $result = $this->prepareQuery($sql, $queryMode, $params);
+            if ($binds) {
+                $result = $this->prepareQuery($sql, $queryMode, $binds);
             } else {
                 $this->_setLastSql($sql);
                 if ($this->_debug === true) {
@@ -170,10 +171,10 @@ class Mysql extends Db_Abstract
      * 
      * @param string $sql
      * @param string $queryMode
-     * @param array $params
+     * @param array $binds
      * @return array|NULL|array
      */
-    public function prepareQuery($sql = null, $queryMode = 'all', array $params)
+    public function prepareQuery($sql, $queryMode, $binds)
     {
         $this->_connect();
         $this->_setLastSql($sql);
@@ -182,8 +183,12 @@ class Mysql extends Db_Abstract
         }
         try {
             $stmt = $this->_dbh->prepare($sql);
-            foreach ($params as $key => $value) {
-                $stmt->bindValue(":" . $key, $value);
+            foreach ($binds as $key => $value) {
+                if (':' == substr($key, 0, 1)) {
+                    $stmt->bindValue($key, $value);
+                } else {
+                    $stmt->bindValue(":" . $key, $value);
+                }
             }
             if ($stmt->execute()) {
                 $stmt->setFetchMode(PDO::FETCH_ASSOC);

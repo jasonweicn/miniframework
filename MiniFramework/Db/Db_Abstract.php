@@ -70,17 +70,18 @@ abstract class Db_Abstract
     /**
      * 执行SQL语句
      *
-     * @param string $sql            
+     * @param string $sql
      */
-    abstract protected function execSql($sql = null);
+    abstract protected function execSql($sql);
 
     /**
      * 查询SQL语句
      *
-     * @param mixed $sql            
-     * @param mixed $queryMode            
+     * @param string $sql            
+     * @param string $queryMode
+     * @param array $binds
      */
-    abstract protected function query($sql = null, $queryMode = 'All');
+    abstract protected function query($sql, $queryMode = 'all', $binds = []);
 
     /**
      * 插入记录
