@@ -245,18 +245,16 @@ abstract class Db_Abstract
      * 输出调试信息
      * 
      * @param string $sql
-     * @param array $values 
+     * @param array $binds 
      */
-    protected function _debugSql($sql, array $values = null)
+    protected function _debugSql($sql, array $binds = null)
     {
-        echo "<p>----------DEBUG SQL BEGIN----------</p>" . PHP_EOL;
-        echo "<p>SQL:</p>" . PHP_EOL;
-        echo "<pre>$sql</pre>" . PHP_EOL;
-        if ($values !== null) {
-            echo "<p>VALUES:</p>" . PHP_EOL;
-            dump($values);
+        echo "<p>---------- DEBUG SQL BEGIN ----------</p>" . PHP_EOL;
+        dump($sql, '[SQL]');
+        if ($binds !== null) {
+            dump($binds, '[BIND VALUE]');
         }
-        echo "<p>----------DEBUG SQL END----------</p>" . PHP_EOL;
+        echo "<p>---------- DEBUG SQL END ----------</p>" . PHP_EOL;
         die();
     }
 }
