@@ -179,7 +179,7 @@ class Mysql extends Db_Abstract
         $this->_connect();
         $this->_setLastSql($sql);
         if ($this->_debug === true) {
-            $this->_debugSql($sql);
+            $this->_debugSql($sql, $binds);
         }
         try {
             $stmt = $this->_dbh->prepare($sql);
@@ -242,20 +242,21 @@ class Mysql extends Db_Abstract
         if (empty($data)) {
             throw new Exception('The data cannot be empty.');
         }
+        $binds = [];
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                throw new Exception('The value cannot be an array.');
+            }
+            $binds[':v_' . $key] = $value;
+        }
         try {
-            $sql = "INSERT INTO `$table` (`" . implode('`, `', array_keys($data)) . "`) VALUES (:" . implode(', :', array_keys($data)) . ")";
+            $sql = "INSERT INTO `$table` (`" . implode('`, `', array_keys($data)) . "`) VALUES (" . implode(', ', array_keys($binds)) . ")";
             $this->_setLastSql($sql);
             if ($this->_debug === true) {
-                $this->_debugSql($sql);
+                $this->_debugSql($sql, $binds);
             }
             $stmt = $this->_dbh->prepare($sql);
-            foreach ($data as $key => $value) {
-                if (is_array($value)) {
-                    throw new Exception('The value cannot be an array.');
-                }
-                $stmt->bindValue(":$key", $value);
-            }
-            return $stmt->execute();
+            return $stmt->execute($binds);
         } catch (Exception $e) {
             throw $e;
         }
@@ -314,7 +315,7 @@ class Mysql extends Db_Abstract
             
         }
         $prepareParams = [];
-        $prepareData = [];
+        $binds = [];
         foreach ($records as $index => $record) {
             if (empty($record) || ! is_array($record)) {
                 throw new Exception('The record at index [' . $index . '] is not an array.');
@@ -323,8 +324,8 @@ class Mysql extends Db_Abstract
                 if (is_array($value)) {
                     throw new Exception('The value of the key [' . $column . '] in the records at index [' . $index . '] cannot be an array.');
                 }
-                $prepareParams[$index][] = ':' . $column . $index;
-                $prepareData[':' . $column . $index] = $value;
+                $prepareParams[$index][] = ':v_' . $column . '_' . $index;
+                $binds[':v_' . $column . '_' . $index] = $value;
             }
         }
         try {
@@ -336,10 +337,10 @@ class Mysql extends Db_Abstract
             $sql .= implode(', ', $valSqls);
             $this->_setLastSql($sql);
             if ($this->_debug === true) {
-                $this->_debugSql($sql, $prepareData);
+                $this->_debugSql($sql, $binds);
             }
             $stmt = $this->_dbh->prepare($sql);
-            return $stmt->execute($prepareData);
+            return $stmt->execute($binds);
         } catch (Exception $e) {
             throw new Exception($e);
         }
@@ -356,10 +357,10 @@ class Mysql extends Db_Abstract
      * @param boolean $prepare 是否进行预处理
      * @return int
      */
-    public function update($table, array $data, $where = '', $prepare = true)
+    public function update($table, array $data, $where = '', $binds = [])
     {
-        if ($prepare === true) {
-            $result = $this->prepareUpdate($table, $data, $where);
+        if ($binds) {
+            $result = $this->prepareUpdate($table, $data, $where, $binds);
         } else {
             $sql = '';
             if (! empty($data)) {
@@ -384,30 +385,29 @@ class Mysql extends Db_Abstract
      * @param string $where
      * @return boolean
      */
-    public function prepareUpdate($table, array $data, $where = '')
+    public function prepareUpdate($table, array $data, $where = '', $binds = [])
     {
         $this->_connect();
         if (empty($data)) {
             return false;
         }
-        $prepareParams = [];
         $sql = '';
         foreach ($data as $k => $v) {
             if (is_array($v)) {
                 throw new Exception('Value cannot be an array.');
             }
-            $prepareParams[':v_' . $k] = $v;
-            $sql .= ', `' . $k . '`=:' . 'v_' . $k;
+            $binds[':v_' . $k] = $v;
+            $sql .= ', `' . $k . '`=:v_' . $k;
         }
-        $sql = substr($sql, 1);
+        $sql = substr($sql, 2);
         try {
             $sql = "UPDATE `$table` SET $sql" . (($where) ? " WHERE $where" : '');
             $this->_setLastSql($sql);
             if ($this->_debug === true) {
-                $this->_debugSql($sql);
+                $this->_debugSql($sql, $binds);
             }
             $stmt = $this->_dbh->prepare($sql);
-            return $stmt->execute($prepareParams);
+            return $stmt->execute($binds);
         } catch (Exception $e) {
             throw new Exception($e);
         }
