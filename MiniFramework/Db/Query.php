@@ -149,7 +149,7 @@ class Query
         if ($this->_debugSql === true) {
             $this->_curDb->debug();
         }
-        $res = $this->_curDb->update($this->getTable(), $this->_options['data'], $where, $prepare);
+        $res = $this->_curDb->update($this->getTable(), $this->_options['data'], $where, $this->_options['binds']);
         $this->reset();
         
         return $res;
@@ -194,7 +194,7 @@ class Query
         if ($this->_debugSql === true) {
             $this->_curDb->debug();
         }
-        $res = $this->_curDb->query($sql, $type);
+        $res = $this->_curDb->query($sql, $type, $this->_options['binds']);
         $this->reset();
         
         return $res;
@@ -400,6 +400,7 @@ class Query
                     throw new Exception('Param invalid.');
                 }
                 $this->_options['where'] = trim($defaultParam);
+                $this->_options['binds'] = [];
                 break;
             case 2:
                 if ($params[0] == null) {
@@ -407,12 +408,12 @@ class Query
                 }
                 // [key1=>value1, key2=>value2], AND|OR
                 if (is_array($params[0]) && in_array($params[1], $this->_logicSymbol)) {
-                    $this->_options['where'] = $this->getWhereByMultiFields($params[0], $params[1]);
+                    list($this->_options['where'], $this->_options['binds']) = $this->parseWhereByMultiFields($params[0], $params[1]);
                 } else {
                     if (! is_array($params[1])) {
-                        $this->_options['where'] = $this->getWhereString($params[0], [$params[1]]);
+                        list($this->_options['where'], $this->_options['binds']) = $this->parseWhereBySingleField($params[0], [$params[1]]);
                     } else {
-                        $this->_options['where'] = $this->getWhereString($params[0], $params[1], '=', 'OR');
+                        list($this->_options['where'], $this->_options['binds']) = $this->parseWhereBySingleField($params[0], $params[1], '=', 'OR');
                     }
                 }
                 break;
@@ -425,22 +426,22 @@ class Query
                         throw new Exception('Param invalid.');
                     }
                     if (! is_array($params[2])) {
-                        $this->_options['where'] = $this->getWhereString($params[0], [$params[2]], strtoupper($params[1]));
+                        list($this->_options['where'], $this->_options['binds']) = $this->parseWhereBySingleField($params[0], [$params[2]], strtoupper($params[1]));
                     } else {
-                        $this->_options['where'] = $this->getWhereString($params[0], $params[2], strtoupper($params[1]), 'OR');
+                        list($this->_options['where'], $this->_options['binds']) = $this->parseWhereBySingleField($params[0], $params[2], strtoupper($params[1]), 'OR');
                     }
                 } else {
                     if (! in_array(strtoupper($params[2]), $this->_logicSymbol)) {
                         throw new Exception('Param invalid.');
                     }
-                    $this->_options['where'] = $this->getWhereString($params[0], $params[1], '=', strtoupper($params[2]));
+                    list($this->_options['where'], $this->_options['binds']) = $this->parseWhereBySingleField($params[0], $params[1], '=', strtoupper($params[2]));
                 }
                 break;
             case 4:
                 if ($params[3] == null) {
                     throw new Exception('Param invalid.');
                 }
-                $this->_options['where'] = $this->getWhereString($params[0], $params[2], $params[1], $params[3]);
+                list($this->_options['where'], $this->_options['binds']) = $this->parseWhereBySingleField($params[0], $params[2], $params[1], $params[3]);
                 break;
             default:
                 throw new Exception('Param invalid.');
@@ -449,17 +450,17 @@ class Query
         
         return $this;
     }
-    
+
     /**
-     * 构造查询语句字符串
+     * 单字段模式解析查询条件
      * 
-     * @param string $field
-     * @param mixed $values
-     * @param string $compareSymbol
-     * @param string $logicSymbol
-     * @return string
+     * @param string $field 字段名
+     * @param mixed $values 值
+     * @param string $compareSymbol 比较运算符
+     * @param string $logicSymbol 逻辑运算符
+     * @return array
      */
-    private function getWhereString($field, $values, $compareSymbol = '=', $logicSymbol = null)
+    private function parseWhereBySingleField($field, $values, $compareSymbol = '=', $logicSymbol = null)
     {
         if (! in_array($compareSymbol, $this->_compareSymbol)) {
             throw new Exception('Compare symbol invalid.');
@@ -469,26 +470,38 @@ class Query
                 throw new Exception('Logic symbol invalid.');
             }
         }
-        
+        $placeholders = [];
         if ($compareSymbol == 'IN' || $compareSymbol == 'NOT IN') {
-            $valueArray = [];
+            $i = 0;
             foreach ($values as $value) {
-                $valueArray[] = $value == null ? 'NULL' : "'" . trim($value) . "'";
+                $placeholders[$i] = ':c_' . $field . '_' . $i;
+                $binds[$placeholders[$i]] = $value == null ? 'NULL' : $value;
+                $i++;
             }
-            $whereString = '`' . trim($field) . "` " . $compareSymbol . " (" . implode(', ', $valueArray) . ")";
+            $whereString = '`' . $field . "` " . $compareSymbol . " (" . implode(', ', $placeholders) . ")";
         } else {
+            $i = 0;
             $whereArray = [];
             foreach ($values as $value) {
-                $value = $value == null ? 'NULL' : trim($value);
-                $whereArray[] = '`' . trim($field) . "` " . $compareSymbol . " '" . $value . "'";
+                $placeholders[$i] = ':c_' . $field . '_' . $i;
+                $binds[$placeholders[$i]] = $value == null ? 'NULL' : $value;
+                $whereArray[] = '`' . $field . "` " . $compareSymbol . " " . $placeholders[$i];
+                $i++;
             }
             $whereString = implode(' ' . $logicSymbol . ' ', $whereArray);
         }
         
-        return $whereString;
+        return [$whereString, $binds];
     }
     
-    private function getWhereByMultiFields($conditions, $logicSymbol = 'AND')
+    /**
+     * 多字段模式解析查询条件
+     * 
+     * @param array $conditions 查询条件数组
+     * @param string $logicSymbol 逻辑运算符
+     * @return array
+     */
+    private function parseWhereByMultiFields($conditions, $logicSymbol = 'AND')
     {
         if (! is_array($conditions)) {
             throw new Exception('Invalid query conditions.');
@@ -496,12 +509,16 @@ class Query
         if (! in_array($logicSymbol, $this->_logicSymbol)) {
             throw new Exception('Invalid query logic symbol.');
         }
+        $placeholders = [];
+        $i = 0;
         foreach ($conditions as $field => $value) {
-            $indexArray[] = $field . '="' . $value . '"';
+            $placeholders[$i] = ':c_' . $field;
+            $binds[$placeholders[$i]] = $value;
+            $indexArray[] = '`' . $field . '` = ' . $placeholders[$i];
         }
         $where = implode(' ' . $logicSymbol . ' ', $indexArray);
         
-        return $where;
+        return [$where, $binds];
     }
     
     /**
