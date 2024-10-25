@@ -1,6 +1,17 @@
 # CHANGES #
 
 
+## Version 2.11.1 released. ( 2024-10-25 ) ##
+
+### 版本变化 ###
+* 新增 Mini\Db\Mysql 类的 prepareQuery() 方法，并改进 query() 方法，支持预处理方式查询。
+* 改进 Mini\Base\Session 类，支持自动开启会话。
+* 改进 Mini\Base\Session 类的 id() 方法，当会话已经处于开启状态时，将不再允许设置会话id。
+* 改进数据库 debug() 方法，完善预处理绑定数据的显示。
+* 修复 Mini\Db\Mysql 类的 prepareUpdate() 方法未记录 SQL 语句的 Bug。
+* 改写部分文件的代码，更符合编码规范。
+
+
 ## Version 2.11.0 released. ( 2024-10-08 ) ##
 
 ### 版本变化 ###
