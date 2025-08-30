@@ -588,6 +588,15 @@ class Mysql extends Db_Abstract
     }
 
     /**
+     * 重新连接数据库
+     */
+    public function reconnect()
+    {
+        $this->close();
+        $this->_connect();
+    }
+
+    /**
      * 关闭数据库连接
      */
     public function close()

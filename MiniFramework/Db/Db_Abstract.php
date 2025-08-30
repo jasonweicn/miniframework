@@ -63,6 +63,11 @@ abstract class Db_Abstract
     abstract protected function _connect();
 
     /**
+     * 重新连接数据库
+     */
+    abstract protected function reconnect();
+
+    /**
      * 关闭数据库连接
      */
     abstract protected function close();
