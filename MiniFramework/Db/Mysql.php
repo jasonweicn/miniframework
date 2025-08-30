@@ -91,10 +91,14 @@ class Mysql extends Db_Abstract
             $this->_params['options'][PDO::ATTR_PERSISTENT] = false;
         }
 
+        if (isset($this->_params['timeout'])) {
+            $this->_params['options'][PDO::ATTR_TIMEOUT] = $this->_params['timeout'];
+        }
+
         try {
             $this->_dbh = new PDO($dsn, $this->_params['username'], $this->_params['passwd'], $this->_params['options']);
-        } catch (Exception $e) {
-            throw new Exception('Database connection failed.');
+        } catch (\PDOException  $e) {
+            throw new Exception('Database connection failed.('.$e->getMessage().')');
         }
 
         if (version_compare(PHP_VERSION, '5.3.6', '<') && ! defined('PDO::MYSQL_ATTR_INIT_COMMAND')) {
