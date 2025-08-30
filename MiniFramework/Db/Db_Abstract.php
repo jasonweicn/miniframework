@@ -247,11 +247,11 @@ abstract class Db_Abstract
      * @param string $sql
      * @param array $binds 
      */
-    protected function _debugSql($sql, array $binds = null)
+    protected function _debugSql($sql, array $binds = [])
     {
         echo "<p>---------- DEBUG SQL BEGIN ----------</p>" . PHP_EOL;
         dump($sql, '[SQL]');
-        if ($binds !== null) {
+        if (! empty($binds)) {
             dump($binds, '[BIND VALUE]');
         }
         echo "<p>---------- DEBUG SQL END ----------</p>" . PHP_EOL;
