@@ -139,15 +139,16 @@ abstract class Db_Abstract
      * 构造
      *
      * @param array $params
-     *            => [
-     *            host          => (string) 主机（非必填，默认值为：localhost）
-     *            port          => (string) 端口（非必填）
-     *            dbname        => (string) 数据库名
-     *            username      => (string) 用户名
-     *            passwd        => (string) 密码
-     *            charset       => (string) 字符集编码（非必填，默认值为：utf8）
-     *            persistent    => (boolean) 是否启用持久连接（非必填，默认值为：false）
-     *            ]
+     *  => [
+     *      host        => (string) 主机（非必填，默认值为：localhost）
+     *      port        => (string) 端口（非必填）
+     *      dbname      => (string) 数据库名
+     *      username    => (string) 用户名
+     *      passwd      => (string) 密码
+     *      charset     => (string) 字符集编码（非必填，默认值为：utf8）
+     *      persistent  => (boolean) 是否启用持久连接（非必填，默认值为：false）
+     *      timeout     => (int) 连接数据库超时时间（非必填，单位：秒）
+     *  ]
      * @return Db_Abstract
      */
     public function __construct($params)
