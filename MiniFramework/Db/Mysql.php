@@ -31,6 +31,11 @@ class Mysql extends Db_Abstract
 {
 
     /**
+     * 数据库关闭标识
+     */
+    private $_isClosed = false;
+
+    /**
      * 创建一个数据源
      */
     private function _dsn()
@@ -65,6 +70,10 @@ class Mysql extends Db_Abstract
      */
     protected function _connect()
     {
+        if ($this->_isClosed === true) {
+            throw new Exception('The database connection is already closed.');
+        }
+
         if ($this->_dbh) {
             return;
         }
@@ -593,6 +602,7 @@ class Mysql extends Db_Abstract
     public function reconnect()
     {
         $this->close();
+        $this->_isClosed = false;
         $this->_connect();
     }
 
@@ -602,5 +612,6 @@ class Mysql extends Db_Abstract
     public function close()
     {
         $this->_dbh = null;
+        $this->_isClosed = true;
     }
 }
