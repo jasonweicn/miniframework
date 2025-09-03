@@ -1,6 +1,17 @@
 # CHANGES #
 
 
+## Version 2.12.0 released. ( 2025-09-03 ) ##
+
+### 版本变化 ###
+* 新增 Mini\Db\Db_Abstract::reconnect() 方法，用于重新连接数据库。
+* 改进 Mini\Db\Mysql 类，完善对于 PDO 预处理的支持。
+* 改进 Mini\Base\Query 类，完善对于 PDO 预处理的支持。
+* 改进 Mini\Db\Mysql 类，支持通过配置文件自定义连接超时的特性。
+* 改进 Mini\Db\Db_Abstract::_debugSql 方法，增强兼容性。
+* 更新文件头部 Copyright 信息。
+
+
 ## Version 2.11.1 released. ( 2024-10-25 ) ##
 
 ### 版本变化 ###
