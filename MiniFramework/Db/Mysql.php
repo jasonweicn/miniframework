@@ -2,7 +2,7 @@
 // +---------------------------------------------------------------------------
 // | Mini Framework
 // +---------------------------------------------------------------------------
-// | Copyright (c) 2015-2024 http://www.sunbloger.com
+// | Copyright (c) 2015-2025 http://www.sunbloger.com
 // +---------------------------------------------------------------------------
 // | Licensed under the Apache License, Version 2.0 (the "License");
 // | you may not use this file except in compliance with the License.
@@ -29,6 +29,11 @@ use \PDO;
 
 class Mysql extends Db_Abstract
 {
+
+    /**
+     * 数据库关闭标识
+     */
+    private $_isClosed = false;
 
     /**
      * 创建一个数据源
@@ -65,6 +70,10 @@ class Mysql extends Db_Abstract
      */
     protected function _connect()
     {
+        if ($this->_isClosed === true) {
+            throw new Exception('The database connection is already closed.');
+        }
+
         if ($this->_dbh) {
             return;
         }
@@ -91,10 +100,14 @@ class Mysql extends Db_Abstract
             $this->_params['options'][PDO::ATTR_PERSISTENT] = false;
         }
 
+        if (isset($this->_params['timeout'])) {
+            $this->_params['options'][PDO::ATTR_TIMEOUT] = $this->_params['timeout'];
+        }
+
         try {
             $this->_dbh = new PDO($dsn, $this->_params['username'], $this->_params['passwd'], $this->_params['options']);
-        } catch (Exception $e) {
-            throw new Exception('Database connection failed.');
+        } catch (\PDOException  $e) {
+            throw new Exception('Database connection failed.('.$e->getMessage().')');
         }
 
         if (version_compare(PHP_VERSION, '5.3.6', '<') && ! defined('PDO::MYSQL_ATTR_INIT_COMMAND')) {
@@ -584,10 +597,21 @@ class Mysql extends Db_Abstract
     }
 
     /**
+     * 重新连接数据库
+     */
+    public function reconnect()
+    {
+        $this->close();
+        $this->_isClosed = false;
+        $this->_connect();
+    }
+
+    /**
      * 关闭数据库连接
      */
     public function close()
     {
         $this->_dbh = null;
+        $this->_isClosed = true;
     }
 }
