@@ -99,7 +99,7 @@ class App
     /**
      * 构造
      */
-    final protected function __construct()
+    protected function __construct()
     {
         set_error_handler('Mini\Base\Exception::customError');
         set_exception_handler('Mini\Base\Exception::customExcepion');
