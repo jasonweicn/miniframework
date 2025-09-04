@@ -129,7 +129,7 @@ class Exception extends \Exception
         $isCli = preg_match("/cli/i", PHP_SAPI) ? true : false;
         if ($isCli) {
             echo "{$error['level']}: {$error['message']} in {$error['file']} on line {$error['line']}\n";
-            die();
+            exit($error['code']);
         }
         if (SHOW_ERROR === true) {
             $response = Response::getInstance();
