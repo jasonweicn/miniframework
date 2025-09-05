@@ -91,10 +91,10 @@ class Router
                     $controller = isset($m[1]) ? $m[1] : 'index';
                     $action = isset($m[2]) ? $m[2] : 'index';
                 } else {
-                    throw new Exception('Request params invalid.');
+                    throw new Exception('The controller or action format is invalid. The correct format is controller/action.');
                 }
             } else {
-                $controller = $action = 'index';
+                throw new Exception('When running in console mode, the controller and action must be specified.');
             }
         } else {
             if (isset($rules) && is_array($rules)) {
@@ -120,16 +120,14 @@ class Router
             }
         }
         
-        if ($this->checkRoute($controller)) {
-            App::getInstance()->setController($controller);
-        } else {
+        if (! $this->checkRoute($controller)) {
             throw new Exception('Controller name "' . $controller . '" invalid.', 404);
         }
-        if ($this->checkRoute($action)) {
-            App::getInstance()->setAction($action);
-        } else {
+        if (! $this->checkRoute($action)) {
             throw new Exception('Action name "' . $action . '" invalid.', 404);
         }
+
+        return ['c' => $controller, 'a' => $action];
     }
 
     /**

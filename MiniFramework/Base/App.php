@@ -122,7 +122,11 @@ class App
     {
         $this->_params = Params::getInstance();
         $this->_request = Request::getInstance();
-        $this->getRouter();
+        if ($this->_router === null) {
+            $this->_router = new Router();
+        }
+        $target = $this->_router->route(Config::getInstance()->load('route', false));
+        $this->setController($target['c'])->setAction($target['a']);
         $requestParams = $this->_request->parseRequestParams($this->_router->getRouteType());
         $isCli = $this->_router->isCli();
         unset($this->_router);
@@ -223,7 +227,7 @@ class App
             if (! file_exists($controllerFile)) {
                 throw new Exception('Controller file "' . $controllerFile . '" not found.', 404);
             }
-            
+
             $controllerName = APP_NAMESPACE . '\\Controller\\' . $controllerName;
             if (class_exists($controllerName)) {
                 $controller = new $controllerName();
@@ -242,25 +246,12 @@ class App
     }
 
     /**
-     * 获取路由器对象
-     *
-     * @return object
-     */
-    public function getRouter()
-    {
-        if ($this->_router === null) {
-            $this->_router = new Router();
-        }
-        return $this->_router;
-    }
-
-    /**
      * 初始化数据库对象池
      *
      * @throws Exception
      * @return boolean
      */
-    private function initDbPool()
+    public function initDbPool()
     {
         $dbConfig = Config::getInstance()->load('database');
         if (is_array($dbConfig)) {
