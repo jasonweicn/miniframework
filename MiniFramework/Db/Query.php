@@ -149,7 +149,7 @@ class Query
         if ($this->_debugSql === true) {
             $this->_curDb->debug();
         }
-        $res = $this->_curDb->update($this->getTable(), $this->_options['data'], $where, $this->_options['binds']);
+        $res = $this->_curDb->update($this->getTable(), $this->_options['data'], $where, isset($this->_options['binds']) ? $this->_options['binds'] : []);
         $this->reset();
         
         return $res;
@@ -194,7 +194,7 @@ class Query
         if ($this->_debugSql === true) {
             $this->_curDb->debug();
         }
-        $res = $this->_curDb->query($sql, $type, $this->_options['binds']);
+        $res = $this->_curDb->query($sql, $type, isset($this->_options['binds']) ? $this->_options['binds'] : []);
         $this->reset();
         
         return $res;
