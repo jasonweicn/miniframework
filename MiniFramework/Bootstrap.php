@@ -63,6 +63,9 @@ defined('CACHE_PATH') || define('CACHE_PATH', APP_PATH . DS . 'Cache');
 // 配置文件路径
 defined('CONFIG_PATH') || define('CONFIG_PATH', APP_PATH . DS . 'Config');
 
+// 命令行模式标识
+defined('CONSOLE_MODE') || define('CONSOLE_MODE', false);
+
 // 布局功能开关
 defined('LAYOUT_ON') || define('LAYOUT_ON', false);
 
@@ -116,7 +119,12 @@ defined('TPL_SEPARATOR_L') || define('TPL_SEPARATOR_L', '{');
 defined('TPL_SEPARATOR_R') || define('TPL_SEPARATOR_R', '}');
 
 require (MINI_PATH . DS . 'Base' . DS . 'Loader.php');
-Mini\Base\Loader::getInstance();
+\Mini\Base\Loader::getInstance();
 
 // 一切由此开始
-Mini\Base\App::getInstance()->run();
+if (CONSOLE_MODE === true) {
+    $code = \Mini\Console\App::getInstance()->run();
+    exit($code);
+} else {
+    \Mini\Base\App::getInstance()->run();
+}
