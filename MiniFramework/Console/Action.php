@@ -28,41 +28,8 @@ use Mini;
 
 class Action
 {
-
-    /**
-     * Params实例
-     *
-     * @var Params
-     */
-    protected $params;
-
-    /**
-     * Request实例（旧名称）
-     *
-     * @var Mini\Base\Request
-     */
-    protected $_request;
-
-    /**
-     * Request实例（新名称）
-     * 
-     * @var Mini\Base\Request
-     */
-    protected $request;
-
-    /**
-     * Response实例
-     *  
-     * @var Mini\Base\Response
-     */
-    protected $response;
-
     /**
      * 构造
-     *
-     * @param string $controller            
-     * @param string $action            
-     * @return Action
      */
     function __construct()
     {
@@ -74,9 +41,30 @@ class Action
     /**
      * 析构
      */
-    function __destruct() {
+    function __destruct()
+    {
         if (method_exists($this, '_end')) {
             $this->_end();
         }
+    }
+
+    /**
+     * 向命令行输出格式化的日志内容
+     * 
+     * @param string $message 自定义日志消息
+     * @param string $level 自定义日志级别
+     */
+    function consoleLog($message, $level = 'INFO')
+    {
+        $level = strtoupper($level);
+        if (! in_array($level, explode(',', LOG_LEVEL))) {
+            $level = 'INFO';
+        }
+        $timestamp = microtime(true);
+        $t = floor($timestamp);
+        $m = sprintf("%03d", ($timestamp - floor($timestamp)) * 1000);
+        $formattedTime = date('Y-m-d H:i:s', $t) . '.' . $m;
+
+        printf("%s - [%s: %s]\n", $formattedTime, $level, $message);
     }
 }
