@@ -20,6 +20,9 @@ class Demo extends Action
         // 输出的内容需要开发者自己处理换行（例如：\n）
         echo $infoText . "\n";
 
+        // 也可以使用框架自带的方法向命令行输出格式化的日志
+        //$this->consoleLog($infoText);
+
         // 返回 0 代表程序正常结束
         return 0;
     }
