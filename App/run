@@ -23,8 +23,11 @@ const SHOW_ERROR = true;
 // 是否开启日志（命令行模式建议开启，默认值：false）
 const LOG_ON = true;
 
+// 系统目录分隔符
+const DS = DIRECTORY_SEPARATOR;
+
 // 日志存储路径（LOG_MODE为1时生效）
-const LOG_PATH = APP_PATH . DIRECTORY_SEPARATOR . 'Log' . DIRECTORY_SEPARATOR . 'console-log';
+const LOG_PATH = APP_PATH . DS . 'Log' . DS . 'console-log';
 
 // 引入 MiniFramework 就是这么简单
-require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'MiniFramework' . DIRECTORY_SEPARATOR . 'Bootstrap.php';
+require dirname(__DIR__) . DS . 'MiniFramework' . DS . 'Bootstrap.php';
