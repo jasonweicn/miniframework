@@ -27,8 +27,6 @@ namespace Mini\Console;
 use Mini\Base\Exception;
 use Mini\Base\Router;
 use Mini\Base\Config;
-use Mini\Base\Params;
-use Mini\Base\Request;
 
 class App
 {
@@ -46,32 +44,11 @@ class App
     protected $_router;
 
     /**
-     * Params实例
-     *
-     * @var Params
-     */
-    protected $_params;
-
-    /**
-     * Request实例
-     *
-     * @var Request
-     */
-    protected $_request;
-
-    /**
      * App实例
      *
      * @var App
      */
     protected static $_instance;
-
-    /**
-     * 是否为 API 接口请求
-     * 
-     * @var boolean
-     */
-    public $isApi;
 
     /**
      * 获取实例
@@ -105,15 +82,12 @@ class App
      */
     public function run()
     {
-        $this->_params = Params::getInstance();
-        $this->_request = Request::getInstance();
         if ($this->_router === null) {
             $this->_router = new Router();
         }
         $target = $this->_router->route(Config::getInstance()->load('route', false));
         $this->baseApp->setController($target['c']);
         $this->baseApp->setAction($target['a']);
-        $requestParams = $this->_request->parseRequestParams($this->_router->getRouteType());
         $isCli = $this->_router->isCli();
         if ($isCli === false) {
             throw new Exception(
@@ -121,9 +95,6 @@ class App
             );
         }
         unset($this->_router);
-        if (! empty($requestParams)) {
-            $this->_params->setParams($requestParams);
-        }
         
         // include global function file.
         include (MINI_PATH . DS . 'Function' . DS . 'Global.func.php');
