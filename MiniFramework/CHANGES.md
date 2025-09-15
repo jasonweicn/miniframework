@@ -1,6 +1,17 @@
 # CHANGES #
 
 
+## Version 2.13.0 released. ( 2025-09-15 ) ##
+
+### 版本变化 ###
+* 新增命令行运行模式。
+（参见文档：[https://www.miniframework.com/docv2/guide/ming-ling-hang-yun-xing-mo-shi.html](https://www.miniframework.com/docv2/guide/ming-ling-hang-yun-xing-mo-shi.html)）
+* 改进异常处理机制，当在命令行模式抛出异常时，将会给系统返回一个状态码。
+* 改进 Mini\Base\App 类的构造方法，删除 final 关键字。
+* 改进路由运行机制，为后续实现更丰富灵活的路由特性提供扩展空间。
+* 修复 Mini\Db\Query 类可能会报 WARNING: Undefined array key 的 Bug。
+
+
 ## Version 2.12.0 released. ( 2025-09-03 ) ##
 
 ### 版本变化 ###
