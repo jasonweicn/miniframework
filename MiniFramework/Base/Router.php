@@ -236,6 +236,6 @@ class Router
      */
     public function isCli()
     {
-        return preg_match("/cli/i", PHP_SAPI) ? true : false;
+        return PHP_SAPI === 'cli' ? true : false;
     }
 }
