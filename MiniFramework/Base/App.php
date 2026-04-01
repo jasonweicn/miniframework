@@ -120,6 +120,9 @@ class App
      */
     public function run()
     {
+        // include global function file.
+        include (MINI_PATH . DS . 'Function' . DS . 'Global.func.php');
+
         $this->_params = Params::getInstance();
         $this->_request = Request::getInstance();
         if ($this->_router === null) {
@@ -133,9 +136,6 @@ class App
         if (! empty($requestParams)) {
             $this->_params->setParams($requestParams);
         }
-        
-        // include global function file.
-        include (MINI_PATH . DS . 'Function' . DS . 'Global.func.php');
         
         // Check CSRF-Token
         if (CSRF_TOKEN_ON === true) {
