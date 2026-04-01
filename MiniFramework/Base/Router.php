@@ -62,7 +62,7 @@ class Router
     {
         $this->_request = Request::getInstance();
         
-        if (true === $this->isCli()) {
+        if (true === isCli()) {
             // CLI (/index.php Controller/Action param1=value1 param2=value2 ...)
             $this->setRouteType('cli');
         } elseif (false === strpos($_SERVER['REQUEST_URI'], $_SERVER['SCRIPT_NAME'])) {
@@ -236,6 +236,6 @@ class Router
      */
     public function isCli()
     {
-        return PHP_SAPI === 'cli' ? true : false;
+        return isCli();
     }
 }

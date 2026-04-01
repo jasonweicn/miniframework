@@ -128,7 +128,7 @@ class App
         $target = $this->_router->route(Config::getInstance()->load('route', false));
         $this->setController($target['c'])->setAction($target['a']);
         $requestParams = $this->_request->parseRequestParams($this->_router->getRouteType());
-        $isCli = $this->_router->isCli();
+        $isCli = isCli();
         unset($this->_router);
         if (! empty($requestParams)) {
             $this->_params->setParams($requestParams);
