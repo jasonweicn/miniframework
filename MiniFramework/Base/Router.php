@@ -61,8 +61,16 @@ class Router
     public function __construct()
     {
         $this->_request = Request::getInstance();
-        
-        if (true === isCli()) {
+        $this->determineRouteType();
+        $this->route(Config::getInstance()->load('route', false));
+    }
+    
+    /**
+     * 确定路由类型
+     */
+    private function determineRouteType()
+    {
+        if (isCli()) {
             // CLI (/index.php Controller/Action param1=value1 param2=value2 ...)
             $this->setRouteType('cli');
         } elseif (false === strpos($_SERVER['REQUEST_URI'], $_SERVER['SCRIPT_NAME'])) {
@@ -72,7 +80,6 @@ class Router
             // GET (/index.php?c=index&a=index)
             $this->setRouteType('get');
         }
-        $this->route(Config::getInstance()->load('route', false));
     }
 
     /**
@@ -83,51 +90,115 @@ class Router
      */
     public function route($rules = null)
     {
-        $controller = $action = '';
+        $routeInfo = $this->dispatchRoute($rules);
+        $controller = $routeInfo['c'];
+        $action = $routeInfo['a'];
+        
+        $this->validateRoute($controller, $action);
+
+        return $routeInfo;
+    }
+    
+    /**
+     * 分发路由
+     * 
+     * @param array $rules
+     * @return array
+     * @throws Exception
+     */
+    private function dispatchRoute($rules = null)
+    {
         if ($this->_routeType == 'cli') {
-            if (isset($_SERVER['argc']) && $_SERVER['argc'] > 1) {
-                $m = [];
-                if (preg_match("/^([a-zA-Z][a-zA-Z0-9]*)\/([a-zA-Z][a-zA-Z0-9]*)$/", $_SERVER['argv'][1], $m)) {
-                    $controller = isset($m[1]) ? $m[1] : 'index';
-                    $action = isset($m[2]) ? $m[2] : 'index';
-                } else {
-                    throw new Exception('The controller or action format is invalid. The correct format is controller/action.');
-                }
-            } else {
-                throw new Exception('When running in console mode, the controller and action must be specified.');
-            }
-        } else {
-            if (isset($rules) && is_array($rules)) {
-                $result = $this->customRoute($rules);
-                if ($result !== false) {
-                    $controller = $result['c'];
-                    $action = $result['a'];
-                    $this->setRouteType('custom');
-                }
-            }
-            if ($this->_routeType == 'rewrite') {
-                $this->_uriArray = $this->parseUrlToArray();
-                $controller = (isset($this->_uriArray[1]) && ! empty($this->_uriArray[1])) ? $this->_uriArray[1] : 'index';
-                $action = (isset($this->_uriArray[2]) && ! empty($this->_uriArray[2])) ? $this->_uriArray[2] : 'index';
-            } elseif ($this->_routeType == 'get') {
-                if (empty($_SERVER['QUERY_STRING'])) {
-                    $controller = $action = 'index';
-                } else {
-                    $queryStringArray = $this->_request->getQueryStringArray();
-                    $controller = isset($queryStringArray['c']) ? $queryStringArray['c'] : 'index';
-                    $action = isset($queryStringArray['a']) ? $queryStringArray['a'] : 'index';
-                }
+            return $this->handleCliRoute();
+        }
+        
+        if (isset($rules) && is_array($rules)) {
+            $customRoute = $this->customRoute($rules);
+            if ($customRoute !== false) {
+                $this->setRouteType('custom');
+                return $customRoute;
             }
         }
         
+        if ($this->_routeType == 'rewrite') {
+            return $this->handleRewriteRoute();
+        } elseif ($this->_routeType == 'get') {
+            return $this->handleGetRoute();
+        }
+        
+        return ['c' => 'index', 'a' => 'index'];
+    }
+    
+    /**
+     * 处理CLI路由
+     * 
+     * @return array
+     * @throws Exception
+     */
+    private function handleCliRoute()
+    {
+        if (!isset($_SERVER['argc']) || $_SERVER['argc'] <= 1) {
+            throw new Exception('When running in console mode, the controller and action must be specified.');
+        }
+        
+        $m = [];
+        if (preg_match("/^([a-zA-Z][a-zA-Z0-9]*)\/([a-zA-Z][a-zA-Z0-9]*)$/", $_SERVER['argv'][1], $m)) {
+            return [
+                'c' => isset($m[1]) ? $m[1] : 'index',
+                'a' => isset($m[2]) ? $m[2] : 'index'
+            ];
+        } else {
+            throw new Exception('The controller or action format is invalid. The correct format is controller/action.');
+        }
+    }
+    
+    /**
+     * 处理Rewrite路由
+     * 
+     * @return array
+     */
+    private function handleRewriteRoute()
+    {
+        $this->_uriArray = $this->parseUrlToArray();
+        return [
+            'c' => (isset($this->_uriArray[1]) && !empty($this->_uriArray[1])) ? $this->_uriArray[1] : 'index',
+            'a' => (isset($this->_uriArray[2]) && !empty($this->_uriArray[2])) ? $this->_uriArray[2] : 'index'
+        ];
+    }
+    
+    /**
+     * 处理GET路由
+     * 
+     * @return array
+     */
+    private function handleGetRoute()
+    {
+        if (empty($_SERVER['QUERY_STRING'])) {
+            return ['c' => 'index', 'a' => 'index'];
+        }
+        
+        $queryStringArray = $this->_request->getQueryStringArray();
+        return [
+            'c' => isset($queryStringArray['c']) ? $queryStringArray['c'] : 'index',
+            'a' => isset($queryStringArray['a']) ? $queryStringArray['a'] : 'index'
+        ];
+    }
+    
+    /**
+     * 验证路由参数
+     * 
+     * @param string $controller
+     * @param string $action
+     * @throws Exception
+     */
+    private function validateRoute($controller, $action)
+    {
         if (! $this->checkRoute($controller)) {
             throw new Exception('Controller name "' . $controller . '" invalid.', 404);
         }
         if (! $this->checkRoute($action)) {
             throw new Exception('Action name "' . $action . '" invalid.', 404);
         }
-
-        return ['c' => $controller, 'a' => $action];
     }
 
     /**
@@ -140,36 +211,41 @@ class Router
     {
         foreach ($rules as $rule => $target) {
             $names = [];
-            $matches = [];
-            preg_match_all('/<(.*?)>/', $rule, $matches);
-            if (! empty($matches[1])) {
-                foreach ($matches[1] as $v) {
-                    if (strpos($v, ':')) {
-                        $names[] = $name = substr($v, 0, strpos($v, ':') - strlen($v));
-                        $rule = preg_replace('/<' . $name . ':(.*?)>/', '($1)', $rule);
-                    } else {
-                        $rule = preg_replace('/<(.*?)>/', '($1)', $rule);
-                    }
+            $pattern = $rule;
+            
+            // 处理路由参数
+            $pattern = preg_replace_callback('/<(.*?)>/', function($matches) use (&$names) {
+                $param = $matches[1];
+                if (strpos($param, ':')) {
+                    list($name, $regex) = explode(':', $param, 2);
+                    $names[] = $name;
+                    return '(' . $regex . ')';
+                } else {
+                    $names[] = $param;
+                    return '([^/]+)';
                 }
-            }
-            $rule = '/^\/' . str_replace('/', '\/', $rule)  .'$/';
-            $m = [];
-            preg_match_all($rule, $_SERVER['REQUEST_URI'], $m);
-            if (! empty($m[0])) {
-                if (! empty($names)) {
-                    unset($m[0]);
-                    $m = array_values($m);
-                    $p = Params::getInstance();
-                    foreach ($names as $k => $name) {
-                        if (isset($m[$k][0])) {
-                            $p->setParam($name, $m[$k][0]);
+            }, $pattern);
+            
+            // 构建正则表达式
+            $regex = '/^\/' . str_replace('/', '\/', $pattern) . '$/';
+            $matches = [];
+            
+            if (preg_match_all($regex, $_SERVER['REQUEST_URI'], $matches)) {
+                // 处理捕获的参数
+                if (!empty($names)) {
+                    array_shift($matches); // 移除完整匹配
+                    $params = Params::getInstance();
+                    foreach ($names as $index => $name) {
+                        if (isset($matches[$index][0])) {
+                            $params->setParam($name, $matches[$index][0]);
                         }
                     }
                 }
+                
+                // 解析目标控制器和动作
                 if (strpos($target, '/')) {
-                    $result['c'] = substr($target, 0, strpos($target, '/') - strlen($target));
-                    $result['a'] = substr($target, strpos($target, '/') + 1, strlen($target));
-                    return $result;
+                    list($controller, $action) = explode('/', $target, 2);
+                    return ['c' => $controller, 'a' => $action];
                 }
             }
         }
@@ -210,23 +286,26 @@ class Router
     {
         $requestUri = $this->_request->getRequestUri();
         $baseUrl = $this->_request->getBaseUrl();
-        if ($requestUri != $baseUrl) {
+        
+        if ($requestUri !== $baseUrl) {
             $requestUri = str_replace($baseUrl, '', $requestUri);
         }
-        $uriArray = explode('/', $requestUri);
         
-        return $uriArray;
+        return explode('/', $requestUri);
     }
 
     /**
      * 检查路由参数合法性
      *
      * @param mixed $value            
-     * @return int
+     * @return bool
      */
     protected function checkRoute($value)
     {
-        return preg_match("/^[a-zA-Z][a-zA-Z0-9]*$/", $value);
+        if (!is_string($value)) {
+            return false;
+        }
+        return (bool) preg_match("/^[a-zA-Z][a-zA-Z0-9]*$/", $value);
     }
 
     /**
