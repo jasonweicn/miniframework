@@ -102,11 +102,10 @@ class Http
      */
     public static function getInstance()
     {
-        $name =  get_called_class();
-        if (! isset(self::$_instance[$name]) || self::$_instance[$name] === null) {
-            self::$_instance[$name] = new $name();
+        if (self::$_instance === null) {
+            self::$_instance = new self();
         }
-        return self::$_instance[$name];
+        return self::$_instance;
     }
     
     /**
