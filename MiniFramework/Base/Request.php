@@ -383,7 +383,7 @@ class Request
         Session::commit();
         
         if ($type == 'cookie') {
-            setcookie($this->_csrfParamName, $token, 0, '/', null, null, true);
+            setcookie($this->_csrfParamName, $token, 0, '/', '', false, true);
         } elseif ($type == 'header') {
             Response::getInstance()->header($this->_csrfHeaderParamName, $token);
         }
