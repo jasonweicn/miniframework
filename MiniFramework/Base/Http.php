@@ -89,13 +89,6 @@ class Http
     protected static $_instance;
 
     /**
-     * 用于输出的Header信息数组
-     *
-     * @var array
-     */
-    protected $_headers = [];
-
-    /**
      * 获取实例
      *
      * @return object
@@ -119,57 +112,6 @@ class Http
      */
     private function __clone()
     {}
-
-    /**
-     * 写入头信息
-     * 
-     * @param string $name            
-     * @param string $value            
-     * @return \Mini\Base\Http
-     */
-    public function header($name, $value = null)
-    {
-        $this->_headers[$name] = $value;
-        
-        return $this;
-    }
-    
-    /**
-     * 输出
-     * 
-     * @param int $code
-     * @param string $content
-     * @throws \Exception
-     */
-    public function response($code, $content)
-    {
-        if (! isset(self::$status[$code])) {
-            throw new Exception('Invalid http status code: ' . $code);
-        }
-        
-        if (SHOW_DEBUG === false) {
-            ob_end_clean();
-        }
-        
-        if (false === headers_sent()) {
-            
-            $this->sendHttpStatus($code);
-            
-            foreach ($this->_headers as $name => $value) {
-                $name = str_replace(' ', '-', ucwords(str_replace('-', ' ', $name)));
-                header($name . ': ' . $value);
-            }
-        }
-        
-        if (! isset($this->_headers['Content-Type'])) {
-            header("Content-Type: text/html; charset=utf-8");
-        }
-        header('Cache-Control: ' . HTTP_CACHE_CONTROL);
-        
-        echo $content;
-        
-        die();
-    }
 
     /**
      * 发送HTTP状态

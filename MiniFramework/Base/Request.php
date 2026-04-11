@@ -385,8 +385,7 @@ class Request
         if ($type == 'cookie') {
             setcookie($this->_csrfParamName, $token, 0, '/', null, null, true);
         } elseif ($type == 'header') {
-            $this->_http->header($this->_csrfHeaderParamName, $token);
-            
+            Response::getInstance()->header($this->_csrfHeaderParamName, $token);
         }
         
         
@@ -451,7 +450,7 @@ class Request
         }
         
         if (! $clientCsrfToken) {
-            $this->_http->sendHttpStatus(403);
+            Http::sendHttpStatus(403);
             echo 'Client CSRF-Token invalid.';
             die();
         }
