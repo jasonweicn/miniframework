@@ -86,7 +86,7 @@ class Http
      *
      * @var Http
      */
-    protected static $_instance = [];
+    protected static $_instance;
 
     /**
      * 用于输出的Header信息数组
