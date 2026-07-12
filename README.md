@@ -8,7 +8,7 @@ MiniFramework 能够帮助开发者用最小的学习成本快速构建 Web 应�
 快速入门
 --------
 
-MiniFramework 快速入门学习文档：[http://www.miniframework.com/docv2/guide/](http://www.miniframework.com/docv2/guide/)
+MiniFramework 快速入门学习文档：[https://www.sunbloger.com/mf/docv2/guide/](https://www.sunbloger.com/mf/docv2/guide/)
 
 
 安装部署
@@ -116,9 +116,3 @@ QQ交流群：745683429 （入群请备注：MF）
 MiniFramework 遵循 Apache License Version 2.0 开源协议发布。
 
 协议详细内容请浏览项目目录中的 LICENSE 文件。
-
-
-官网地址
---------
-
-网址：[https://www.miniframework.com/](https://www.miniframework.com/)
