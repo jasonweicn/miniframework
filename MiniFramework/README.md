@@ -7,7 +7,7 @@ MiniFramework 能够帮助开发者用最小的学习成本快速构建 Web 应�
 快速入门
 --------
 
-MiniFramework 快速入门学习文档：[http://www.miniframework.com/docv2/guide/](http://www.miniframework.com/docv2/guide/)
+MiniFramework 快速入门学习文档：[https://www.sunbloger.com/mf/docv2/guide/](https://www.sunbloger.com/mf/docv2/guide/)
 
 安装部署
 --------
