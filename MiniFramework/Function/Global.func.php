@@ -2,7 +2,7 @@
 // +---------------------------------------------------------------------------
 // | Mini Framework
 // +---------------------------------------------------------------------------
-// | Copyright (c) 2015-2025 http://www.sunbloger.com
+// | Copyright (c) 2015-2026 http://www.sunbloger.com
 // +---------------------------------------------------------------------------
 // | Licensed under the Apache License, Version 2.0 (the "License");
 // | you may not use this file except in compliance with the License.
@@ -183,7 +183,7 @@ function dump($var, $label = null, $echo = true)
     $output = ob_get_clean();
     $output = preg_replace("/\]\=\>\n(\s+)/m", "] => ", $output);
 
-    $cli = preg_match("/cli/i", PHP_SAPI) ? true : false;
+    $cli = isCli();
 
     if ($cli === true) {
         $output = PHP_EOL . $label . PHP_EOL . $output . PHP_EOL;
@@ -499,4 +499,13 @@ function checkInject(string $string)
     }
     
     return false;
+}
+
+/**
+ * 判断PHP是否处于CLI模式下运行
+ * @return boolean
+ */
+function isCli()
+{
+    return PHP_SAPI === 'cli' ? true : false;
 }

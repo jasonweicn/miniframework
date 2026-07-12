@@ -2,7 +2,7 @@
 // +---------------------------------------------------------------------------
 // | Mini Framework
 // +---------------------------------------------------------------------------
-// | Copyright (c) 2015-2025 http://www.sunbloger.com
+// | Copyright (c) 2015-2026 http://www.sunbloger.com
 // +---------------------------------------------------------------------------
 // | Licensed under the Apache License, Version 2.0 (the "License");
 // | you may not use this file except in compliance with the License.
@@ -106,7 +106,7 @@ class Exception extends \Exception
      */
     public static function showWarning($error = [])
     {
-        $isCli = preg_match("/cli/i", PHP_SAPI) ? true : false;
+        $isCli = isCli();
         if (SHOW_ERROR === true) {
             if (! empty($error) && is_array($error)) {
                 if ($isCli) {
@@ -126,7 +126,7 @@ class Exception extends \Exception
      */
     public static function showError($error = [])
     {
-        $isCli = preg_match("/cli/i", PHP_SAPI) ? true : false;
+        $isCli = isCli();
         if ($isCli) {
             echo "{$error['level']}: {$error['message']} in {$error['file']} on line {$error['line']}\n";
             exit($error['code']);

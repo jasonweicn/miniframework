@@ -2,7 +2,7 @@
 // +---------------------------------------------------------------------------
 // | Mini Framework
 // +---------------------------------------------------------------------------
-// | Copyright (c) 2015-2025 http://www.sunbloger.com
+// | Copyright (c) 2015-2026 http://www.sunbloger.com
 // +---------------------------------------------------------------------------
 // | Licensed under the Apache License, Version 2.0 (the "License");
 // | you may not use this file except in compliance with the License.
@@ -120,6 +120,9 @@ class App
      */
     public function run()
     {
+        // include global function file.
+        include (MINI_PATH . DS . 'Function' . DS . 'Global.func.php');
+
         $this->_params = Params::getInstance();
         $this->_request = Request::getInstance();
         if ($this->_router === null) {
@@ -128,14 +131,11 @@ class App
         $target = $this->_router->route(Config::getInstance()->load('route', false));
         $this->setController($target['c'])->setAction($target['a']);
         $requestParams = $this->_request->parseRequestParams($this->_router->getRouteType());
-        $isCli = $this->_router->isCli();
+        $isCli = isCli();
         unset($this->_router);
         if (! empty($requestParams)) {
             $this->_params->setParams($requestParams);
         }
-        
-        // include global function file.
-        include (MINI_PATH . DS . 'Function' . DS . 'Global.func.php');
         
         // Check CSRF-Token
         if (CSRF_TOKEN_ON === true) {

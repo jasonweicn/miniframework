@@ -2,7 +2,7 @@
 // +---------------------------------------------------------------------------
 // | Mini Framework
 // +---------------------------------------------------------------------------
-// | Copyright (c) 2015-2025 http://www.sunbloger.com
+// | Copyright (c) 2015-2026 http://www.sunbloger.com
 // +---------------------------------------------------------------------------
 // | Licensed under the Apache License, Version 2.0 (the "License");
 // | you may not use this file except in compliance with the License.
@@ -383,10 +383,9 @@ class Request
         Session::commit();
         
         if ($type == 'cookie') {
-            setcookie($this->_csrfParamName, $token, 0, '/', null, null, true);
+            setcookie($this->_csrfParamName, $token, 0, '/', '', false, true);
         } elseif ($type == 'header') {
-            $this->_http->header($this->_csrfHeaderParamName, $token);
-            
+            Response::getInstance()->header($this->_csrfHeaderParamName, $token);
         }
         
         
@@ -451,7 +450,7 @@ class Request
         }
         
         if (! $clientCsrfToken) {
-            $this->_http->sendHttpStatus(403);
+            Http::sendHttpStatus(403);
             echo 'Client CSRF-Token invalid.';
             die();
         }
