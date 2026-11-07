@@ -107,8 +107,6 @@ QQ交流群：745683429 （入群请备注：MF）
 
 博客：[http://www.sunbloger.com](http://www.sunbloger.com)
 
-微博：[https://weibo.com/jasonweicn](https://weibo.com/jasonweicn)
-
 
 开源协议
 --------
