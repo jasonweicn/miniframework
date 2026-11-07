@@ -427,6 +427,11 @@ function isTimestamp($timestamp)
  */
 function arrayToUrlParams(array $array, $type = 1)
 {
+    if (empty($array)) {
+        return '';
+    }
+    $splitSymbol = '';
+    $joinSymbol = '';
     switch ($type) {
         case 1:
             $joinSymbol = '=';
