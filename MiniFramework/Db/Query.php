@@ -471,6 +471,7 @@ class Query
             }
         }
         $placeholders = [];
+        $binds = [];
         if ($compareSymbol == 'IN' || $compareSymbol == 'NOT IN') {
             $i = 0;
             foreach ($values as $value) {
@@ -510,6 +511,8 @@ class Query
             throw new Exception('Invalid query logic symbol.');
         }
         $placeholders = [];
+        $binds = [];
+        $indexArray = [];
         $i = 0;
         foreach ($conditions as $field => $value) {
             $placeholders[$i] = ':c_' . $field;
