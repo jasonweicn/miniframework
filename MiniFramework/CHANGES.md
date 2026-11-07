@@ -1,6 +1,17 @@
 # CHANGES #
 
 
+## Version 2.14.0 released. ( 2026-11-07 ) ##
+
+### 版本变化 ###
+* 为应对 PHP2Shell（CVE-2026-109618 和 CVE-2026-109619）两个高危漏洞，适配 PHP 8.4 并将最低版本要求提升至 8.0，不再继续支持 PHP 7.4 及以下版本。
+* 修复 PHP 8.0 环境下 glob() 返回 false 时 count() 抛出 TypeError 的问题。
+* 改进 Mini\Base\Model、Mini\Base\Action、Mini\Db\Query 类，将隐式可空参数改为显式可空声明（如 `?string $table = null`），兼容 PHP 8.4。
+* 修复 PHP 8.4 中 exit() 传入 null 产生弃用提示的问题，完善命令行入口及异常处理的退出状态码处理。
+* 修复命令行模式下因 Global.func.php 加载顺序导致的 isCli() 未定义问题。
+* 移除对 PHP 8.0 已移除函数 get_magic_quotes_gpc() 的引用，并清理 PHP 5.3/5.4 版本兼容分支。
+
+
 ## Version 2.13.0 released. ( 2025-09-15 ) ##
 
 ### 版本变化 ###
