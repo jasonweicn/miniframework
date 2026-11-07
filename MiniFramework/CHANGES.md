@@ -1,6 +1,13 @@
 # CHANGES #
 
 
+## Version 2.14.1 released. ( 2026-11-08 ) ##
+
+### 版本变化 ###
+* 修复 Mini\Db\Query 类可能会报 WARNING: Undefined array key 的 Bug。
+* 修复全局函数 arrayToUrlParams() 时，type 参数默认值为 1 时，可能会报 WARNING: Undefined array key 的 Bug。
+
+
 ## Version 2.14.0 released. ( 2026-11-07 ) ##
 
 ### 版本变化 ###
@@ -10,7 +17,11 @@
 * 修复 PHP 8.4 中 exit() 传入 null 产生弃用提示的问题，完善命令行入口及异常处理的退出状态码处理。
 * 修复命令行模式下因 Global.func.php 加载顺序导致的 isCli() 未定义问题。
 * 移除对 PHP 8.0 已移除函数 get_magic_quotes_gpc() 的引用，并清理 PHP 5.3/5.4 版本兼容分支。
-* 如需帮助请访问 https://www.sunbloger.com/miniframework，原网站域名 www.miniframework.com 已经停用。
+* 如需帮助请访问 [https://www.sunbloger.com/miniframework](https://www.sunbloger.com/miniframework)，原网站域名 www.miniframework.com 已经停用。
+
+### 升级说明 ###
+* 兼容 PHP 最低版本为 8.0.0（建议升级至 PHP 8.4）
+* 当前版本向前兼容至 2.11.0 版本，使用 2.11.0 及后续版本的开发者可直接升级至 2.14.0 版本。
 
 
 ## Version 2.13.0 released. ( 2025-09-15 ) ##
