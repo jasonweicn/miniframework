@@ -82,6 +82,9 @@ class App
      */
     public function run()
     {
+        // include global function file.
+        include (MINI_PATH . DS . 'Function' . DS . 'Global.func.php');
+        
         if ($this->_router === null) {
             $this->_router = new Router();
         }
@@ -95,9 +98,6 @@ class App
             );
         }
         unset($this->_router);
-        
-        // include global function file.
-        include (MINI_PATH . DS . 'Function' . DS . 'Global.func.php');
         
         if (DB_AUTO_CONNECT === true) {
             $this->baseApp->initDbPool();

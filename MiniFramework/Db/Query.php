@@ -306,7 +306,7 @@ class Query
      * @param string $type (default: INNER | LEFT | RIGHT)
      * @return $this
      */
-    public function join(string $table = null, string $condition = null, string $type = 'INNER')
+    public function join(?string $table = null, ?string $condition = null, string $type = 'INNER')
     {
         if ($table == null || $condition == null || $type == null) {
             throw new Exception('Param invalid.');
@@ -338,7 +338,7 @@ class Query
      * @param string $condition
      * @return $this
      */
-    public function innerjoin(string $table = null, string $condition = null)
+    public function innerjoin(?string $table = null, ?string $condition = null)
     {
         if ($table == null || $condition == null) {
             throw new Exception('Param invalid.');
@@ -355,7 +355,7 @@ class Query
      * @param string $condition
      * @return $this
      */
-    public function leftjoin(string $table = null, string $condition = null)
+    public function leftjoin(?string $table = null, ?string $condition = null)
     {
         if ($table == null || $condition == null) {
             throw new Exception('Param invalid.');
@@ -372,7 +372,7 @@ class Query
      * @param string $condition
      * @return $this
      */
-    public function rightjoin(string $table = null, string $condition = null)
+    public function rightjoin(?string $table = null, ?string $condition = null)
     {
         if ($table == null || $condition == null) {
             throw new Exception('Param invalid.');

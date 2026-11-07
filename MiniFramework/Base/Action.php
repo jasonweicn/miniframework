@@ -147,7 +147,7 @@ class Action
      * @param string $action
      * @param string $controller
      */
-    final protected function redirect(string $action, string $controller = null)
+    final protected function redirect(string $action, ?string $controller = null)
     {
         $baseUrl = $this->request->getBaseUrl();
         $redirectUrl = $baseUrl;

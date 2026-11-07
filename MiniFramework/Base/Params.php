@@ -125,10 +125,7 @@ class Params
      */
     private function getStr($string)
     {
-        if (! function_exists("get_magic_quotes_gpc")) {
-            $string = addslashes($string);
-        }
-        return $string;
+        return addslashes($string);
     }
 
     /**

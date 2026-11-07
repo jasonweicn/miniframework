@@ -72,6 +72,7 @@ class Exception extends \Exception
     {
         $error = [
             'message' => $message,
+            'code' => 500,
             'file' => $file,
             'line' => $line
         ];

@@ -45,14 +45,8 @@ class Session
             return true;
         }
         $flag = false;
-        if (version_compare(PHP_VERSION, '5.4.0', '>=')) {
-            if (session_status() != 2) {
-                $flag = true;
-            }
-        } else {
-            if (! isset($_SESSION)) {
-                $flag = true;
-            }
+        if (session_status() != PHP_SESSION_ACTIVE) {
+            $flag = true;
         }
         
         if ($flag === true) {
@@ -203,10 +197,6 @@ class Session
      */
     public static function status()
     {
-        if (version_compare(PHP_VERSION, '5.4.0', '<')) {
-            throw new Exception('Not support session_status().');
-        }
-        
         return session_status();
     }
 }

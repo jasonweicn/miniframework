@@ -132,11 +132,7 @@ function base64EncodeImage($image_file)
  */
 function pushJson($data, $push = true)
 {
-    if (version_compare(PHP_VERSION, '5.4.0', '>=')) {
-        $json = json_encode($data, JSON_UNESCAPED_UNICODE);
-    } else {
-        $json = json_encode($data);
-    }
+    $json = json_encode($data, JSON_UNESCAPED_UNICODE);
 
     if ($push === true) {
         header("Content-Type: application/json; charset=utf-8");
@@ -384,13 +380,7 @@ function getHash($s, $len = 4)
  */
 function htmlEncode($string, $doubleEncode = true)
 {
-    if (version_compare(PHP_VERSION, '5.4.0', '>=')) {
-        $reVal = htmlspecialchars($string, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', $doubleEncode);
-    } else {
-        $reVal = htmlspecialchars($string, ENT_QUOTES, 'UTF-8', $doubleEncode);
-    }
-
-    return $reVal;
+    return htmlspecialchars($string, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', $doubleEncode);
 }
 
 /**

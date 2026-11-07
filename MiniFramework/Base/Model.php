@@ -62,7 +62,7 @@ abstract class Model extends Query
      * 
      * @return void
      */
-    function __construct(object $db = null)
+    function __construct(?object $db = null)
     {
         if (DB_AUTO_CONNECT === true && $db === null) {
             $db = $this->loadDb('default');

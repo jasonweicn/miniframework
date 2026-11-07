@@ -145,6 +145,9 @@ class Log
         }
         if (LOG_MAX_FILES) {
             $files = glob(LOG_PATH . DS. '????-??-??.log');
+            if ($files === false) {
+                $files = [];
+            }
             $num = count($files);
             if ($num > LOG_MAX_FILES) {
                 for ($i=0; $i<($num-LOG_MAX_FILES); $i++) {

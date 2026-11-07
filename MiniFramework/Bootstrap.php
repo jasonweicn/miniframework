@@ -124,7 +124,7 @@ require (MINI_PATH . DS . 'Base' . DS . 'Loader.php');
 // 一切由此开始
 if (CONSOLE_MODE === true) {
     $code = \Mini\Console\App::getInstance()->run();
-    exit($code);
+    exit($code ?? 0);
 } else {
     \Mini\Base\App::getInstance()->run();
 }
