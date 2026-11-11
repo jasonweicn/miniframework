@@ -147,7 +147,7 @@ function pushJson($data, $push = true)
  * 校验日期格式是否正确
  *
  * @param string $date 日期
- * @param string $formats 需要检验的格式数组
+ * @param array $formats 需要检验的格式数组
  * @return boolean
  */
 function isDate($date, $formats = ['Y-m-d', 'Y/m/d'])
@@ -361,8 +361,8 @@ function getFileExtName($filename)
  * 获取一个指定长度INT类型HASH值
  *
  * @param string $s
- * @param number $len
- * @return number
+ * @param int $len
+ * @return int
  */
 function getHash($s, $len = 4)
 {
