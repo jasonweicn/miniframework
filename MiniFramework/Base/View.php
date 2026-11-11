@@ -119,19 +119,19 @@ class View
         return $this->_baseUrl;
     }
 
-    public function __set($variable, $value)
+    public function __set(string $variable, $value)
     {
         $this->variables[$variable] = $value;
         
         return true;
     }
 
-    public function __get($variable)
+    public function __get(string $variable)
     {
         return isset($this->variables[$variable]) ? $this->variables[$variable] : null;
     }
     
-    public function __isset($variable)
+    public function __isset(string $variable)
     {
         return isset($this->variables[$variable]) ? true : false;
     }
