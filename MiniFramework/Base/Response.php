@@ -180,7 +180,7 @@ class Response
      * Set http status
      *
      * @param int $code
-     * @return boolean
+     * @return \Mini\Base\Response
      */
     public function httpStatus($code)
     {
